@@ -1,0 +1,4 @@
+long,id,1
+com.epam.rd.autocode.assessment.appliances.model.Client,client,1
+com.epam.rd.autocode.assessment.appliances.model.Employee,employee,1
+java.util.Set,orderRowSet,1

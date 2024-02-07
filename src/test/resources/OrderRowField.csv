@@ -1,0 +1,4 @@
+long,id
+com.epam.rd.autocode.assessment.appliances.model.Appliance,appliance
+java.math.BigDecimal,amount
+long,number
