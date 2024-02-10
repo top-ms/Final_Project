@@ -10,13 +10,13 @@ In this exercise, you will implement an "Appliances shop" using Spring Boot.
 Your application has to imitate work of an online shop.
 
 Employees should be able to do the following:
-1. Have navigation and provide access for each element front-end;
-2. Show every table;
-3. add, correct, and delete `Employee`, `Client`, `Appliance`, `Manufacturer`;
-4. approve orders.
+1. show every table;
+2. add, correct, and delete `Employee`, `Client`, `Appliance`, `Manufacturer`;
+3. approve orders.
 
 Clients and employees should be able to do the following:
-1. add, correct, and delete orders.
+1. have navigation and provide access for permitted elements front-end;
+2. add, correct, and delete orders.
 
 Users must be able to work in two languages(native and English). 
 
