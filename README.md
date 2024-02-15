@@ -45,9 +45,10 @@ Your application must implement next layers:
 * Implement validation for the Domain model and controllers.
 
 ### Would be nice
-* to use logging
-* to implement pagination and sorting in controllers
-* to explore other Spring technologies
+* to use logging;
+* to implement pagination and sorting in controllers;
+* to explore other Spring technologies;
+* to write tests for controllers and services.
 
 ### Recommendations
 * Use `Lombok`
