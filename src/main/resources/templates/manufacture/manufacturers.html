@@ -24,8 +24,9 @@
         <td th:text="${manufacturer.id}"/>
         <td th:text="${manufacturer.name}"/>
     </tr>
+
+    </tbody>
 </table>
-</tbody>
 <a th:href="@{manufacturers/add}" class="btn btn-primary" th:text="#{manufacturer.btn.new}"></a>
 <div th:insert="~{footer::footer}"></div>
 </body>

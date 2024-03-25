@@ -61,9 +61,9 @@ class OrdersTest {
     @Test
     void checkParameterTypeForConstructorWithParameter() {
         final Constructor<?> constructor = allConstructors.stream()
-                .filter(c -> c.getParameterCount() == TestConstants.User.PARAMETERS_IN_CONSTRUCTOR_WITH_PARAMETERS)
+                .filter(c -> c.getParameterCount() == TestConstants.Orders.PARAMETERS_IN_CONSTRUCTOR_WITH_PARAMETERS)
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("No constructor with " + TestConstants.User.PARAMETERS_IN_CONSTRUCTOR_WITH_PARAMETERS + " parameters"));
+                .orElseThrow(() -> new RuntimeException("No constructor with " + TestConstants.Orders.PARAMETERS_IN_CONSTRUCTOR_WITH_PARAMETERS + " parameters"));
 
         final List<Parameter> parameters = Arrays.asList(constructor.getParameters());
 

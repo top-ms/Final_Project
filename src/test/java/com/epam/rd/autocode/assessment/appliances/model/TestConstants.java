@@ -11,8 +11,8 @@ public class TestConstants {
     public static final String EMPLOYEE_TYPE = CLASS_PACKAGE + "." + Employee.CLASS_NAME;
     public static final String ORDER_ROW_TYPE = CLASS_PACKAGE + "." + OrderRow.CLASS_NAME;
     public static final String ORDERS_TYPE = CLASS_PACKAGE + "." + Orders.CLASS_NAME;
-    public static final String LONG_TYPE = "long";
-    public static final String INT_TYPE = "int";
+    public static final String LONG_TYPE = "java.lang.Long";
+    public static final String INT_TYPE = "java.lang.Integer";
     public static final String STRING_TYPE = "java.lang.String";
     public static final String BIG_DECIMAL_TYPE = "java.math.BigDecimal";
 
@@ -43,7 +43,7 @@ public class TestConstants {
 
     static class Appliance {
         public static final String CLASS_NAME = "Appliance";
-        public static final int CLASS_COUNT_FIELDS = 9;
+        public static final int CLASS_COUNT_FIELDS = 10;
         public static final int CLASS_COUNT_CONSTRUCTORS = 2;
         public static final int PARAMETERS_IN_CONSTRUCTOR_WITH_PARAMETERS = CLASS_COUNT_FIELDS;
     }
@@ -80,7 +80,7 @@ public class TestConstants {
 
     static class Orders {
         public static final String CLASS_NAME = "Orders";
-        public static final int CLASS_COUNT_FIELDS = 4;
+        public static final int CLASS_COUNT_FIELDS = 5;
         public static final int CLASS_COUNT_CONSTRUCTORS = 2;
         public static final int PARAMETERS_IN_CONSTRUCTOR_WITH_PARAMETERS = CLASS_COUNT_FIELDS;
 

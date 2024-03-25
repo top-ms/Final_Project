@@ -68,8 +68,6 @@ class ManufacturerTest {
         final List<Parameter> parameters = Arrays.asList(constructor.getParameters());
 
 
-        parameters.stream().forEach(System.out::println);
-
         parameters.stream()
                 .filter(p -> p.getType().getTypeName().equals(LONG_TYPE))
                 .findFirst()
@@ -92,7 +90,7 @@ class ManufacturerTest {
     @Test
     @DisplayName(CLASS_NAME + " has field with name " + FIELD_ID)
     void checkFieldNameId() {
-        Field id = allFields.stream()
+        allFields.stream()
                 .filter(f -> f.getName().equals(FIELD_ID))
                 .findFirst().orElseThrow(() -> new RuntimeException("Field " + FIELD_ID + " not found"));
     }
@@ -100,7 +98,7 @@ class ManufacturerTest {
     @Test
     @DisplayName(CLASS_NAME + " has field with name " + FIELD_NAME)
     void checkFieldNameName() {
-        Field name = allFields.stream()
+        allFields.stream()
                 .filter(f -> f.getName().equals(FIELD_NAME))
                 .findFirst().orElseThrow(() -> new RuntimeException("Field " + FIELD_NAME + " not found"));
     }

@@ -1,4 +1,4 @@
 package com.epam.rd.autocode.assessment.appliances.config;
 
-public class MainConfig implements WebMvcConfigurer {
+public class MainConfig {
 }
