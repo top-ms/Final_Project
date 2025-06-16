@@ -1,4 +1,19 @@
 package com.epam.rd.autocode.assessment.appliances.model;
 
-public class Client {
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class Client extends User {
+
+    @Column(nullable = false)
+    private String card;
+
+    public Client(Long id, String name, String email, String password, String card) {
+        super(id, name, email, password);
+        this.card = card;
+    }
 }
