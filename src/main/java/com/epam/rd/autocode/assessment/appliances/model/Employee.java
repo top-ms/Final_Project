@@ -5,6 +5,8 @@ import lombok.*;
 
 @Entity
 @NoArgsConstructor
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Employee extends User {
@@ -17,7 +19,4 @@ public class Employee extends User {
         this.department = department;
     }
 
-    public String getDepartment() {
-        return department;
-    }
 }

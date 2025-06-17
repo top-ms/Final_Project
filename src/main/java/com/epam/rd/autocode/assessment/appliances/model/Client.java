@@ -6,6 +6,8 @@ import lombok.*;
 
 @Entity
 @NoArgsConstructor
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Client extends User {
