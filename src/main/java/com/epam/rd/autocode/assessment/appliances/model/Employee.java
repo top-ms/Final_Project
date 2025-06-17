@@ -16,4 +16,8 @@ public class Employee extends User {
         super(id, name, email, password);
         this.department = department;
     }
+
+    public String getDepartment() {
+        return department;
+    }
 }

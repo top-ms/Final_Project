@@ -6,6 +6,8 @@ import lombok.*;
 import java.math.BigDecimal;
 @EqualsAndHashCode
 @ToString
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
