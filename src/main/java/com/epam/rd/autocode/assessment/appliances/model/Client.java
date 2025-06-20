@@ -20,7 +20,4 @@ public class Client extends User {
         this.card = card;
     }
 
-    public String getCard() {
-        return card;
-    }
 }

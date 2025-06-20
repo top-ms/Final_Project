@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ApplianceInOrderRepository extends JpaRepository<OrderRow, Long> {
         List<OrderRow> findByAppliance(Appliance appliance);
+
 }
