@@ -5,9 +5,12 @@ import lombok.*;
 
 import java.util.List;
 
-@Data
+@ToString
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity
 public class Manufacturer {
 

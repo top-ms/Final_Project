@@ -25,12 +25,8 @@ public class Orders {
     private Client client;
 
 
-
-
     @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderRow> orderRowSet = new LinkedHashSet<>();
-
-
 
 
     @Column(nullable = false)

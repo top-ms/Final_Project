@@ -5,7 +5,6 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
-@Data
 @NoArgsConstructor
 @Entity
 public class OrderRow {

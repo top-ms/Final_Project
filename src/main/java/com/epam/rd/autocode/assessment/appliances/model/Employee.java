@@ -4,19 +4,29 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class Employee extends User {
+@EqualsAndHashCode
+@ToString
+public class Employee{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+
 
     @Column(nullable = false)
     private String department;
-
-    public Employee(Long id, String name, String email, String password, String department) {
-        super(id, name, email, password);
-        this.department = department;
-    }
 
 }
