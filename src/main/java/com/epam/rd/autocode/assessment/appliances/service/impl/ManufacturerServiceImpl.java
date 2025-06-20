@@ -10,29 +10,23 @@ import java.util.List;
 @Service
 public class ManufacturerServiceImpl implements ManufacturerService {
 
-    private final ManufacturerRepository manufacturerRepository;
-
-    public ManufacturerServiceImpl(ManufacturerRepository manufacturerRepository) {
-        this.manufacturerRepository = manufacturerRepository;
-    }
-
     @Override
     public List<Manufacturer> findAll() {
-        return manufacturerRepository.findAll();
+        return List.of();
     }
 
     @Override
     public Manufacturer findById(Long id) {
-        return manufacturerRepository.findById(id).orElse(null);
+        return null;
     }
 
     @Override
     public Manufacturer save(Manufacturer manufacturer) {
-        return manufacturerRepository.save(manufacturer);
+        return null;
     }
 
     @Override
     public void deleteById(Long id) {
-        manufacturerRepository.deleteById(id);
+
     }
 }

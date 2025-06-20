@@ -10,29 +10,23 @@ import java.util.List;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    private final OrdersRepository ordersRepository;
-
-    public OrderServiceImpl(OrdersRepository ordersRepository) {
-        this.ordersRepository = ordersRepository;
-    }
-
     @Override
     public List<Orders> findAll() {
-        return ordersRepository.findAll();
+        return List.of();
     }
 
     @Override
     public Orders findById(Long id) {
-        return ordersRepository.findById(id).orElse(null);
+        return null;
     }
 
     @Override
     public Orders save(Orders order) {
-        return ordersRepository.save(order);
+        return null;
     }
 
     @Override
     public void deleteById(Long id) {
-        ordersRepository.deleteById(id);
+
     }
 }

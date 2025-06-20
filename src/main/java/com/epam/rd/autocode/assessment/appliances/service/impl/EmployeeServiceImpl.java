@@ -10,29 +10,23 @@ import java.util.List;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private final EmployeeRepository employeeRepository;
-
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
-    }
-
     @Override
     public List<Employee> findAll() {
-        return employeeRepository.findAll();
+        return List.of();
     }
 
     @Override
     public Employee findById(Long id) {
-        return employeeRepository.findById(id).orElse(null);
+        return null;
     }
 
     @Override
     public Employee save(Employee employee) {
-        return employeeRepository.save(employee);
+        return null;
     }
 
     @Override
     public void deleteById(Long id) {
-        employeeRepository.deleteById(id);
+
     }
 }
