@@ -1,11 +1,10 @@
 package com.epam.rd.autocode.assessment.appliances.repository;
 
-import com.epam.rd.autocode.assessment.appliances.model.Appliance;
 import com.epam.rd.autocode.assessment.appliances.model.OrderRow;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface ApplianceInOrderRepository extends JpaRepository<OrderRow, Long> {
-
+@Repository
+public interface OrderRowRepository extends JpaRepository<OrderRow, Long> {
+    void deleteOrderRowById(Long orderRowId);
 }

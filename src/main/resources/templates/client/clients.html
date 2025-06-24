@@ -14,6 +14,9 @@
 <body>
 <div th:insert="~{menunavy::navy}"></div>
 <h1 th:text="#{client.header.list}"></h1>
+<div class="d-flex justify-content-start mt-2 mb-2">
+    <a th:href="@{clients/add}" class="btn btn-primary" th:text="#{client.btn.new}">New client</a>
+</div>
 <table class="table table-hover">
     <thead>
     <tr class="table-dark">
@@ -22,7 +25,7 @@
         <th th:text="#{object.user.email}"></th>
         <th th:text="#{object.user.password}"></th>
         <th th:text="#{object.client.card}"></th>
-        <th >Operation</th>
+        <th th:text="#{client.operation}">Operation</th>
     </tr>
     </thead>
     <tbody>
@@ -34,7 +37,7 @@
         <td th:text="${client.card}"/>
         <td>
             <div>
-                <a th:href="@{clients/}+${client.id}+@{/delete}">
+                <a th:href="@{/clients/{id}/delete(id=${client.id})}">
                     <span class="icon">
                           <i class="fa fa-minus"></i>
                     </span>
@@ -45,7 +48,6 @@
 
 </tbody>
 </table>
-<a th:href="@{clients/add}" class="btn btn-primary" th:text="#{client.btn.new}">New client</a>
 <div th:insert="~{footer::footer}"></div>
 </body>
 </html>

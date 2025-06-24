@@ -9,12 +9,7 @@ import java.util.List;
 
 public interface OrdersRepository extends JpaRepository<Orders, Long> {
 
-    // Пошук усіх замовлень певного клієнта
-    List<Orders> findByClient(Client client);
+    List<Orders> findAllByEmployeeId(Long id);
 
-    // Пошук усіх замовлень оброблених певним працівником
-    List<Orders> findByEmployee(Employee employee);
-
-    // Пошук за статусом підтвердження
-    List<Orders> findByApproved(Boolean approved);
+    List<Orders> findAllByClientId(Long id);
 }

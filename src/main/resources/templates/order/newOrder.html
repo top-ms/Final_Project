@@ -13,7 +13,7 @@
 <div th:insert="~{menunavy::navy}"></div>
 <h1 th:text="#{orders.btn.new}"></h1>
 <form action="#" th:action="@{add-order}" th:object="${order}" method="post">
-    <p><span th:text="#{object.order.id}"></span> <input type="text" th:field="*{id}"/></p>
+    <!--<p><span th:text="#{object.order.id}"></span> <input type="text" th:field="*{id}"/></p>-->
     <p>
         <!--        <p th:if="${#fields.hasErrors('powerType')}" class="text-danger">Invalid power type</p>-->
         <span th:text="#{object.order.client}"></span>

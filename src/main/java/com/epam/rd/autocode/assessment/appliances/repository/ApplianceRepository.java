@@ -10,21 +10,4 @@ import java.util.List;
 
 public interface ApplianceRepository extends JpaRepository<Appliance, Long> {
 
-    // Пошук за назвою
-    List<Appliance> findByName(String name);
-
-    // Пошук за категорією (BIG, SMALL)
-    List<Appliance> findByCategory(Category category);
-
-    // Пошук за моделлю
-    List<Appliance> findByModel(String model);
-
-    // Пошук за типом живлення (AC110, ACCUMULATOR, AC220)
-    List<Appliance> findByPowerType(PowerType powerType);
-
-    // Пошук за потужністю
-    List<Appliance> findByPower(Integer power);
-
-    // Пошук за ціною
-    List<Appliance> findByPrice(BigDecimal price);
 }

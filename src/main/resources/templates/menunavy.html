@@ -22,6 +22,22 @@
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/orders}" th:text="#{order.menu.name}"></a>
                     </li>
+
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="langDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                🌐 <span th:text="#{language.choose}">Language</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                                <li>
+                                    <a class="dropdown-item" th:href="@{${requestURI}(lang='en')}">English 🇬🇧</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" th:href="@{${requestURI}(lang='uk')}">Українська 🇺🇦</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </ul>
             </div>
         </div>

@@ -11,34 +11,43 @@
 </head>
 <body>
 <div th:insert="~{menunavy::navy}"></div>
-<h1>Edit order</h1>
 
-<div th:object="${order}">
-    <p><span th:text="#{object.order.id}"></span> <input type="text" th:field="*{id}" disabled/></p>
-    <p><span th:text="#{object.order.client}"></span> <input type="text" th:field="*{client.name}" disabled/></p>
-    <p><span th:text="#{object.order.employee}"></span> <input type="text" th:field="*{employee.name}" disabled/></p>
-    <table class="table table-hover">
-        <thead>
-        <tr class="table-dark">
-            <th th:text="id"></th>
-            <th th:text="Appliance"></th>
-            <th th:text="Number"></th>
-            <th th:text="Price"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="row: ${rows}">
-            <td th:text="${row.id}"/>
-            <td th:text="${row.appliance.name}"/>
-            <td th:text="${row.number}"/>
-            <td th:text="${row.amount}"/>
-        </tr>
-        </tbody>
-    </table>
-    <div>
-        <a th:href="@{choice-appliance}">Add
-            <i class="fa fa-plus-square-o"></i>
-        </a>
+<div class="container-fluid mt-2 px-2">
+
+    <div th:object="${order}">
+        <p><span th:text="#{object.order.id}"></span> <input type="text" th:field="*{id}" disabled/></p>
+        <p><span th:text="#{object.order.client}"></span> <input type="text" th:field="*{client.name}" disabled/></p>
+        <p><span th:text="#{object.order.employee}"></span> <input type="text" th:field="*{employee.name}" disabled/></p>
+
+        <div class="my-1">
+            <a th:href="@{choice-appliance}" class="btn btn-primary me-2">Add</a>
+            <a th:href="@{/orders}" class="btn btn-primary">To orders</a>
+        </div>
+
+        <table class="table table-hover">
+            <thead>
+            <tr class="table-dark">
+                <th th:text="id"></th>
+                <th th:text="Appliance"></th>
+                <th th:text="Number"></th>
+                <th th:text="Price"></th>
+                <th th:text="Option"></th>
+
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="row: ${rows}">
+                    <td th:text="${row.id}"/>
+                    <td th:text="${row.appliance.name}"/>
+                    <td th:text="${row.number}"/>
+                    <td th:text="${row.amount}"/>
+                    <td>
+                        <a th:href="@{'/orders/' + ${order.id} + '/edit/row/' + ${row.id} + '/delete'}" class="btn btn-sm btn-danger">Delete
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 

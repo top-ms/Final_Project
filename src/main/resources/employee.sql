@@ -1,5 +1,5 @@
 INSERT INTO employee (name, email, password, department) VALUES
-    ('Phobos','phobos@gmail.com','111','salle'),
-    ('Moon','phobos@gmail.com','222','salle'),
-    ('Deimos','deimos@gmail.com','333','security'),
-    ('Europa','europa@gmail.com','444','security');
+('Diana','diana.kent@gmail.com','111','sales'),
+('Logan','logan.wolf@gmail.com','222','sales'),
+('Mira','mira.nova@gmail.com','333','security'),
+('Orion','orion.stellar@gmail.com','444','security');

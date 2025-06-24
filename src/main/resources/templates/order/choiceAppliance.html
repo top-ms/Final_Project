@@ -16,17 +16,32 @@
 <main>
     <h1 th:text="#{appliance.header.list}">Appliances list</h1>
 
-    <th:block th:each="appliance: ${appliances}">
-        <form class="store-form" th:action="@{add-into-order}" method="post">
-            <input type="hidden" th:value="${ordersId}" th:name="ordersId">
-            <input type="hidden" th:value="${appliance.id}" th:name="applianceId">
-            <span th:text="${appliance.name}" />
-            <input th:name="numbers" placeholder="Numbers"/>
-            <input th:name="price" th:value="${appliance.price}"/>
-            <input type="submit" value="Add">
-        </form>
-    </th:block>
-    <a th:href="@{/orders}" class="btn btn-primary">To orders</a>
+    <div class="d-flex justify-content-start mt-2 mb-4">
+        <a th:href="@{/orders}" class="btn btn-primary">To orders</a>
+    </div>
+
+    <div class="container d-flex flex-column align-items-center gap-3">
+        <div class="col-md-5 w-100" th:each="appliance: ${appliances}">
+            <form class="card p-3 shadow-sm rounded-4 border-0" th:action="@{add-into-order}" method="post">
+                <input type="hidden" th:value="${ordersId}" th:name="ordersId">
+                <input type="hidden" th:value="${appliance.id}" th:name="applianceId">
+
+                <h5 class="card-title text-primary fw-bold mb-3" th:text="${appliance.name}">Appliance Name</h5>
+
+                <div class="mb-2">
+                    <label class="form-label">Quantity</label>
+                    <input type="number" th:name="numbers" class="form-control form-control-sm" placeholder="Enter quantity" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Price</label>
+                    <input type="number" th:name="price" th:value="${appliance.price}" class="form-control form-control-sm" required>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100 btn-sm">➕ Add to Order</button>
+            </form>
+        </div>
+    </div>
 </main>
 <div th:insert="~{footer::footer}"></div>
 </body>
