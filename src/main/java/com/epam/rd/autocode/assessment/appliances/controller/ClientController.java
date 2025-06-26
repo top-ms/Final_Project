@@ -32,7 +32,7 @@ public class ClientController {
 
     @PostMapping("/add-client")
     public String addNewClient(@ModelAttribute("client") Client client) {
-        clientService.addNewClient(client);
+        clientService.register(client);
         return "redirect:/clients";
     }
 

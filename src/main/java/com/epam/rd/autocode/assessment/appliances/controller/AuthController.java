@@ -37,7 +37,6 @@ public class AuthController {
 
         // 🔐 Викликаємо сервіс, де пароль хешується й юзер зберігається в базу
         clientService.register(client);
-        System.out.println("Client registered: " + client.getEmail() + " with card: " + client.getPassword() + "");
         // ✅ Після реєстрації перекидуємо на логін
         return "redirect:/login";
     }
@@ -45,7 +44,6 @@ public class AuthController {
     // 🔐 Показати форму логіну (Spring Security сам обробить POST /login)
     @GetMapping("/login")
     public String showLoginForm() {
-        System.out.println("showLoginForm() method called. Client object added to the model. Client object: " + "null" + "");
         return "entrance/login";
     }
 

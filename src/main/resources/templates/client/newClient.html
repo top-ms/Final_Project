@@ -29,11 +29,7 @@
         <span th:text="#{object.user.password}"></span>
         <input type="text" th:field="*{password}"/>
     </p>
-    <p>
-        <p th:if="${#fields.hasErrors('card')}" class="text-danger">Invalid card</p>
-        <span th:text="#{object.client.card}"></span>
-        <input type="text" th:field="*{card}"/>
-    </p>
+
     <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
 </form>
 <div th:insert="~{footer::footer}"></div>

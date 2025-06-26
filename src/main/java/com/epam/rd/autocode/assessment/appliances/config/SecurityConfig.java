@@ -1,7 +1,8 @@
 package com.epam.rd.autocode.assessment.appliances.config;
 
 import com.epam.rd.autocode.assessment.appliances.service.ClientService;
-import com.epam.rd.autocode.assessment.appliances.service.impl.ClientServiceImpl;
+
+import com.epam.rd.autocode.assessment.appliances.service.impl.UniversalUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,10 +14,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    private final ClientServiceImpl clientService;
+    private final UniversalUserDetailsService universalUserDetailsService;
 
-    public SecurityConfig(ClientServiceImpl clientService) {
-        this.clientService = clientService;
+    public SecurityConfig(UniversalUserDetailsService universalUserDetailsService) {
+        this.universalUserDetailsService = universalUserDetailsService;
     }
 
     @Bean
@@ -44,8 +45,8 @@ public class SecurityConfig {
 
 
     @Bean
-    public UserDetailsService userDetailsService(ClientServiceImpl clientServiceImpl) {
+    public UserDetailsService userDetailsService(UniversalUserDetailsService universalUserDetailsService) {
         System.out.println("UserDetailService bean created");
-        return clientServiceImpl;
+        return universalUserDetailsService;
     }
 }

@@ -14,10 +14,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
-public class ClientServiceImpl implements ClientService, UserDetailsService {
+public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
     private final OrdersRepository ordersRepository;
@@ -37,11 +38,6 @@ public class ClientServiceImpl implements ClientService, UserDetailsService {
     }
 
     @Override
-    public void addNewClient(Client client) {
-        clientRepository.save(client);
-    }
-
-    @Override
     public void deleteClientById(Long id) {
         deleteAllOrdersOfClientById(id);
         clientRepository.deleteById(id);
@@ -53,29 +49,13 @@ public class ClientServiceImpl implements ClientService, UserDetailsService {
         ordersRepository.deleteAll(orders);
     }
 
-    @Override
-    public Client findByEmail(String email){
-        return clientRepository.findByEmail(email);
-    }
+//    @Override
+//    public Optional<Client> findByEmail(String email){
+//        return clientRepository.findByEmail(email);
+//    }
 
     // 🔐 Додаємо реалізацію UserDetailsService
 
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Client client = clientRepository.findByEmail(username);
-        if (client == null) {
-            throw new UsernameNotFoundException("Користувача з email не знайдено: " + username);
-        }
-
-        System.out.println("Email: " + client.getEmail() + " Password: " + client.getPassword() + " Card: " + client.getCard() + " Role: USER");
-        return new User(
-                client.getEmail(),
-                client.getPassword(),
-                // тут же повинно бути імя
-                List.of(new SimpleGrantedAuthority("ROLE_USER"))
-        );
-    }
 
 
     // ✅ Метод для реєстрації користувача з хешуванням пароля і генерацією карти

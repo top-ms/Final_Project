@@ -7,13 +7,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ClientService {
     List<Client> getAllClients();
-    void addNewClient(Client client);
     void deleteClientById(Long id);
     void deleteAllOrdersOfClientById(Long id);
-    Client findByEmail(String email);
 
     void register(Client client);
 }
