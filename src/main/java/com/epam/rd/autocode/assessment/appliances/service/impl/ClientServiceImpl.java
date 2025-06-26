@@ -5,19 +5,30 @@ import com.epam.rd.autocode.assessment.appliances.model.Orders;
 import com.epam.rd.autocode.assessment.appliances.repository.ClientRepository;
 import com.epam.rd.autocode.assessment.appliances.repository.OrdersRepository;
 import com.epam.rd.autocode.assessment.appliances.service.ClientService;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 
 @Service
-public class ClientServiceImpl implements ClientService {
+public class ClientServiceImpl implements ClientService, UserDetailsService {
 
     private final ClientRepository clientRepository;
     private final OrdersRepository ordersRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public ClientServiceImpl(ClientRepository clientRepository, OrdersRepository ordersRepository) {
+    public ClientServiceImpl(ClientRepository clientRepository,
+                             OrdersRepository ordersRepository,
+                             BCryptPasswordEncoder passwordEncoder) {
         this.clientRepository = clientRepository;
         this.ordersRepository = ordersRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -42,4 +53,46 @@ public class ClientServiceImpl implements ClientService {
         ordersRepository.deleteAll(orders);
     }
 
+    @Override
+    public Client findByEmail(String email){
+        return clientRepository.findByEmail(email);
+    }
+
+    // 🔐 Додаємо реалізацію UserDetailsService
+
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Client client = clientRepository.findByEmail(username);
+        if (client == null) {
+            throw new UsernameNotFoundException("Користувача з email не знайдено: " + username);
+        }
+
+        System.out.println("Email: " + client.getEmail() + " Password: " + client.getPassword() + " Card: " + client.getCard() + " Role: USER");
+        return new User(
+                client.getEmail(),
+                client.getPassword(),
+                // тут же повинно бути імя
+                List.of(new SimpleGrantedAuthority("ROLE_USER"))
+        );
+    }
+
+
+    // ✅ Метод для реєстрації користувача з хешуванням пароля і генерацією карти
+    public void register(Client client) {
+        client.setPassword(passwordEncoder.encode(client.getPassword()));
+        client.setCard(generateCardNumber()); // 🧠 Генеруємо випадковий номер
+        clientRepository.save(client);
+        System.out.println("Registered client: " + client.getEmail() + " with card: " + client.getPassword() + "");
+    }
+
+    // 🧠 Генерація випадкового номера карти (16 цифр)
+    private String generateCardNumber() {
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 16; i++) {
+            sb.append(random.nextInt(10));
+        }
+        return sb.toString();
+    }
 }

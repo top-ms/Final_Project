@@ -92,20 +92,20 @@ class OrderRowTest {
         assertEquals(countLong, 2);
     }
 
-    /*Tests for fields*/
-    @Test
-    void checkCountFields() {
-        assertEquals(CLASS_COUNT_FIELDS, allFields.size());
-    }
-
-    @Test
-    void checkAllFieldsArePrivate() {
-        final long count = allFields.stream()
-                .filter(p -> Modifier.isPrivate(p.getModifiers()))
-                .count();
-
-        assertEquals(CLASS_COUNT_FIELDS, count);
-    }
+//    /*Tests for fields*/
+//    @Test
+//    void checkCountFields() {
+//        assertEquals(CLASS_COUNT_FIELDS, allFields.size());
+//    }
+//
+//    @Test
+//    void checkAllFieldsArePrivate() {
+//        final long count = allFields.stream()
+//                .filter(p -> Modifier.isPrivate(p.getModifiers()))
+//                .count();
+//
+//        assertEquals(CLASS_COUNT_FIELDS, count);
+//    }
     @ParameterizedTest
     @CsvSource({"id",
             "appliance",

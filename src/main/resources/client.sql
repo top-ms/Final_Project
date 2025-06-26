@@ -5,4 +5,4 @@ INSERT INTO client (name, email, password, card) VALUES ('Sarah', 'sarah.johnson
 INSERT INTO client (name, email, password, card) VALUES ('David', 'david.miller@gmail.com', 'd4v1dM!', '5326-5555');
 INSERT INTO client (name, email, password, card) VALUES ('Emma', 'emma.davis@gmail.com', 'emmA12345', '5326-6666');
 INSERT INTO client (name, email, password, card) VALUES ('Daniel', 'daniel.garcia@gmail.com', 'daniel#2024', '5326-7777');
-INSERT INTO client (name, email, password, card) VALUES ('Olivia', 'olivia.martinez@gmail.com', 'olivPass', '5326-8888');
+INSERT INTO client (name, email, password, card) VALUES ('Mike', 'i@gmail.com', '$2a$10$RGtraDnB55azXAC6/gwVbOVsCYyIqbZ3wteh8uqldIiM/lYR9ul36', '4534552087111009');
