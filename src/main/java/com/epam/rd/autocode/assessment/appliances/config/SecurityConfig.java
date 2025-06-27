@@ -49,4 +49,10 @@ public class SecurityConfig {
         System.out.println("UserDetailService bean created");
         return universalUserDetailsService;
     }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        System.out.println("BCryptPasswordEncoder bean created");
+        return new BCryptPasswordEncoder();
+    }
 }
