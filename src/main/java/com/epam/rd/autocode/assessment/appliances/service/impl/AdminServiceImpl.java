@@ -6,6 +6,7 @@ import com.epam.rd.autocode.assessment.appliances.service.AdminService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,12 +20,25 @@ public class AdminServiceImpl implements AdminService {
         this.passwordEncoder = passwordEncoder;
     }
 
+
     @Override
     public void register(Admin admin) {
-        admin.setName("admin");
-        admin.setEmail("k@gmail.com");
-        admin.setPassword(passwordEncoder.encode("1111"));
+        admin.setName(admin.getName());
+        admin.setEmail(admin.getEmail());
+        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
         adminRepository.save(admin);
         System.out.println("Registered admin: " + admin.getEmail() + " with password: " + admin.getPassword() + "");
     }
+
+    @Override
+    public List<Admin> getAllAdmins() {
+        return adminRepository.findAll();
+    }
+
+    @Override
+    public void deleteAdminById(Long id) {
+        adminRepository.deleteById(id);
+    }
+
+
 }

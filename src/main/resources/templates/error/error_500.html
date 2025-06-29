@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Ой</title>
+    <style>
+        body {
+            background-color: #fff1f2;
+            color: #7f1d1d;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            padding: 4rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #b91c1c;
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        a {
+            text-decoration: none;
+            background-color: #7f1d1d;
+            color: #fef2f2;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+<h1 th:text="${errorMessage}">💥 500 — Странник, щось бахнуло в нутрощах сервера</h1>
+<p>Можливо, ти ввів не ті дані. А може, наші гобліни-інженери знову напортачили...<br>Якщо помилка повторюється — кинь сигнал адміну 🧙‍♂️</p>
+<a href="/main">⬅ Назад до головної</a>
+</body>
+</html>

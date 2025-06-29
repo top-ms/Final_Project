@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Ой!</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fef3c7;
+            color: #92400e;
+            text-align: center;
+            padding: 5rem;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        p {
+            font-size: 1.2rem;
+        }
+        a {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.8rem 1.5rem;
+            background-color: #92400e;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+        a:hover {
+            background-color: #78350f;
+        }
+    </style>
+</head>
+<body>
+<h1 th:text="${errorMessage}">Странник, ти не туди попав 🚷</h1>
+<p>У тебе немає повноважень блукати цими темними стежками 🕵️‍♂️</p>
+<a href="/main">Повернутись на світлу сторону</a>
+</body>
+</html>

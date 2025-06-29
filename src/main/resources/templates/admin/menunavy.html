@@ -1,0 +1,63 @@
+<div th:fragment="navy">
+    <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/main" th:text="#{shop.name}"></a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/clients}" th:text="#{clients.menu.name}"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/employees}" th:text="#{employees.menu.name}"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/manufacturers}" th:text="#{manufacturers.menu.name}"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/appliances}" th:text="#{appliances.menu.name}"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/orders}" th:text="#{order.menu.name}"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/admins}" th:text="#{admin.menu.name}"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/logs}" th:text="#{log.menu.name}"></a>
+                    </li>
+                </ul>
+
+                <!-- Dropdown мов -->
+                <ul class="navbar-nav ms-auto me-2">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="langDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            🌐 <span th:text="#{language.choose}">Language</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                            <li>
+                                <a class="dropdown-item" th:href="@{${requestURI}(lang='en')}">English 🇬🇧</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" th:href="@{${requestURI}(lang='uk')}">Українська 🇺🇦</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item position-relative">
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-outline-light btn-sm px-3 py-1 logout-btn-with-icon">
+                                <span class="icon logout-variant">🔓</span>
+                                <span th:text="#{logout.button}" class="ms-4">Вийти</span>
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>

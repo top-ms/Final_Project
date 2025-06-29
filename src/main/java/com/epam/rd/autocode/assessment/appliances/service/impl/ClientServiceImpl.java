@@ -1,10 +1,12 @@
 package com.epam.rd.autocode.assessment.appliances.service.impl;
 
+import com.epam.rd.autocode.assessment.appliances.dto.ClientRegisterDTO;
 import com.epam.rd.autocode.assessment.appliances.model.Client;
 import com.epam.rd.autocode.assessment.appliances.model.Orders;
 import com.epam.rd.autocode.assessment.appliances.repository.ClientRepository;
 import com.epam.rd.autocode.assessment.appliances.repository.OrdersRepository;
 import com.epam.rd.autocode.assessment.appliances.service.ClientService;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,13 +25,15 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
     private final OrdersRepository ordersRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
     public ClientServiceImpl(ClientRepository clientRepository,
                              OrdersRepository ordersRepository,
-                             BCryptPasswordEncoder passwordEncoder) {
+                             BCryptPasswordEncoder passwordEncoder, ModelMapper modelMapper) {
         this.clientRepository = clientRepository;
         this.ordersRepository = ordersRepository;
         this.passwordEncoder = passwordEncoder;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -49,21 +53,15 @@ public class ClientServiceImpl implements ClientService {
         ordersRepository.deleteAll(orders);
     }
 
-//    @Override
-//    public Optional<Client> findByEmail(String email){
-//        return clientRepository.findByEmail(email);
-//    }
-
-    // 🔐 Додаємо реалізацію UserDetailsService
-
-
 
     // ✅ Метод для реєстрації користувача з хешуванням пароля і генерацією карти
-    public void register(Client client) {
-        client.setPassword(passwordEncoder.encode(client.getPassword()));
-        client.setCard(generateCardNumber()); // 🧠 Генеруємо випадковий номер
+    public void register(ClientRegisterDTO dto) {
+        Client client = modelMapper.map(dto, Client.class);
+
+        client.setPassword(passwordEncoder.encode(dto.getPassword()));
+        client.setCard(generateCardNumber());
+
         clientRepository.save(client);
-        System.out.println("Registered client: " + client.getEmail() + " with card: " + client.getPassword() + "");
     }
 
     // 🧠 Генерація випадкового номера карти (16 цифр)

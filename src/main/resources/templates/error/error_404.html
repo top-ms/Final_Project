@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Ой!</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+            text-align: center;
+            padding: 4rem;
+        }
+        h1 {
+            font-size: 3rem;
+            color: #dc2626;
+            margin-bottom: 1rem;
+        }
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        a {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: #1f2937;
+            color: #f9fafb;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+        a:hover {
+            background-color: #111827;
+        }
+    </style>
+</head>
+<body>
+<h1 th:text="${errorMessage}">404 — Странник, ти не туди попав 🧭</h1>
+<p>Цієї сторінки не існує в цьому світі... 🤷‍♂️<br>Якщо ти впевнений, що вона мала бути — пошепчи про це адміну.</p>
+<a href="/main">⬅ Назад до притулку (головної)</a>
+</body>
+</html>

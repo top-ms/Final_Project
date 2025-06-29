@@ -9,5 +9,5 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface ApplianceRepository extends JpaRepository<Appliance, Long> {
-
+    List<Appliance> findAllByManufacturerId(Long manufacturerId);
 }
