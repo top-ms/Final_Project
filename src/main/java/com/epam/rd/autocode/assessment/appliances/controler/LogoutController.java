@@ -1,7 +1,6 @@
 package com.epam.rd.autocode.assessment.appliances.controler;
 
 import com.epam.rd.autocode.assessment.appliances.service.JwtService;
-import com.epam.rd.autocode.assessment.appliances.service.impl.RequestAuditService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,11 +19,9 @@ public class LogoutController {
     private static final Logger log = LoggerFactory.getLogger(LogoutController.class);
 
     private final JwtService jwtService;
-    private final RequestAuditService auditService;
 
-    public LogoutController(JwtService jwtService, RequestAuditService auditService) {
+    public LogoutController(JwtService jwtService) {
         this.jwtService = jwtService;
-        this.auditService = auditService;
     }
 
     // 🚪 POST logout (основний метод)
@@ -66,7 +63,6 @@ public class LogoutController {
             String clientIp = getClientIpAddress(request);
             String userAgent = request.getHeader("User-Agent");
 
-            auditService.logRequestAsync(username, userId, role, "/logout", "POST", clientIp, userAgent);
 
             log.info("👋 User {} successfully logged out from IP: {}", username, clientIp);
 

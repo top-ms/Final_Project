@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,9 @@ import org.springframework.web.bind.annotation.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Collection;
+
 @Controller
 public class JwtAuthController {
 
@@ -49,7 +53,6 @@ public class JwtAuthController {
     ) {
         System.out.println("Login: " + email + " " + password + "");
         try {
-            System.out.println("Login999: " + email + " " + password + "");
 
             // 1. Аутентифікація користувача
             Authentication authentication = authenticationManager.authenticate(
@@ -81,7 +84,18 @@ public class JwtAuthController {
                 System.out.println(headerName + ": " + response.getHeader(headerName));
             }
 
-            return "redirect:/admin/admins";
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            for (GrantedAuthority authority : authorities) {
+                String role = authority.getAuthority();
+                if (role.equals("ROLE_ADMIN")) {
+                    return "redirect:/admin/orders";
+                } else if (role.equals("ROLE_EMPLOYEE")) {
+                    return "redirect:/employee/orders";
+                } else if (role.equals("ROLE_CLIENT")) {
+                    return "redirect:/client/orders";
+                }
+            }
+            return "redirect:/access-denied";
 
         } catch (BadCredentialsException e) {
             logger.error("Invalid credentials for user: {}", email, e);

@@ -1,29 +1,19 @@
 package com.epam.rd.autocode.assessment.appliances.model;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import jakarta.persistence.Entity;
 
 @Entity
-public class Admin extends User{
-
-    public Admin() {
-    }
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class Admin extends User {
 
     public Admin(Long id, String name, String email, String password) {
-        this.setId(id);
-        this.setName(name);
-        this.setEmail(email);
-        this.setPassword(password);
-    }
-
-
-
-    @Override
-    public String toString() {
-        return "Admin{" +
-                "id=" + getId() +
-                ", name='" + getName() + '\'' +
-                ", email='" + getEmail() + '\'' +
-                ", password='" + getPassword() + '\'' +
-                '}';
+        super(id, name, email, password);
     }
 }

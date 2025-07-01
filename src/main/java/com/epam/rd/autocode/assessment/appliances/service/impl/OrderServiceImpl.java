@@ -50,6 +50,7 @@ public class OrderServiceImpl implements OrderService {
         orderRow.setNumber(number);
         orderRow.setAmount(appliance.getPrice().multiply(BigDecimal.valueOf(number)));
 
+
         orders.getOrderRowSet().add(orderRow);
         ordersRepository.save(orders);
     }
@@ -62,8 +63,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void setApproved(Long id, boolean status) {
-        Orders order = ordersRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+        Orders order = ordersRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Order not found"));
         order.setApproved(status);
         ordersRepository.save(order);
     }
