@@ -30,11 +30,11 @@ public class ManufacturersControllerForEmloyee {
         return "employee/manufacture/newManufacturer";
     }
 
-    @PostMapping("/manufacturers/add-manufacturer")
-    public String addNewManufacturer(@ModelAttribute Manufacturer manufacturer) {
-        manufacturerService.saveNewManufacturer(manufacturer);
-        return "redirect:/employee/manufacturers";
-    }
+//    @PostMapping("/manufacturers/add-manufacturer")
+//    public String addNewManufacturer(@ModelAttribute Manufacturer manufacturer) {
+//        manufacturerService.saveNewManufacturer(manufacturer);
+//        return "redirect:/employee/manufacturers";
+//    }
 
     @GetMapping("manufacturers/{id}/delete")
     public String deleteManufacturer(@PathVariable Long id) {

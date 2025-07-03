@@ -17,7 +17,7 @@
     <nav class="d-flex justify-content-start align-items-center gap-3 mt-3 mb-3">
 
         <!-- Кнопка "Новий клієнт" -->
-        <a th:href="@{employees/add}" class="btn btn-primary" th:text="#{employee.btn.new}">New client</a>
+        <a th:href="@{/admin/employees/add}" class="btn btn-primary" th:text="#{employee.btn.new}">New client</a>
 
 
         <!-- Форма пошуку -->
@@ -51,7 +51,6 @@
         <a th:href="@{/admin/employees}" class="btn btn-primary" th:text="#{button.reset}"></a>
     </nav>
 
-
     <table class="table table-hover">
         <thead>
         <tr class="table-dark">
@@ -64,14 +63,14 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="employee : ${employeesPage.content}">
+        <tr th:each="employee : ${employeesPage}">
             <td th:text="${employee.id}"/>
             <td th:text="${employee.name}"/>
             <td th:text="${employee.email}"/>
             <td>********</td>
             <td th:text="${employee.department}"/>
             <td>
-                <a th:href="@{employees/{id}/delete(id=${employee.id}, page=${currentPage})}" class="text-danger">
+                <a th:href="@{/admin/employees/{id}/delete(id=${employee.id}, page=${currentPage})}" class="text-danger">
                     <i class="fa fa-minus"></i>
                 </a>
             </td>
@@ -80,51 +79,48 @@
     </table>
 </div>
 
+    <!-- Центрована Bootstrap-пагінація -->
+    <nav aria-label="Pagination" class="mt-5 mb-4">
+        <ul class="pagination justify-content-center">
 
-<!-- ✅ Центрована Bootstrap-пагінація -->
-<nav aria-label="Pagination" class="mt-5 mb-4">
-    <ul class="pagination justify-content-center">
+            <!-- Кнопка "Назад" -->
+            <li class="page-item" th:if="${currentPage > 0}">
+                <a class="page-link"
+                   th:href="@{/admin/employees(page=${currentPage - 1}, size=10, sort=${sort})}"
+                   th:text="#{pagination.previous}">← Previous</a>
+            </li>
+            <li class="page-item disabled" th:if="${currentPage == 0}">
+                <a class="page-link"
+                   href="#" tabindex="-1" aria-disabled="true"
+                   th:text="#{pagination.previous}">← Previous</a>
+            </li>
 
-        <!-- Кнопка "Назад" -->
-        <li class="page-item" th:if="${currentPage > 0}">
-            <a class="page-link"
-               th:href="@{/admin/employees(page=${currentPage - 1}, size=10, sort=${sort})}"
-               th:text="#{pagination.previous}">← Previous</a>
-        </li>
-        <li class="page-item disabled" th:if="${currentPage == 0}">
-            <a class="page-link"
-               href="#" tabindex="-1" aria-disabled="true"
-               th:text="#{pagination.previous}">← Previous</a>
-        </li>
+            <!-- Номери сторінок -->
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${i == currentPage} ? 'active'">
+                <a class="page-link"
+                   th:href="@{/admin/employees(page=${i}, size=10, sort=${sort})}"
+                   th:text="${i + 1}">1</a>
+            </li>
 
-        <!-- Номери сторінок -->
-        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-            th:classappend="${i == currentPage} ? 'active'">
-            <a class="page-link"
-               th:href="@{/admin/employees(page=${i}, size=10, sort=${sort})}"
-               th:text="${i + 1}">1</a>
-        </li>
+            <!-- Кнопка "Вперед" -->
+            <li class="page-item" th:if="${currentPage + 1 < totalPages}">
+                <a class="page-link"
+                   th:href="@{/admin/employees(page=${currentPage + 1}, size=10, sort=${sort})}"
+                   th:text="#{pagination.next}">Next →</a>
+            </li>
+            <li class="page-item disabled" th:if="${currentPage + 1 >= totalPages}">
+                <a class="page-link"
+                   href="#" tabindex="-1" aria-disabled="true"
+                   th:text="#{pagination.next}">Next →</a>
+            </li>
 
-        <!-- Кнопка "Вперед" -->
-        <li class="page-item" th:if="${currentPage + 1 < totalPages}">
-            <a class="page-link"
-               th:href="@{/admin/employees(page=${currentPage + 1}, size=10, sort=${sort})}"
-               th:text="#{pagination.next}">Next →</a>
-        </li>
-        <li class="page-item disabled" th:if="${currentPage + 1 >= totalPages}">
-            <a class="page-link"
-               href="#" tabindex="-1" aria-disabled="true"
-               th:text="#{pagination.next}">Next →</a>
-        </li>
+        </ul>
+    </nav>
 
-    </ul>
-</nav>
-
-
-
-<div class="mt-5"
-     th:insert="~{footer::footer}">
-</div>
+    <div class="mt-5"
+        th:insert="~{footer::footer}">
+    </div>
 
 </body>
 </html>

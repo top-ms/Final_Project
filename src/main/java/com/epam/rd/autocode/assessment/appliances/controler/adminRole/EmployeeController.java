@@ -1,8 +1,5 @@
 package com.epam.rd.autocode.assessment.appliances.controler.adminRole;
 
-
-import com.epam.rd.autocode.assessment.appliances.dto.clientDTO.ClientRegisterDTO;
-import com.epam.rd.autocode.assessment.appliances.dto.clientDTO.ViewClientsByAdminDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.employeeDTO.EmployeeRegisterDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.employeeDTO.ViewEmployeesDTO;
 import com.epam.rd.autocode.assessment.appliances.model.Employee;
@@ -42,7 +39,6 @@ public class EmployeeController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, "name"));
         Page<ViewEmployeesDTO> employeesPage = employeeService.getAllEmployeesAsDto(pageable);
         model.addAttribute("employeesPage", employeesPage);
-        model.addAttribute("employees", employeeService.getAllEmployees());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", employeesPage.getTotalPages());
         model.addAttribute("sort", sort);
@@ -51,6 +47,9 @@ public class EmployeeController {
 
     @GetMapping("employees/search")
     public String searchEmployees(@RequestParam("email") String email, Model model) {
+        if (email == null || email == "") {
+            return "redirect:/admin/employees";
+        }
         Optional<ViewEmployeesDTO> employeeOptional = employeeService.findByEmail(email);
 
         if (employeeOptional.isPresent()) {
@@ -92,8 +91,9 @@ public class EmployeeController {
     }
 
     @GetMapping("employees/{id}/delete")
-    public String deleteEmployee(@PathVariable Long id) {
+    public String deleteEmployee(@PathVariable Long id,
+                                 @RequestParam(defaultValue = "0") int page) {
         employeeService.deleteEmployeeById(id);
-        return "redirect:/admin/employees";
+        return "redirect:/admin/employees?page=" + page;
     }
 }

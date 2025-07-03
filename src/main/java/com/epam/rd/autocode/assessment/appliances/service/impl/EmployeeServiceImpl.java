@@ -39,10 +39,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.modelMapper = modelMapper;
     }
 
-
-
-
-
     @Override
     public Optional<ViewEmployeesDTO> findByEmail(String email) {
         return employeeRepository.findByEmail(email)
@@ -59,23 +55,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findAll(pageable)
                 .map(employee -> modelMapper.map(employee, ViewEmployeesDTO.class));
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     @Override
     public List<Employee> getAllEmployees() {

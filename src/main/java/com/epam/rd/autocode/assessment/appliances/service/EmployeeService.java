@@ -12,24 +12,18 @@ import java.util.Optional;
 
 public interface EmployeeService{
 
-
     Optional<ViewEmployeesDTO> findByEmail(String email);
 
     boolean existsByEmail(String email);
 
     Page<ViewEmployeesDTO> getAllEmployeesAsDto(Pageable pageable);
 
-
-
-
-
-
-
-
-
     List<Employee> getAllEmployees();
 
     void deleteEmployeeById(Long id);
+
     void deleteAllOrdersOfEmployeeById(Long id);
+
     void register(EmployeeRegisterDTO employee);
+
 }

@@ -48,22 +48,18 @@ public class ClientController {
         return "admin/client/clients";
     }
 
-
-
-
-
     @GetMapping("clients/search")
     public String searchClients(@RequestParam("email") String email, Model model) {
+        if (email == null || email == "") {
+            return "redirect:/admin/clients";
+        }
         Optional<ViewClientsByAdminDTO> clientOptional = clientService.findByEmail(email);
 
         if (clientOptional.isPresent()) {
-            // Обгортаємо одного клієнта у список і передаємо як Page
             model.addAttribute("clientsPage", new PageImpl<>(List.of(clientOptional.get())));
         } else {
-            // Додаємо ознаку, що нічого не знайдено
             model.addAttribute("notFound", true);
-            model.addAttribute("clientsPage", Page.empty()); // 🛡️ додаємо порожню сторінку
-
+            model.addAttribute("clientsPage", Page.empty());
         }
 
         model.addAttribute("currentPage", 0);
@@ -72,32 +68,6 @@ public class ClientController {
 
         return "admin/client/clients";
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     @GetMapping("clients/add")
     public String showFormForAddingClient(Model model) {
