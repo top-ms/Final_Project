@@ -114,15 +114,21 @@ public class JwtAuthController {
         return "entrance/register"; // Thymeleaf-шаблон register.html
     }
 
-    // 📝 Обробити реєстрацію користувача
     @PostMapping("/register")
-    public String registerClient(@Valid @ModelAttribute("client") ClientRegisterDTO dto, BindingResult bindingResult) {
+    public String registerClient(@Valid @ModelAttribute("client") ClientRegisterDTO dto,
+                                 BindingResult bindingResult,
+                                 Model model) {
+
+
+        if (clientService.existsByEmail(dto.getEmail())) {
+            bindingResult.rejectValue("email", "error.client.email");
+            return "entrance/register";
+        }
         if (bindingResult.hasErrors()) {
             return "entrance/register";
         }
-        // 🔐 Викликаємо сервіс, де пароль хешується й юзер зберігається в базу
         clientService.register(dto);
-        // ✅ Після реєстрації перекидуємо на логін
         return "redirect:/login";
     }
+
 }

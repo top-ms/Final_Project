@@ -2,59 +2,55 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <!-- Latest compiled and minified CSS -->
+    <title>New Client</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Latest compiled JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <title>New client</title>
 </head>
-<body>
+<body class="bg-light">
+
 <div th:insert="~{admin/menunavy::navy}"></div>
-<h1 th:text="#{client.btn.new}"></h1>
-<form action="#" th:action="@{add-client}" th:object="${client}" method="post">
 
-    <!-- Якщо форма повертається з помилками, то вони тут будуть показані -->
-    <!-- Контролер має повертати Model з BindingResult -->
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow p-4" style="min-width: 400px;">
+        <h2 class="text-center mb-4" th:text="#{client.btn.new}">Create New Client</h2>
 
-    <!-- name -->
-    <div class="mb-3">
-        <!-- Якщо є помилка в полі 'name' – виводимо перше повідомлення -->
-        <div th:if="${#fields.hasErrors('name')}" class="text-danger"
-             th:each="err : ${#fields.errors('name')}"
-             th:text="${err}"></div>
+        <form action="#" th:action="@{add-client}" th:object="${client}" method="post">
+            <!-- Name -->
+            <div class="mb-3">
+                <label for="name" class="form-label" th:text="#{object.user.name}">Name</label>
+                <input type="text" id="name" class="form-control" th:field="*{name}" placeholder="John"/>
+                <div th:if="${#fields.hasErrors('name')}" class="text-danger small mt-1"
+                     th:each="err : ${#fields.errors('name')}" th:text="${err}"></div>
+            </div>
 
-        <!-- Label для поля name -->
-        <label for="name" class="form-label" th:text="#{object.user.name}">Name</label>
+            <!-- Email -->
+            <div class="mb-3">
+                <label for="email" class="form-label" th:text="#{object.user.email}">Email</label>
+                <input type="email" id="email" class="form-control" th:field="*{email}" placeholder="example@mail.com"/>
+                <div th:if="${#fields.hasErrors('email')}" class="text-danger small mt-1"
+                     th:each="err : ${#fields.errors('email')}" th:text="${err}"></div>
+            </div>
 
-        <!-- Власне поле вводу -->
-        <input type="text" id="name" class="form-control" th:field="*{name}" />
+            <!-- Password -->
+            <div class="mb-3">
+                <label for="password" class="form-label" th:text="#{object.user.password}">Password</label>
+                <input type="password" id="password" class="form-control" th:field="*{password}" placeholder="••••••••"/>
+                <div th:if="${#fields.hasErrors('password')}" class="text-danger small mt-1"
+                     th:each="err : ${#fields.errors('password')}" th:text="${err}"></div>
+            </div>
+
+            <!-- Submit/Reset Buttons -->
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success" th:text="#{button.submit}">Register</button>
+                <a th:href="@{/admin/clients}" class="btn btn-outline-primary" th:text="#{button.back}">Back to Clients</a>
+            </div>
+        </form>
     </div>
+</div>
 
-    <!-- email -->
-    <div class="mb-3">
-        <!-- Якщо є помилка – виводимо всі повідомлення -->
-        <div th:if="${#fields.hasErrors('email')}" class="text-danger"
-             th:each="err : ${#fields.errors('email')}"
-             th:text="${err}"></div>
-
-        <label for="email" class="form-label" th:text="#{object.user.email}">Email</label>
-        <input type="text" id="email" class="form-control" th:field="*{email}" />
-    </div>
-
-    <!-- password -->
-    <div class="mb-3">
-        <!-- Виводимо всі помилки пароля -->
-        <div th:if="${#fields.hasErrors('password')}" class="text-danger"
-             th:each="err : ${#fields.errors('password')}"
-             th:text="${err}"></div>
-
-        <label for="password" class="form-label" th:text="#{object.user.password}">Password</label>
-        <input type="password" id="password" class="form-control" th:field="*{password}" />
-    </div>
-
-    <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
-</form>
 <div th:insert="~{footer::footer}"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
