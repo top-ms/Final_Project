@@ -1,20 +1,20 @@
-package com.epam.rd.autocode.assessment.appliances.dto;
+package com.epam.rd.autocode.assessment.appliances.dto.employeeDTO;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.boot.context.properties.bind.Name;
 
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientRegisterDTO {
+public class EmployeeRegisterDTO {
+
+
 
     @NotBlank(message = "{user.name.is.mandatory}")
     @Pattern(
@@ -30,5 +30,7 @@ public class ClientRegisterDTO {
     @NotBlank(message = "{user.password.is.blank}")
     @Size(min = 6, max = 30, message = "{user.password.length}")
     private String password;
+
+    private String department;
 
 }

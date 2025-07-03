@@ -1,4 +1,4 @@
-package com.epam.rd.autocode.assessment.appliances.controler.admin;
+package com.epam.rd.autocode.assessment.appliances.controler.adminRole;
 
 import com.epam.rd.autocode.assessment.appliances.model.Appliance;
 import com.epam.rd.autocode.assessment.appliances.model.Category;

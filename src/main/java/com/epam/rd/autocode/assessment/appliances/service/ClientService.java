@@ -1,7 +1,7 @@
 package com.epam.rd.autocode.assessment.appliances.service;
 
-import com.epam.rd.autocode.assessment.appliances.dto.ClientRegisterDTO;
-import com.epam.rd.autocode.assessment.appliances.dto.ViewClientsByAdminDTO;
+import com.epam.rd.autocode.assessment.appliances.dto.clientDTO.ClientRegisterDTO;
+import com.epam.rd.autocode.assessment.appliances.dto.clientDTO.ViewClientsByAdminDTO;
 import com.epam.rd.autocode.assessment.appliances.model.Client;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

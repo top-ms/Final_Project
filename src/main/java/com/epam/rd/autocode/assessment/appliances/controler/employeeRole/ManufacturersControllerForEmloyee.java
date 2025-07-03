@@ -1,4 +1,4 @@
-package com.epam.rd.autocode.assessment.appliances.controler.admin;
+package com.epam.rd.autocode.assessment.appliances.controler.employeeRole;
 
 import com.epam.rd.autocode.assessment.appliances.model.Manufacturer;
 import com.epam.rd.autocode.assessment.appliances.service.ManufacturerService;
@@ -8,37 +8,37 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/admin")
-@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-public class ManufacturersController {
+@RequestMapping("/employee")
+@PreAuthorize("hasAuthority('ROLE_EMPLOYEE')")
+public class ManufacturersControllerForEmloyee {
 
     private final ManufacturerService manufacturerService;
 
-    public ManufacturersController(ManufacturerService manufacturerService) {
+    public ManufacturersControllerForEmloyee(ManufacturerService manufacturerService) {
         this.manufacturerService = manufacturerService;
     }
 
     @GetMapping("/manufacturers")
     public String viewListOfManufacturers(Model model) {
         model.addAttribute("manufacturers", manufacturerService.getAllManufacturers());
-        return "admin/manufacture/manufacturers";
+        return "employee/manufacture/manufacturers";
     }
 
     @GetMapping("/manufacturers/add")
     public String showFormForAddingNewManufacturer(Model model) {
         model.addAttribute("manufacturer", new Manufacturer());
-        return "admin/manufacture/newManufacturer";
+        return "employee/manufacture/newManufacturer";
     }
 
     @PostMapping("/manufacturers/add-manufacturer")
     public String addNewManufacturer(@ModelAttribute Manufacturer manufacturer) {
         manufacturerService.saveNewManufacturer(manufacturer);
-        return "redirect:/admin/manufacturers";
+        return "redirect:/employee/manufacturers";
     }
 
     @GetMapping("manufacturers/{id}/delete")
     public String deleteManufacturer(@PathVariable Long id) {
         manufacturerService.deleteManufacturerById(id);
-        return "redirect:/admin/manufacturers";
+        return "redirect:/employee/manufacturers";
     }
 }

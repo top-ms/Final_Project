@@ -1,6 +1,6 @@
 package com.epam.rd.autocode.assessment.appliances.controler;
 
-import com.epam.rd.autocode.assessment.appliances.dto.ClientRegisterDTO;
+import com.epam.rd.autocode.assessment.appliances.dto.clientDTO.ClientRegisterDTO;
 import com.epam.rd.autocode.assessment.appliances.model.Client;
 import com.epam.rd.autocode.assessment.appliances.service.ClientService;
 import com.epam.rd.autocode.assessment.appliances.service.JwtService;

@@ -1,4 +1,4 @@
-package com.epam.rd.autocode.assessment.appliances.controler.employee;
+package com.epam.rd.autocode.assessment.appliances.controler.employeeRole;
 
 import com.epam.rd.autocode.assessment.appliances.model.Appliance;
 import com.epam.rd.autocode.assessment.appliances.model.Category;

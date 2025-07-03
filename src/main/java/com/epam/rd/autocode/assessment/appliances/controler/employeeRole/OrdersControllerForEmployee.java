@@ -1,4 +1,4 @@
-package com.epam.rd.autocode.assessment.appliances.controler.employee;
+package com.epam.rd.autocode.assessment.appliances.controler.employeeRole;
 
 import com.epam.rd.autocode.assessment.appliances.model.Appliance;
 import com.epam.rd.autocode.assessment.appliances.model.OrderRow;
@@ -43,7 +43,7 @@ public class OrdersControllerForEmployee {
         model.addAttribute("order", new Orders()); // Порожній Order для форми
 
         model.addAttribute("clients", clientService.getAllClients()); // для селекта клієнтів
-        model.addAttribute("employees", employeeService.getAllEmployee()); // для селекта працівників
+        model.addAttribute("employees", employeeService.getAllEmployees()); // для селекта працівників
 
         return "employee/order/newOrder"; // Назва шаблону (html), де твоя форма
     }

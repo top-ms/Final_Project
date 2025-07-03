@@ -1,17 +1,11 @@
-package com.epam.rd.autocode.assessment.appliances.controler.admin;
+package com.epam.rd.autocode.assessment.appliances.controler.adminRole;
 
-import com.epam.rd.autocode.assessment.appliances.dto.ClientRegisterDTO;
 import com.epam.rd.autocode.assessment.appliances.model.*;
 import com.epam.rd.autocode.assessment.appliances.service.*;
-import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-
-import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
