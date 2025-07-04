@@ -9,77 +9,77 @@
     <title>Clients list</title>
 </head>
 <body class="d-flex flex-column min-vh-100">
-<div class="flex-grow-1">
-    <div th:insert="~{admin/menunavy::navy}"></div>
+<div class="flex-grow-1" style="min-height: 600px;">
+        <div th:insert="~{admin/menunavy::navy}"></div>
 
-    <h1 th:text="#{employee.header.list}"></h1>
+        <h1 th:text="#{employee.header.list}"></h1>
 
-    <nav class="d-flex justify-content-start align-items-center gap-3 mt-3 mb-3">
+        <nav class="d-flex justify-content-start align-items-center gap-3 mt-3 mb-3">
 
-        <!-- Кнопка "Новий клієнт" -->
-        <a th:href="@{/admin/employees/add}" class="btn btn-primary" th:text="#{employee.btn.new}">New client</a>
+            <!-- Кнопка "Новий клієнт" -->
+            <a th:href="@{/admin/employees/add}" class="btn btn-primary" th:text="#{employee.btn.new}">New client</a>
 
 
-        <!-- Форма пошуку -->
-        <form th:action="@{/admin/employees/search}" method="get" class="d-flex">
-            <input class="form-control me-2"
-                   type="search"
-                   name="email"
-                   placeholder="Search by email"
-                   aria-label="Search"
-                   th:classappend="${notFound} ? ' is-invalid' : ''"/>
-            <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
+            <!-- Форма пошуку -->
+            <form th:action="@{/admin/employees/search}" method="get" class="d-flex">
+                <input class="form-control me-2"
+                       type="search"
+                       name="email"
+                       placeholder="Search by email"
+                       aria-label="Search"
+                       th:classappend="${notFound} ? ' is-invalid' : ''"/>
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
 
-        <!-- Повідомлення, якщо не знайдено -->
-        <div th:if="${notFound}" class="text-danger mt-2">
-            <p th:text="#{notfound}">Клієнта з такою електронною поштою не знайдено</p>
-        </div>
+            <!-- Повідомлення, якщо не знайдено -->
+            <div th:if="${notFound}" class="text-danger mt-2">
+                <p th:text="#{notfound}">Клієнта з такою електронною поштою не знайдено</p>
+            </div>
 
-        <!-- Сортування за ім’ям -->
-        <form method="get" th:action="@{/admin/employees}" class="d-flex align-items-center">
-            <input type="hidden" name="page" th:value="${currentPage}"/>
-            <input type="hidden" name="size" th:value="10"/>
-            <select name="sort" class="form-select" onchange="this.form.submit()">
-                <option th:value="asc" th:selected="${sort == 'asc'}"
-                        th:text="#{sort.asc}">Name A-Z</option>
-                <option th:value="desc" th:selected="${sort == 'desc'}"
-                        th:text="#{sort.desc}">Name Z-A</option>
-            </select>
-        </form>
+            <!-- Сортування за ім’ям -->
+            <form method="get" th:action="@{/admin/employees}" class="d-flex align-items-center">
+                <input type="hidden" name="page" th:value="${currentPage}"/>
+                <input type="hidden" name="size" th:value="10"/>
+                <select name="sort" class="form-select" onchange="this.form.submit()">
+                    <option th:value="asc" th:selected="${sort == 'asc'}"
+                            th:text="#{sort.asc}">Name A-Z</option>
+                    <option th:value="desc" th:selected="${sort == 'desc'}"
+                            th:text="#{sort.desc}">Name Z-A</option>
+                </select>
+            </form>
 
-        <a th:href="@{/admin/employees}" class="btn btn-primary" th:text="#{button.reset}"></a>
-    </nav>
+            <a th:href="@{/admin/employees}" class="btn btn-primary" th:text="#{button.reset}"></a>
+        </nav>
 
-    <table class="table table-hover">
-        <thead>
-        <tr class="table-dark">
-            <th th:text="#{object.user.id}"></th>
-            <th th:text="#{object.user.name}"></th>
-            <th th:text="#{object.user.email}"></th>
-            <th th:text="#{object.user.password}"></th>
-            <th th:text="#{object.employee.department}"></th>
-            <th th:text="#{client.operation}">Operation</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="employee : ${employeesPage}">
-            <td th:text="${employee.id}"/>
-            <td th:text="${employee.name}"/>
-            <td th:text="${employee.email}"/>
-            <td>********</td>
-            <td th:text="${employee.department}"/>
-            <td>
-                <a th:href="@{/admin/employees/{id}/delete(id=${employee.id}, page=${currentPage})}"
-                   class="btn btn-outline-danger btn-sm"
-                   title="Delete">
-                    <i class="fa fa-trash"></i>
-                </a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+        <table class="table table-hover">
+            <thead>
+                <tr class="table-dark">
+                    <th th:text="#{object.user.id}"></th>
+                    <th th:text="#{object.user.name}"></th>
+                    <th th:text="#{object.user.email}"></th>
+                    <th th:text="#{object.user.password}"></th>
+                    <th th:text="#{object.employee.department}"></th>
+                    <th th:text="#{client.operation}">Operation</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr th:each="employee : ${employeesPage}">
+                <td th:text="${employee.id}"/>
+                <td th:text="${employee.name}"/>
+                <td th:text="${employee.email}"/>
+                <td>********</td>
+                <td th:text="${employee.department}"/>
+                <td>
+                    <a th:href="@{/admin/employees/{id}/delete(id=${employee.id}, page=${currentPage})}"
+                       class="btn btn-outline-danger btn-sm"
+                       title="Delete">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
     <!-- Центрована Bootstrap-пагінація -->
     <nav aria-label="Pagination" class="mt-5 mb-4">

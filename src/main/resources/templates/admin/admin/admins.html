@@ -2,50 +2,129 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <!-- Latest compiled and minified CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link th:href="@{/styles/css/main.css}" rel="stylesheet"/>
     <title>Admins list</title>
 </head>
-<body>
-<div th:insert="~{admin/menunavy::navy}"></div>
-<h1>Admins list</h1>
-<div class="d-flex justify-content-start mt-2 mb-2">
-    <a th:href="@{admins/add}" class="btn btn-primary" th:text="#{admin.btn.new}">New admin</a>
-</div>
-<table class="table table-hover">
-    <thead>
-    <tr class="table-dark">
-        <th th:text="#{object.user.id}"></th>
-        <th th:text="#{object.user.name}"></th>
-        <th th:text="#{object.user.email}"></th>
-        <th th:text="#{object.user.password}"></th>
-        <th th:text="#{admin.operation}">Operation</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="admin: ${admins}">
-        <td th:text="${admin.id}"></td>
-        <td th:text="${admin.name}"></td>
-        <td th:text="${admin.email}"></td>
-        <td th:text="${admin.password}"></td>
-        <td>
-            <div>
-                <a th:href="@{admins/{id}/delete(id=${admin.id})}">
-                    <span class="icon">
-                          <i class="fa fa-minus"></i>
-                    </span>
-                </a>
-            </div>
-        </td>
-    </tr>
+<body class="d-flex flex-column min-vh-100">
+<div class="flex-grow-1">
+    <div th:insert="~{admin/menunavy::navy}"></div>
 
-    </tbody>
-</table>
-<div th:insert="~{footer::footer}"></div>
+    <h1 th:text="#{admin.header.list}"></h1>
+
+    <nav class="d-flex justify-content-start align-items-center gap-3 mt-3 mb-3">
+
+        <!-- Кнопка "Новий клієнт" -->
+        <a th:href="@{admins/add}" class="btn btn-primary" th:text="#{admin.btn.new}">New</a>
+
+
+        <!-- Форма пошуку -->
+        <form th:action="@{/admin/admins/search}" method="get" class="d-flex">
+            <input class="form-control me-2"
+                   type="search"
+                   name="email"
+                   placeholder="Search by email"
+                   aria-label="Search"
+                   th:classappend="${notFound} ? ' is-invalid' : ''"/>
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+
+        <!-- Повідомлення, якщо не знайдено -->
+        <div th:if="${notFound}" class="text-danger mt-2">
+            <p th:text="#{notfound}">Клієнта з такою електронною поштою не знайдено</p>
+        </div>
+
+        <!-- Сортування за ім’ям -->
+        <form method="get" th:action="@{/admin/admins}" class="d-flex align-items-center">
+            <input type="hidden" name="page" th:value="${currentPage}"/>
+            <input type="hidden" name="size" th:value="10"/>
+            <select name="sort" class="form-select" onchange="this.form.submit()">
+                <option th:value="asc" th:selected="${sort == 'asc'}"
+                        th:text="#{sort.asc}">Name A-Z</option>
+                <option th:value="desc" th:selected="${sort == 'desc'}"
+                        th:text="#{sort.desc}">Name Z-A</option>
+            </select>
+        </form>
+
+        <a th:href="@{/admin/admins}" class="btn btn-primary" th:text="#{reset.btn}">View all clients</a>
+    </nav>
+
+
+    <table class="table table-hover">
+        <thead>
+        <tr class="table-dark">
+            <th th:text="#{object.user.id}"></th>
+            <th th:text="#{object.user.name}"></th>
+            <th th:text="#{object.user.email}"></th>
+            <th th:text="#{object.user.password}"></th>
+            <th th:text="#{client.operation}">Operation</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="admin : ${adminsPage}">
+            <td th:text="${admin.id}"></td>
+            <td th:text="${admin.name}"></td>
+            <td th:text="${admin.email}"></td>
+            <td>********</td>
+            <td>
+                <a th:href="@{/admin/admins/{id}/delete(id=${admin.id}, page=${currentPage})}"
+                   class="btn btn-outline-danger btn-sm"
+                   title="Delete">
+                    <i class="fa fa-trash"></i>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<!-- ✅ Центрована Bootstrap-пагінація -->
+<nav aria-label="Pagination" class="mt-5 mb-4">
+    <ul class="pagination justify-content-center">
+
+        <!-- Кнопка "Назад" -->
+        <li class="page-item" th:if="${currentPage > 0}">
+            <a class="page-link"
+               th:href="@{/admin/admins(page=${currentPage - 1}, size=10, sort=${sort})}"
+               th:text="#{pagination.previous}">← Previous</a>
+        </li>
+        <li class="page-item disabled" th:if="${currentPage == 0}">
+            <a class="page-link"
+               href="#" tabindex="-1" aria-disabled="true"
+               th:text="#{pagination.previous}">← Previous</a>
+        </li>
+
+        <!-- Номери сторінок -->
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+            th:classappend="${i == currentPage} ? 'active'">
+            <a class="page-link"
+               th:href="@{/admin/admins(page=${i}, size=10, sort=${sort})}"
+               th:text="${i + 1}">1</a>
+        </li>
+
+        <!-- Кнопка "Вперед" -->
+        <li class="page-item" th:if="${currentPage + 1 < totalPages}">
+            <a class="page-link"
+               th:href="@{/admin/admins(page=${currentPage + 1}, size=10, sort=${sort})}"
+               th:text="#{pagination.next}">Next →</a>
+        </li>
+        <li class="page-item disabled" th:if="${currentPage + 1 >= totalPages}">
+            <a class="page-link"
+               href="#" tabindex="-1" aria-disabled="true"
+               th:text="#{pagination.next}">Next →</a>
+        </li>
+
+    </ul>
+</nav>
+
+
+
+<div class="mt-5"
+     th:insert="~{footer::footer}">
+</div>
+
 </body>
 </html>
