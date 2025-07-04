@@ -72,8 +72,10 @@
                 <td th:text="${manufacturer.name}"/>
                 <td>
                     <div>
-                    <a th:href="@{/admin/manufacturers/{id}/delete(id=${manufacturer.id}, page=${currentPage})}" class="text-danger">
-                          <i class="fa fa-minus"></i>
+                        <a th:href="@{/admin/manufacturers/{id}/delete(id=${manufacturer.id}, page=${currentPage})}"
+                           class="btn btn-outline-danger btn-sm"
+                           title="Delete">
+                            <i class="fa fa-trash"></i>
                         </a>
                     </div>
                 </td>

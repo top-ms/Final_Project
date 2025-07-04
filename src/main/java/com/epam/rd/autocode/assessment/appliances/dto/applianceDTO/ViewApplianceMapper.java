@@ -7,10 +7,10 @@ import com.epam.rd.autocode.assessment.appliances.model.PowerType;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ApplianceMapper {
+public class ViewApplianceMapper {
 
-    public ApplianceDTO toDTO(Appliance appliance) {
-        ApplianceDTO dto = new ApplianceDTO();
+    public ViewApplianceDTO toDTO(Appliance appliance) {
+        ViewApplianceDTO dto = new ViewApplianceDTO();
         dto.setId(appliance.getId());
         dto.setName(appliance.getName());
         dto.setCategory(appliance.getCategory().name()); // enum → string
@@ -31,7 +31,7 @@ public class ApplianceMapper {
         return dto;
     }
 
-    public Appliance toEntity(ApplianceDTO dto, Manufacturer manufacturer) {
+    public Appliance toEntity(ViewApplianceDTO dto, Manufacturer manufacturer) {
         Appliance appliance = new Appliance();
         appliance.setId(dto.getId());
         appliance.setName(dto.getName());

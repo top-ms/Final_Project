@@ -90,13 +90,27 @@
                     <td th:text="${appliance.description}"></td>
                     <td><span class="float-end" th:text="${appliance.power}"/></td>
                     <td><span class="float-end" th:text="${appliance.price}"/></td>
-                    <td>
-                        <div>
-                            <a th:href="@{/admin/appliances/{id}/delete(id=${appliance.id}, page=${currentPage})}" class="text-danger">
-                                  <i class="fa fa-minus"></i>
-                            </a>
-                        </div>
-                    </td>
+                     <td>
+                         <div class="d-flex gap-2 justify-content-center">
+
+                             <!-- Кнопка редагування -->
+                             <a th:href="@{'/admin/appliances/' + ${appliance.id} + '/edit'}"
+                                class="btn btn-outline-primary btn-sm"
+                                title="Edit">
+                                 <i class="fa fa-pencil"></i>
+                             </a>
+
+                             <!-- Кнопка видалення -->
+                             <a th:href="@{/admin/appliances/{id}/delete(id=${appliance.id}, page=${currentPage})}"
+                                class="btn btn-outline-danger btn-sm"
+                                title="Delete">
+                                 <i class="fa fa-trash"></i>
+                             </a>
+
+                         </div>
+                     </td>
+
+
                 </tr>
             </tbody>
         </table>

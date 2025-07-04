@@ -1,9 +1,8 @@
 package com.epam.rd.autocode.assessment.appliances.controler.adminRole;
 
-import com.epam.rd.autocode.assessment.appliances.dto.applianceDTO.ApplianceDTO;
-import com.epam.rd.autocode.assessment.appliances.model.Appliance;
-import com.epam.rd.autocode.assessment.appliances.model.Category;
-import com.epam.rd.autocode.assessment.appliances.model.PowerType;
+import com.epam.rd.autocode.assessment.appliances.dto.applianceDTO.EditApplianceDTO;
+import com.epam.rd.autocode.assessment.appliances.dto.applianceDTO.ViewApplianceDTO;
+import com.epam.rd.autocode.assessment.appliances.model.*;
 import com.epam.rd.autocode.assessment.appliances.service.ApplianceService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,7 +36,7 @@ public class ApplianceController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, "name"));
 
 
-        Page<ApplianceDTO> appliancesPage = applianceService.getAllManufacturersAsDto(pageable);
+        Page<ViewApplianceDTO> appliancesPage = applianceService.getAllManufacturersAsDto(pageable);
 
 
         model.addAttribute("appliancesPage", appliancesPage);
@@ -53,7 +52,7 @@ public class ApplianceController {
             return "redirect:/admin/appliances";
         }
 
-        Optional<ApplianceDTO> applianceOptional = applianceService.getByName(name);
+        Optional<ViewApplianceDTO> applianceOptional = applianceService.getByName(name);
         if (applianceOptional.isPresent()) {
             model.addAttribute("appliancesPage", applianceOptional.get());
         } else {
@@ -64,7 +63,6 @@ public class ApplianceController {
         model.addAttribute("totalPages", 1);
         return "admin/appliance/appliances";
     }
-
 
     @GetMapping("appliances/{id}/delete")
     public String deleteManufacturer(@PathVariable Long id,
@@ -83,11 +81,51 @@ public class ApplianceController {
     }
 
     @PostMapping("/appliances/add-appliance")
-    public String addNewAppliance(@ModelAttribute("appliance") ApplianceDTO dto) {
-        System.out.println("Before");
+    public String addNewAppliance(@ModelAttribute("appliance") ViewApplianceDTO dto) {
         applianceService.addNewAppliance(dto);
-        System.out.println("After");
         return "redirect:/admin/appliances";
     }
+
+
+
+    @GetMapping("/appliances/{id}/edit")
+    public String showEditForm(@PathVariable("id") Long id, Model model) {
+        Optional<ViewApplianceDTO> appliance = applianceService.getApplianceById(id);
+        System.out.println("Appliance " + appliance.get());
+
+        model.addAttribute("categories", Category.values());
+        model.addAttribute("powerTypes", PowerType.values());
+        model.addAttribute("manufacturers", applianceService.getAllManufacturers());
+        model.addAttribute("appliance", appliance.get());
+
+        return "admin/appliance/editAppliance";
+    }
+
+    @PostMapping("/appliances/{id}/update-appliance")
+    public String updateAppliance(@PathVariable("id") Long id,
+                                  @ModelAttribute("appliance") ViewApplianceDTO dto) {
+        applianceService.updateAppliance(id, dto);
+        return "redirect:/admin/appliances";
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

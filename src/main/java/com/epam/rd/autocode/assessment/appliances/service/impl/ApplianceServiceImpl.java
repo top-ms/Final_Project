@@ -1,9 +1,12 @@
 package com.epam.rd.autocode.assessment.appliances.service.impl;
 
-import com.epam.rd.autocode.assessment.appliances.dto.applianceDTO.ApplianceMapper;
-import com.epam.rd.autocode.assessment.appliances.dto.applianceDTO.ApplianceDTO;
+import com.epam.rd.autocode.assessment.appliances.dto.applianceDTO.EditApplianceDTO;
+import com.epam.rd.autocode.assessment.appliances.dto.applianceDTO.ViewApplianceMapper;
+import com.epam.rd.autocode.assessment.appliances.dto.applianceDTO.ViewApplianceDTO;
 import com.epam.rd.autocode.assessment.appliances.model.Appliance;
+import com.epam.rd.autocode.assessment.appliances.model.Category;
 import com.epam.rd.autocode.assessment.appliances.model.Manufacturer;
+import com.epam.rd.autocode.assessment.appliances.model.PowerType;
 import com.epam.rd.autocode.assessment.appliances.repository.ApplianceRepository;
 import com.epam.rd.autocode.assessment.appliances.repository.ManufacturerRepository;
 import com.epam.rd.autocode.assessment.appliances.repository.OrderRowRepository;
@@ -25,30 +28,32 @@ public class ApplianceServiceImpl implements ApplianceService {
 
     private final ApplianceRepository applianceRepository;
     private final ManufacturerRepository manufacturerRepository;
-    private final ApplianceMapper applianceMapper;
+    private final ModelMapper modelMapper;
+    private final ViewApplianceMapper viewApplianceMapper;
     private final OrderRowRepository orderRowRepository;
 
     public ApplianceServiceImpl(ApplianceRepository applianceRepository,
-                                ManufacturerRepository manufacturerRepository, ApplianceMapper applianceMapper, ModelMapper modelMapper, OrderService orderService, OrderRowRepository orderRowRepository) {
+                                ManufacturerRepository manufacturerRepository, ViewApplianceMapper viewApplianceMapper, ModelMapper modelMapper, OrderService orderService, ModelMapper modelMapper1, OrderRowRepository orderRowRepository) {
         this.applianceRepository = applianceRepository;
         this.manufacturerRepository = manufacturerRepository;
-        this.applianceMapper = applianceMapper;
+        this.viewApplianceMapper = viewApplianceMapper;
+        this.modelMapper = modelMapper1;
         this.orderRowRepository = orderRowRepository;
     }
 
 
     @Override
-    public Page<ApplianceDTO> getAllManufacturersAsDto(Pageable pageable) {
+    public Page<ViewApplianceDTO> getAllManufacturersAsDto(Pageable pageable) {
         System.out.println("getAllManufacturersAsDto: " + pageable);
 
         return applianceRepository.findAll(pageable)
-                .map(applianceMapper::toDTO);
+                .map(viewApplianceMapper::toDTO);
     }
 
     @Override
-    public Optional<ApplianceDTO> getByName(String name) {
+    public Optional<ViewApplianceDTO> getByName(String name) {
         return applianceRepository.findByName(name)
-                .map(applianceMapper::toDTO);
+                .map(viewApplianceMapper::toDTO);
     }
 
     @Transactional
@@ -60,21 +65,49 @@ public class ApplianceServiceImpl implements ApplianceService {
 
 
     @Override
-    public void addNewAppliance(ApplianceDTO applianceDTO) {
-        System.out.println("Before save: " + applianceDTO.toString() + "");
-        System.out.println("Looking for manufacturer name: " + applianceDTO.getManufacturer());
+    public void addNewAppliance(ViewApplianceDTO viewApplianceDTO) {
+        System.out.println("Before save: " + viewApplianceDTO.toString() + "");
+        System.out.println("Looking for manufacturer name: " + viewApplianceDTO.getManufacturer());
 
-        Optional<Manufacturer> optionalManufacturer = manufacturerRepository.findByName(applianceDTO.getManufacturer());
-        System.out.println("Optional manufacturer: " + optionalManufacturer.toString() + "");
+        Optional<Manufacturer> optionalManufacturer = manufacturerRepository.findByName(viewApplianceDTO.getManufacturer());
         Manufacturer manufacturer = optionalManufacturer.orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.BAD_REQUEST, "Manufacturer not found: " + applianceDTO.getManufacturer()));
+                new ResponseStatusException(HttpStatus.BAD_REQUEST, "Manufacturer not found: " + viewApplianceDTO.getManufacturer()));
 
-        System.out.println("Manufacturer: " + manufacturer.toString() + "");
-
-        Appliance appliance = applianceMapper.toEntity(applianceDTO, manufacturer);
+        Appliance appliance = viewApplianceMapper.toEntity(viewApplianceDTO, manufacturer);
         System.out.println("After save: " + appliance.toString() + "");
 
         applianceRepository.save(appliance);
+    }
+
+
+    @Override
+    public Optional<ViewApplianceDTO> getApplianceById(Long id) {
+        return applianceRepository.findById(id)
+                .map(viewApplianceMapper::toDTO);
+    }
+
+
+
+    public void updateAppliance(Long id, ViewApplianceDTO dto) {
+        Appliance appliance = applianceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Appliance not found with id: " + id));
+
+        // оновлюємо поля
+        appliance.setName(dto.getName());
+        appliance.setModel(dto.getModel());
+        appliance.setCategory(Category.valueOf(dto.getCategory()));
+        appliance.setPowerType(PowerType.valueOf(dto.getPowerType()));
+        appliance.setCharacteristic(dto.getCharacteristic());
+        appliance.setDescription(dto.getDescription());
+        appliance.setPower(dto.getPower());
+        appliance.setPrice(dto.getPrice());
+
+        // оновлюємо manufacturer, якщо треба
+        Manufacturer manufacturer = manufacturerRepository.findByName(dto.getManufacturer())
+                .orElseThrow(() -> new RuntimeException("Manufacturer not found"));
+        appliance.setManufacturer(manufacturer);
+
+        applianceRepository.save(appliance); // зберігаємо оновлений об'єкт
     }
 
 
@@ -102,9 +135,5 @@ public class ApplianceServiceImpl implements ApplianceService {
         return applianceRepository.findAll();
     }
 
-    @Override
-    public Appliance findById(Long id) {
-        return applianceRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Appliance not find with id = " + id));
-    }
+
 }

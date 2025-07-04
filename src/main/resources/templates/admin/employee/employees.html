@@ -70,8 +70,10 @@
             <td>********</td>
             <td th:text="${employee.department}"/>
             <td>
-                <a th:href="@{/admin/employees/{id}/delete(id=${employee.id}, page=${currentPage})}" class="text-danger">
-                    <i class="fa fa-minus"></i>
+                <a th:href="@{/admin/employees/{id}/delete(id=${employee.id}, page=${currentPage})}"
+                   class="btn btn-outline-danger btn-sm"
+                   title="Delete">
+                    <i class="fa fa-trash"></i>
                 </a>
             </td>
         </tr>

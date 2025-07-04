@@ -1,6 +1,8 @@
 package com.epam.rd.autocode.assessment.appliances.dto.applianceDTO;
 
-
+import com.epam.rd.autocode.assessment.appliances.model.Category;
+import com.epam.rd.autocode.assessment.appliances.model.Manufacturer;
+import com.epam.rd.autocode.assessment.appliances.model.PowerType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,20 +12,19 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApplianceDTO {
-
+public class EditApplianceDTO {
 
     private Long id;
 
     private String name;
 
-    private String category;
+    private Category category;
 
     private String model;
 
-    private String manufacturer;
+    private Manufacturer manufacturer;
 
-    private String powerType;
+    private PowerType powerType;
 
     private String characteristic;
 
