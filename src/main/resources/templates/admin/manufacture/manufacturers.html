@@ -72,10 +72,8 @@
                 <td th:text="${manufacturer.name}"/>
                 <td>
                     <div>
-                        <a th:href="@{/admin/manufacturers/{id}/delete(id=${manufacturer.id})}">
-                    <span class="icon">
+                    <a th:href="@{/admin/manufacturers/{id}/delete(id=${manufacturer.id}, page=${currentPage})}" class="text-danger">
                           <i class="fa fa-minus"></i>
-                    </span>
                         </a>
                     </div>
                 </td>
@@ -129,7 +127,6 @@
 
 
     </tbody>
-</table>
 <div th:insert="~{footer::footer}"></div>
 </body>
 </html>

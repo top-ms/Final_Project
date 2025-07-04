@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface OrderRowRepository extends JpaRepository<OrderRow, Long> {
     void deleteOrderRowById(Long orderRowId);
     void deleteAllByApplianceId(Long applianceId);
+    void deleteOrderRowsByApplianceId(Long applianceId);
 }

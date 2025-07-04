@@ -39,9 +39,9 @@ public class ApplianceControllerForEmployee {
         return "employee/appliance/newAppliance";
     }
 
-    @PostMapping("/appliances/add-appliance")
-    public String addNewAppliance(@ModelAttribute("appliance") Appliance appliance) {
-        applianceService.addNewAppliance(appliance);
-        return "redirect:/employee/appliances";
-    }
+//    @PostMapping("/appliances/add-appliance")
+//    public String addNewAppliance(@ModelAttribute("appliance") Appliance appliance) {
+//        applianceService.addNewAppliance(appliance);
+//        return "redirect:/employee/appliances";
+//    }
 }
