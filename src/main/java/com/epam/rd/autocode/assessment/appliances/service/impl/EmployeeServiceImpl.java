@@ -39,6 +39,22 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.modelMapper = modelMapper;
     }
 
+
+
+    // У EmployeeServiceImpl:
+    @Override
+    public Employee findEmployeeEntityByEmail(String email) {
+        return employeeRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Employee not found with email: " + email));
+    }
+
+
+
+
+
+
+    /// //////
+
     @Override
     public Optional<ViewEmployeesDTO> findByEmail(String email) {
         return employeeRepository.findByEmail(email)

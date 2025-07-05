@@ -26,4 +26,6 @@ public interface EmployeeService{
 
     void register(EmployeeRegisterDTO employee);
 
+    // У EmployeeService interface:
+    Employee findEmployeeEntityByEmail(String email);
 }

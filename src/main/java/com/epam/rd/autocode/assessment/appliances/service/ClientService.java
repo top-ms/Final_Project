@@ -18,7 +18,7 @@ public interface ClientService {
 
     Page<ViewClientsByAdminDTO> getAllClientsAsDto(Pageable pageable);
 
-
+    Client findClientEntityByEmail(String email);
 
 
 

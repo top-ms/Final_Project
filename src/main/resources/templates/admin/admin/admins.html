@@ -2,129 +2,205 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link th:href="@{/styles/css/main.css}" rel="stylesheet"/>
-    <title>Admins list</title>
+
+    <!-- ✅ ТВІЙ ГОЛОВНИЙ CSS ФАЙЛ -->
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Список адміністраторів</title>
 </head>
 <body class="d-flex flex-column min-vh-100">
 <div class="flex-grow-1">
     <div th:insert="~{admin/menunavy::navy}"></div>
 
-    <h1 th:text="#{admin.header.list}"></h1>
-
-    <nav class="d-flex justify-content-start align-items-center gap-3 mt-3 mb-3">
-
-        <!-- Кнопка "Новий клієнт" -->
-        <a th:href="@{admins/add}" class="btn btn-primary" th:text="#{admin.btn.new}">New</a>
-
-
-        <!-- Форма пошуку -->
-        <form th:action="@{/admin/admins/search}" method="get" class="d-flex">
-            <input class="form-control me-2"
-                   type="search"
-                   name="email"
-                   placeholder="Search by email"
-                   aria-label="Search"
-                   th:classappend="${notFound} ? ' is-invalid' : ''"/>
-            <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
-
-        <!-- Повідомлення, якщо не знайдено -->
-        <div th:if="${notFound}" class="text-danger mt-2">
-            <p th:text="#{notfound}">Клієнта з такою електронною поштою не знайдено</p>
+    <div class="main-container main-container-wide">
+        <div class="page-header">
+            <h1 class="page-title" th:text="#{admin.header.list}">Список адміністраторів</h1>
         </div>
 
-        <!-- Сортування за ім’ям -->
-        <form method="get" th:action="@{/admin/admins}" class="d-flex align-items-center">
-            <input type="hidden" name="page" th:value="${currentPage}"/>
-            <input type="hidden" name="size" th:value="10"/>
-            <select name="sort" class="form-select" onchange="this.form.submit()">
-                <option th:value="asc" th:selected="${sort == 'asc'}"
-                        th:text="#{sort.asc}">Name A-Z</option>
-                <option th:value="desc" th:selected="${sort == 'desc'}"
-                        th:text="#{sort.desc}">Name Z-A</option>
-            </select>
-        </form>
-
-        <a th:href="@{/admin/admins}" class="btn btn-primary" th:text="#{reset.btn}">View all clients</a>
-    </nav>
-
-
-    <table class="table table-hover">
-        <thead>
-        <tr class="table-dark">
-            <th th:text="#{object.user.id}"></th>
-            <th th:text="#{object.user.name}"></th>
-            <th th:text="#{object.user.email}"></th>
-            <th th:text="#{object.user.password}"></th>
-            <th th:text="#{client.operation}">Operation</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="admin : ${adminsPage}">
-            <td th:text="${admin.id}"></td>
-            <td th:text="${admin.name}"></td>
-            <td th:text="${admin.email}"></td>
-            <td>********</td>
-            <td>
-                <a th:href="@{/admin/admins/{id}/delete(id=${admin.id}, page=${currentPage})}"
-                   class="btn btn-outline-danger btn-sm"
-                   title="Delete">
-                    <i class="fa fa-trash"></i>
+        <!-- Панель дій та фільтрів -->
+        <div class="controls-panel">
+            <!-- Кнопки дій -->
+            <div class="action-section">
+                <a th:href="@{admins/add}" class="btn-custom btn-success-custom" th:text="#{admin.btn.new}">
+                    <i class="bi bi-shield-plus"></i>
+                    Новий адміністратор
                 </a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                <a th:href="@{/admin/admins}" class="btn-custom btn-view" th:text="#{reset.btn}">
+                    <i class="bi bi-shield-check"></i>
+                    Переглянути всіх адміністраторів
+                </a>
+            </div>
+
+            <!-- Панель фільтрів -->
+            <div class="filters-section">
+                <!-- Пошук -->
+                <form th:action="@{/admin/admins/search}" method="get" class="search-form">
+                    <div class="search-group">
+                        <div class="search-input-wrapper">
+                            <i class="bi bi-envelope search-icon"></i>
+                            <input class="form-control-custom search-input"
+                                   type="search"
+                                   name="email"
+                                   placeholder="Пошук за email"
+                                   aria-label="Search"
+                                   th:classappend="${notFound} ? 'search-error' : ''"/>
+                        </div>
+                        <button class="btn-custom btn-primary-custom search-btn" type="submit">
+                            <i class="bi bi-search"></i>
+                            Пошук
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Сортування -->
+                <form method="get" th:action="@{/admin/admins}" class="sort-form">
+                    <input type="hidden" name="page" th:value="${currentPage}"/>
+                    <input type="hidden" name="size" th:value="10"/>
+                    <div class="sort-group">
+                        <label class="sort-label">
+                            <i class="bi bi-sort-alpha-down me-2"></i>
+                            Сортування:
+                        </label>
+                        <select name="sort" class="form-select-custom sort-select" onchange="this.form.submit()">
+                            <option th:value="asc" th:selected="${sort == 'asc'}"
+                                    th:text="#{sort.asc}">Ім'я A-Z</option>
+                            <option th:value="desc" th:selected="${sort == 'desc'}"
+                                    th:text="#{sort.desc}">Ім'я Z-A</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Повідомлення про помилку -->
+        <div th:if="${notFound}" class="alert-custom search-not-found">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <span th:text="#{notfound}">Адміністратора з таким email не знайдено</span>
+        </div>
+
+        <!-- Таблиця адміністраторів -->
+        <div class="table-container">
+            <div class="table-responsive">
+                <table class="table table-custom">
+                    <thead>
+                    <tr>
+                        <th>
+                            <i class="bi bi-hash me-2"></i>
+                            <span th:text="#{object.user.id}">ID</span>
+                        </th>
+                        <th>
+                            <i class="bi bi-shield-check me-2"></i>
+                            <span th:text="#{object.user.name}">Ім'я</span>
+                        </th>
+                        <th>
+                            <i class="bi bi-envelope me-2"></i>
+                            <span th:text="#{object.user.email}">Email</span>
+                        </th>
+                        <th>
+                            <i class="bi bi-key me-2"></i>
+                            <span th:text="#{object.user.password}">Пароль</span>
+                        </th>
+                        <th>
+                            <i class="bi bi-gear-wide-connected me-2"></i>
+                            <span th:text="#{client.operation}">Операції</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="admin : ${adminsPage}">
+                        <td>
+                            <span class="id-cell" th:text="${admin.id}">1</span>
+                        </td>
+                        <td>
+                            <div class="admin-name" th:text="${admin.name}">Ім'я адміністратора</div>
+                        </td>
+                        <td>
+                            <div class="admin-email" th:text="${admin.email}">admin@example.com</div>
+                        </td>
+                        <td>
+                            <div class="password-hidden">
+                                <i class="bi bi-eye-slash me-2"></i>
+                                <span class="password-mask">••••••</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="operations-group">
+                                <a th:href="@{/admin/admins/{id}/delete(id=${admin.id}, page=${currentPage})}"
+                                   class="operation-btn btn-delete"
+                                   title="Видалити">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div th:if="${adminsPage.isEmpty()}" class="empty-state">
+            <i class="bi bi-shield-x"></i>
+            <h3>Адміністратори відсутні</h3>
+            <p>На даний момент немає адміністраторів для відображення.</p>
+            <a th:href="@{admins/add}" class="btn-custom btn-success-custom mt-3">
+                <i class="bi bi-shield-plus"></i>
+                Додати першого адміністратора
+            </a>
+        </div>
+    </div>
+
+    <!-- Пагінація -->
+    <div class="pagination-container" th:if="${!adminsPage.isEmpty()}">
+        <nav aria-label="Pagination">
+            <ul class="pagination pagination-custom justify-content-center">
+
+                <!-- Кнопка "Назад" -->
+                <li class="page-item" th:if="${currentPage > 0}">
+                    <a class="page-link"
+                       th:href="@{/admin/admins(page=${currentPage - 1}, size=10, sort=${sort})}"
+                       th:text="#{pagination.previous}">← Попередня</a>
+                </li>
+                <li class="page-item disabled" th:if="${currentPage == 0}">
+                    <a class="page-link"
+                       href="#" tabindex="-1" aria-disabled="true"
+                       th:text="#{pagination.previous}">← Попередня</a>
+                </li>
+
+                <!-- Номери сторінок -->
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                    th:classappend="${i == currentPage} ? 'active'">
+                    <a class="page-link"
+                       th:href="@{/admin/admins(page=${i}, size=10, sort=${sort})}"
+                       th:text="${i + 1}">1</a>
+                </li>
+
+                <!-- Кнопка "Вперед" -->
+                <li class="page-item" th:if="${currentPage + 1 < totalPages}">
+                    <a class="page-link"
+                       th:href="@{/admin/admins(page=${currentPage + 1}, size=10, sort=${sort})}"
+                       th:text="#{pagination.next}">Наступна →</a>
+                </li>
+                <li class="page-item disabled" th:if="${currentPage + 1 >= totalPages}">
+                    <a class="page-link"
+                       href="#" tabindex="-1" aria-disabled="true"
+                       th:text="#{pagination.next}">Наступна →</a>
+                </li>
+
+            </ul>
+        </nav>
+    </div>
 </div>
 
-
-<!-- ✅ Центрована Bootstrap-пагінація -->
-<nav aria-label="Pagination" class="mt-5 mb-4">
-    <ul class="pagination justify-content-center">
-
-        <!-- Кнопка "Назад" -->
-        <li class="page-item" th:if="${currentPage > 0}">
-            <a class="page-link"
-               th:href="@{/admin/admins(page=${currentPage - 1}, size=10, sort=${sort})}"
-               th:text="#{pagination.previous}">← Previous</a>
-        </li>
-        <li class="page-item disabled" th:if="${currentPage == 0}">
-            <a class="page-link"
-               href="#" tabindex="-1" aria-disabled="true"
-               th:text="#{pagination.previous}">← Previous</a>
-        </li>
-
-        <!-- Номери сторінок -->
-        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-            th:classappend="${i == currentPage} ? 'active'">
-            <a class="page-link"
-               th:href="@{/admin/admins(page=${i}, size=10, sort=${sort})}"
-               th:text="${i + 1}">1</a>
-        </li>
-
-        <!-- Кнопка "Вперед" -->
-        <li class="page-item" th:if="${currentPage + 1 < totalPages}">
-            <a class="page-link"
-               th:href="@{/admin/admins(page=${currentPage + 1}, size=10, sort=${sort})}"
-               th:text="#{pagination.next}">Next →</a>
-        </li>
-        <li class="page-item disabled" th:if="${currentPage + 1 >= totalPages}">
-            <a class="page-link"
-               href="#" tabindex="-1" aria-disabled="true"
-               th:text="#{pagination.next}">Next →</a>
-        </li>
-
-    </ul>
-</nav>
-
-
-
-<div class="mt-5"
-     th:insert="~{footer::footer}">
-</div>
+<div class="mt-5" th:insert="~{footer::footer}"></div>
 
 </body>
 </html>

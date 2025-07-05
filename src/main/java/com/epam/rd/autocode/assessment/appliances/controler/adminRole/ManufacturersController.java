@@ -43,19 +43,25 @@ public class ManufacturersController {
 
     @GetMapping("manufacturers/search")
     public String searchManufacturers(@RequestParam("name") String name, Model model) {
-        if (name == null || name == "") {
+        if (name == null || name.trim().isEmpty()) {
             return "redirect:/admin/manufacturers";
         }
 
         Optional<ViewManufacturerAsDTO> manufacurerOptional = manufacturerService.getByName(name);
         if (manufacurerOptional.isPresent()) {
-            model.addAttribute("manufacturersPage", manufacurerOptional.get());
+            // 👇 тут ми робимо з одного елемента повноцінну Page<>
+            List<ViewManufacturerAsDTO> list = List.of(manufacurerOptional.get());
+            Page<ViewManufacturerAsDTO> page = new PageImpl<>(list);
+            model.addAttribute("manufacturersPage", page);
+            model.addAttribute("notFound", false);
         } else {
             model.addAttribute("notFound", true);
             model.addAttribute("manufacturersPage", Page.empty());
         }
+
         model.addAttribute("currentPage", 0);
         model.addAttribute("totalPages", 1);
+        model.addAttribute("sort", "asc");
         return "admin/manufacture/manufacturers";
     }
 
