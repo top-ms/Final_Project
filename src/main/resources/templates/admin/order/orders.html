@@ -39,7 +39,8 @@
                                type="number"
                                name="orderId"
                                placeholder="Search by ID"
-                               aria-label="Search"/>
+                               aria-label="Search"
+                               required>
                         <button class="btn btn-outline-light btn-sm" type="submit">
                             <i class="fa fa-search"></i>
                         </button>
@@ -107,7 +108,10 @@
                 <span th:text="${order.clientName}"></span><br/>
                 <small class="text-muted" th:text="${order.clientEmail}"></small>
             </td>
-            <td th:text="${order.employeeName}"></td>
+            <td>
+                <span th:text="${order.employeeName}"></span><br/>
+                <small class="text-muted" th:text="${order.employeeEmail}"></small>
+            </td>
             <td th:text="${#numbers.formatDecimal(order.price, 1, 2)}"></td>
             <td>
                 <span th:if="${order.approved}" class="badge bg-success" th:text="#{status.approved}">Approved</span>

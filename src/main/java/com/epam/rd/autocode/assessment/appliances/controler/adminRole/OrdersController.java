@@ -65,8 +65,10 @@ public class OrdersController {
             ordersPage = orderService.getAllOrdersAsDto(pageable);
         }
 
+
         model.addAttribute("ordersPage", ordersPage);
         model.addAttribute("employees", employeeService.getAllEmployees());
+        model.addAttribute("clients", clientService.getAllClients());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", ordersPage.getTotalPages());
         model.addAttribute("priceSort", priceSort);
@@ -78,7 +80,7 @@ public class OrdersController {
 
     @GetMapping("orders/search")
     public String searchOrders(@RequestParam("orderId") Long orderId, Model model) {
-        if (orderId == null) {
+        if (orderId == null || orderId == 0) {
             return "redirect:/admin/orders";
         }
 

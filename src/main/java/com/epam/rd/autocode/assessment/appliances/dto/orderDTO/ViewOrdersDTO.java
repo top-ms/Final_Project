@@ -7,6 +7,7 @@ public class ViewOrdersDTO {
     private String clientName;
     private String clientEmail;
     private String employeeName;
+    private String employeeEmail;
     private BigDecimal price;
     private Boolean approved;
 
@@ -14,11 +15,12 @@ public class ViewOrdersDTO {
     public ViewOrdersDTO() {
     }
 
-    public ViewOrdersDTO(Long id, String clientName, String clientEmail, String employeeName, BigDecimal price, Boolean approved) {
+    public ViewOrdersDTO(Long id, String clientName, String clientEmail, String employeeName, String employeeEmail, BigDecimal price, Boolean approved) {
         this.id = id;
         this.clientName = clientName;
         this.clientEmail = clientEmail;
         this.employeeName = employeeName;
+        this.employeeEmail = employeeEmail;
         this.price = price;
         this.approved = approved;
     }
@@ -54,6 +56,14 @@ public class ViewOrdersDTO {
 
     public void setEmployeeName(String employeeName) {
         this.employeeName = employeeName;
+    }
+
+    public String getEmployeeEmail() {
+        return employeeEmail;
+    }
+
+    public void setEmployeeEmail(String employeeEmail) {
+        this.employeeEmail = employeeEmail;
     }
 
     public BigDecimal getPrice() {

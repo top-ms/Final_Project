@@ -67,11 +67,15 @@ public class OrderServiceImpl implements OrderService {
         Appliance appliance = applianceRepository.findById(applianceId)
                 .orElseThrow(() -> new RuntimeException("Appliance not found"));
 
+        System.out.println("Order: " + order.toString() + " Appliance: " + appliance.toString() + " Number: " + number + "");
+
         OrderRow orderRow = new OrderRow();
+
         orderRow.setOrder(order);
         orderRow.setAppliance(appliance);
         orderRow.setNumber(number);
-
+        orderRow.setAmount(appliance.getPrice().multiply(BigDecimal.valueOf(number)));
+        System.out.println("OrderRow: " + orderRow.toString() + "");
         orderRowRepository.save(orderRow);
     }
 
@@ -128,6 +132,7 @@ public class OrderServiceImpl implements OrderService {
 
         if (order.getEmployee() != null) {
             dto.setEmployeeName(order.getEmployee().getName());
+            dto.setEmployeeEmail(order.getEmployee().getEmail());
         }
 
         // Обчислюємо загальну ціну замовлення
