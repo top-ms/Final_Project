@@ -38,4 +38,5 @@ public class OrderRow {
         this.number = number;
         this.amount = amount;
     }
+
 }

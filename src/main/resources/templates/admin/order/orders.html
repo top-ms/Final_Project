@@ -2,72 +2,196 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <!-- Latest compiled and minified CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link th:href="@{/styles/css/main.css}" rel="stylesheet"/>
-    <title>Title</title>
+    <title>Orders list</title>
 </head>
-<body>
-<header>
+<body class="d-flex flex-column min-vh-100">
+<div class="flex-grow-1" style="min-height: 600px;">
     <div th:insert="~{admin/menunavy::navy}"></div>
-</header>
-<main>
-    <h1 th:text="#{orders.header.list}">Orders list</h1>
-    <div class="d-flex justify-content-start mt-2 mb-2">
-        <a th:href="@{orders/add}" class="btn btn-primary" th:text="#{orders.btn.new}"></a>
+
+    <h1 th:text="#{orders.header.list}">Orders List</h1>
+
+    <nav class="d-flex justify-content-start align-items-center gap-3 mt-3 mb-3">
+        <!-- Кнопка "Нове замовлення" -->
+        <a th:href="@{orders/add}" class="btn btn-primary" th:text="#{orders.btn.new}">New order</a>
+
+        <!-- Кнопка "Переглянути всі замовлення" -->
+        <a th:href="@{/admin/orders}" class="btn btn-primary" th:text="#{viewAllOrders.btn}">View all orders</a>
+    </nav>
+
+    <!-- Повідомлення, якщо не знайдено -->
+    <div th:if="${notFound}" class="alert alert-danger mt-2">
+        <p th:text="#{order.notfound}">Замовлення з таким ID не знайдено</p>
     </div>
+
     <table class="table table-hover">
         <thead>
         <tr class="table-dark">
-            <th th:text="#{order.id}">ID</th>
-            <th th:text="#{order.client}">Client</th>
-            <th th:text="#{order.employee}">Employee</th>
-            <th th:text="#{order.approved}">Approved</th>
-            <th th:text="#{order.amount}">Amount</th>
-            <th th:text="#{order.operation}">Operation</th>
+            <th>
+                <div th:text="#{object.order.id}">ID</div>
+                <!-- Форма пошуку по ID -->
+                <form th:action="@{/admin/orders/search}" method="get" class="mt-2">
+                    <div class="input-group input-group-sm">
+                        <input class="form-control"
+                               type="number"
+                               name="orderId"
+                               placeholder="Search by ID"
+                               aria-label="Search"/>
+                        <button class="btn btn-outline-light btn-sm" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </th>
+            <th th:text="#{object.order.client}">Client</th>
+            <th>
+                <div th:text="#{object.order.employee}">Employee</div>
+                <!-- Фільтр по працівнику -->
+                <form method="get" th:action="@{/admin/orders}" class="mt-2">
+                    <input type="hidden" name="page" th:value="${currentPage}"/>
+                    <input type="hidden" name="size" th:value="10"/>
+                    <input type="hidden" name="priceSort" th:value="${priceSort}"/>
+                    <input type="hidden" name="approved" th:value="${selectedApproved}"/>
+                    <select name="employeeId" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <option value="" th:text="#{filter.all.employees}">All employees</option>
+                        <option th:each="employee : ${employees}"
+                                th:value="${employee.id}"
+                                th:selected="${employee.id == selectedEmployeeId}"
+                                th:text="${employee.name}">Employee Name</option>
+                    </select>
+                </form>
+            </th>
+            <th>
+                <div th:text="#{object.order.price}">Price</div>
+                <!-- Сортування по ціні -->
+                <form method="get" th:action="@{/admin/orders}" class="mt-2">
+                    <input type="hidden" name="page" th:value="${currentPage}"/>
+                    <input type="hidden" name="size" th:value="10"/>
+                    <input type="hidden" name="employeeId" th:value="${selectedEmployeeId}"/>
+                    <input type="hidden" name="approved" th:value="${selectedApproved}"/>
+                    <select name="priceSort" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <option th:value="asc" th:selected="${priceSort == 'asc'}"
+                                th:text="#{sort.price.asc}">Price ↑</option>
+                        <option th:value="desc" th:selected="${priceSort == 'desc'}"
+                                th:text="#{sort.price.desc}">Price ↓</option>
+                    </select>
+                </form>
+            </th>
+            <th>
+                <div th:text="#{object.order.approved}">Approved</div>
+                <!-- Фільтр по approved -->
+                <form method="get" th:action="@{/admin/orders}" class="mt-2">
+                    <input type="hidden" name="page" th:value="${currentPage}"/>
+                    <input type="hidden" name="size" th:value="10"/>
+                    <input type="hidden" name="priceSort" th:value="${priceSort}"/>
+                    <input type="hidden" name="employeeId" th:value="${selectedEmployeeId}"/>
+                    <select name="approved" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <option value="" th:text="#{filter.all.status}">All</option>
+                        <option value="true" th:selected="${selectedApproved == true}"
+                                th:text="#{filter.approved}">Approved</option>
+                        <option value="false" th:selected="${selectedApproved == false}"
+                                th:text="#{filter.not.approved}">Not approved</option>
+                    </select>
+                </form>
+            </th>
+            <th th:text="#{orders.operation}">Operations</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="order: ${orders}">
-            <td><span class="float-center" th:text="${order.id}"></span></td>
-            <td><span class="float-center" th:text="${order.client.getName()}"></span></td>
-            <td><span class="float-center" th:text="${order.employee.getName()}"></span></td>
+        <tr th:each="order : ${ordersPage.content}">
+            <td th:text="${order.id}"></td>
             <td>
-                <div th:if="${order.approved}">
-                    <a th:href="@{orders/{id}/unapproved(id=${order.id})}">
-                        <span class="icon"><i class="fa fa-check"></i></span>
-                    </a>
-                </div>
-                <div th:unless="${order.approved}">
-                    <a th:href="@{orders/{id}/approved(id=${order.id})}">
-                        <span class="icon"><i class="fa fa-minus"></i></span>
-                    </a>
-                </div>
+                <span th:text="${order.clientName}"></span><br/>
+                <small class="text-muted" th:text="${order.clientEmail}"></small>
             </td>
-
-            <td><span class="float-center" th:text="${order.getAmount()} + ${order.getAmount()}"></span></td>
-
+            <td th:text="${order.employeeName}"></td>
+            <td th:text="${#numbers.formatDecimal(order.price, 1, 2)}"></td>
             <td>
-                <div>
-                    <a th:href="@{orders/{id}/delete(id=${order.id})}">
+                <span th:if="${order.approved}" class="badge bg-success" th:text="#{status.approved}">Approved</span>
+                <span th:unless="${order.approved}" class="badge bg-warning text-dark" th:text="#{status.not.approved}">Not approved</span>
+            </td>
+            <td>
+                <div class="btn-group" role="group">
+                    <!-- Кнопка редагування -->
+                    <a th:href="@{orders/{id}/edit(id=${order.id})}"
+                       class="btn btn-outline-primary btn-sm"
+                       title="Edit">
+                        <i class="fa fa-edit"></i>
+                    </a>
+
+                    <!-- Кнопка затвердження/відхилення -->
+                    <a th:if="${!order.approved}"
+                       th:href="@{orders/{id}/approved(id=${order.id}, page=${currentPage})}"
+                       class="btn btn-outline-success btn-sm"
+                       title="Approve">
+                        <i class="fa fa-check"></i>
+                    </a>
+
+                    <a th:if="${order.approved}"
+                       th:href="@{orders/{id}/unapproved(id=${order.id}, page=${currentPage})}"
+                       class="btn btn-outline-warning btn-sm"
+                       title="Unapprove">
                         <i class="fa fa-times"></i>
                     </a>
-                </div>
-                <div>
-                    <a th:href="@{orders/{id}/edit(id=${order.id})}">
-                        <i class="fa fa-edit"></i>
+
+                    <!-- Кнопка видалення -->
+                    <a th:href="@{orders/{id}/delete(id=${order.id}, page=${currentPage})}"
+                       class="btn btn-outline-danger btn-sm"
+                       title="Delete">
+                        <i class="fa fa-trash"></i>
                     </a>
                 </div>
             </td>
         </tr>
         </tbody>
     </table>
-</main>
-<div th:insert="~{footer::footer}"></div>
+</div>
+
+<!-- ✅ Центрована Bootstrap-пагінація -->
+<nav aria-label="Pagination" class="mt-5 mb-4">
+    <ul class="pagination justify-content-center">
+
+        <!-- Кнопка "Назад" -->
+        <li class="page-item" th:if="${currentPage > 0}">
+            <a class="page-link"
+               th:href="@{/admin/orders(page=${currentPage - 1}, size=10, priceSort=${priceSort}, employeeId=${selectedEmployeeId}, approved=${selectedApproved})}"
+               th:text="#{pagination.previous}">← Previous</a>
+        </li>
+        <li class="page-item disabled" th:if="${currentPage == 0}">
+            <a class="page-link"
+               href="#" tabindex="-1" aria-disabled="true"
+               th:text="#{pagination.previous}">← Previous</a>
+        </li>
+
+        <!-- Номери сторінок -->
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+            th:classappend="${i == currentPage} ? 'active'">
+            <a class="page-link"
+               th:href="@{/admin/orders(page=${i}, size=10, priceSort=${priceSort}, employeeId=${selectedEmployeeId}, approved=${selectedApproved})}"
+               th:text="${i + 1}">1</a>
+        </li>
+
+        <!-- Кнопка "Вперед" -->
+        <li class="page-item" th:if="${currentPage + 1 < totalPages}">
+            <a class="page-link"
+               th:href="@{/admin/orders(page=${currentPage + 1}, size=10, priceSort=${priceSort}, employeeId=${selectedEmployeeId}, approved=${selectedApproved})}"
+               th:text="#{pagination.next}">Next →</a>
+        </li>
+        <li class="page-item disabled" th:if="${currentPage + 1 >= totalPages}">
+            <a class="page-link"
+               href="#" tabindex="-1" aria-disabled="true"
+               th:text="#{pagination.next}">Next →</a>
+        </li>
+
+    </ul>
+</nav>
+
+<div class="mt-5"
+     th:insert="~{footer::footer}">
+</div>
+
 </body>
 </html>
