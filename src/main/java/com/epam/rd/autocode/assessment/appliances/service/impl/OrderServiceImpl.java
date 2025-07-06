@@ -155,4 +155,38 @@ public class OrderServiceImpl implements OrderService {
         }
         return total;
     }
+
+
+
+
+
+
+
+
+
+// Імплементація методів (додайте до ServiceImpl):
+
+    @Override
+    public Page<ViewOrdersDTO> getOrdersByClientId(Long clientId, Pageable pageable) {
+        Page<Orders> ordersPage = ordersRepository.findByClientId(clientId, pageable);
+        return ordersPage.map(orders -> modelMapper.map(orders, ViewOrdersDTO.class));
+    }
+
+    @Override
+    public Page<ViewOrdersDTO> getOrdersByClientIdAndApproved(Long clientId, Boolean approved, Pageable pageable) {
+        Page<Orders> ordersPage = ordersRepository.findByClientIdAndApproved(clientId, approved, pageable);
+        return ordersPage.map(orders -> modelMapper.map(orders, ViewOrdersDTO.class));
+    }
+
+    @Override
+    public Page<ViewOrdersDTO> getOrdersByClientIdAndEmployeeId(Long clientId, Long employeeId, Pageable pageable) {
+        Page<Orders> ordersPage = ordersRepository.findByClientIdAndEmployeeId(clientId, employeeId, pageable);
+        return ordersPage.map(orders -> modelMapper.map(orders, ViewOrdersDTO.class));
+    }
+
+    @Override
+    public Page<ViewOrdersDTO> getOrdersByClientIdAndEmployeeIdAndApproved(Long clientId, Long employeeId, Boolean approved, Pageable pageable) {
+        Page<Orders> ordersPage = ordersRepository.findByClientIdAndEmployeeIdAndApproved(clientId, employeeId, approved, pageable);
+        return ordersPage.map(orders -> modelMapper.map(orders, ViewOrdersDTO.class));
+    }
 }

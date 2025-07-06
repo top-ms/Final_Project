@@ -37,4 +37,22 @@ public interface OrderService {
     Page<ViewOrdersDTO> getOrdersByEmployeeIdAndApproved(Long employeeId, Boolean approved, Pageable pageable);
 
     Optional<ViewOrdersDTO> findOrderDtoById(Long id);
+
+
+    Page<ViewOrdersDTO> getOrdersByClientId(Long clientId, Pageable pageable);
+
+    /**
+     * Отримати замовлення клієнта за статусом затвердження
+     */
+    Page<ViewOrdersDTO> getOrdersByClientIdAndApproved(Long clientId, Boolean approved, Pageable pageable);
+
+    /**
+     * Отримати замовлення клієнта за працівником
+     */
+    Page<ViewOrdersDTO> getOrdersByClientIdAndEmployeeId(Long clientId, Long employeeId, Pageable pageable);
+
+    /**
+     * Отримати замовлення клієнта за працівником і статусом затвердження
+     */
+    Page<ViewOrdersDTO> getOrdersByClientIdAndEmployeeIdAndApproved(Long clientId, Long employeeId, Boolean approved, Pageable pageable);
 }

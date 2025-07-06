@@ -36,9 +36,8 @@ public class Orders {
     private Boolean approved;
 
 
-
     @Transient
-    public BigDecimal getAmount() {
+    public BigDecimal getPrice() {
         if (orderRowSet == null || orderRowSet.isEmpty()) {
             return BigDecimal.ZERO;
         }
@@ -47,4 +46,10 @@ public class Orders {
                 .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
+    @Transient
+    public BigDecimal getAmount() {
+        return getPrice();
+    }
+
 }
