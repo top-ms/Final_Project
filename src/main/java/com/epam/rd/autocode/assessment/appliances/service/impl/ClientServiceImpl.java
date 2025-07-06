@@ -112,21 +112,6 @@ public class ClientServiceImpl implements ClientService {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // Додай ці методи до ClientServiceImpl:
 
     @Override

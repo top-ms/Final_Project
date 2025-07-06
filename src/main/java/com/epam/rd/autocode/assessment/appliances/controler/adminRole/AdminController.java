@@ -26,7 +26,7 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    public AdminController(AdminService adminService, ClientService clientService, EmployeeService employeeService, ManufacturerService manufacturerService, ApplianceService applianceService, OrderService orderService) {
+    public AdminController(AdminService adminService) {
         this.adminService = adminService;
     }
 

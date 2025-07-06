@@ -112,13 +112,6 @@ public class ApplianceServiceImpl implements ApplianceService {
 
 
 
-
-
-
-
-
-
-
     @Override
     public List<Appliance> getAllAppliance() {
         return applianceRepository.findAll();

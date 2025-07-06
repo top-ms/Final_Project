@@ -64,25 +64,6 @@ public class AdminServiceImpl implements AdminService {
         return adminRepository.findByEmail(email).isPresent();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @Override
     public Optional<UserEditDTO> findByIdForEdit(Long id) {
         return adminRepository.findById(id)
@@ -115,8 +96,6 @@ public class AdminServiceImpl implements AdminService {
     public Optional<Admin> findById(Long id) {
         return adminRepository.findById(id);
     }
-
-
 
 
 }
