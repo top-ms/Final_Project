@@ -35,12 +35,6 @@ public class ClientServiceImpl implements ClientService {
     }
 
 
-    // У ClientServiceImpl:
-    @Override
-    public Client findClientEntityByEmail(String email) {
-        return clientRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Client not found with email: " + email));
-    }
 
 
 
@@ -71,13 +65,11 @@ public class ClientServiceImpl implements ClientService {
                 .map(client -> modelMapper.map(client, ViewClientsByAdminDTO.class));
     }
 
-
-
-
-
-
-
-
+    @Override
+    public Client findClientEntityByEmail(String email) {
+        return clientRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Client not found with email: " + email));
+    }
 
 
     @Override
