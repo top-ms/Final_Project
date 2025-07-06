@@ -1,5 +1,6 @@
 package com.epam.rd.autocode.assessment.appliances.service;
 
+import com.epam.rd.autocode.assessment.appliances.dto.UserEditDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.adminDTO.RegistrationAdminDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.adminDTO.ViewAdminDTO;
 import com.epam.rd.autocode.assessment.appliances.model.Admin;
@@ -20,4 +21,16 @@ public interface AdminService {
     void register(RegistrationAdminDTO registrationAdminDTO);
 
     boolean existsByEmail(String email);
+
+
+
+
+
+
+
+
+    // Методи для редагування
+    Optional<UserEditDTO> findByIdForEdit(Long id);
+    void updateAdmin(UserEditDTO userEditDTO);
+    Optional<Admin> findById(Long id);
 }

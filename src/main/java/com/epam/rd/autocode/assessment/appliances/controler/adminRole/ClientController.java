@@ -1,5 +1,6 @@
 package com.epam.rd.autocode.assessment.appliances.controler.adminRole;
 
+import com.epam.rd.autocode.assessment.appliances.dto.UserEditDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.clientDTO.ClientRegisterDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.clientDTO.ViewClientsByAdminDTO;
 import com.epam.rd.autocode.assessment.appliances.model.Client;
@@ -114,4 +115,65 @@ public class ClientController {
         return "redirect:/admin/clients?page=" + page;
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Додай ці методи до ClientController:
+
+    @GetMapping("clients/{id}/edit")
+    public String showEditClientForm(@PathVariable Long id, Model model) {
+        Optional<UserEditDTO> clientOptional = clientService.findByIdForEdit(id);
+
+        if (clientOptional.isEmpty()) {
+            return "redirect:/admin/clients";
+        }
+
+        model.addAttribute("client", clientOptional.get());
+        model.addAttribute("isEdit", true);
+        return "admin/client/editClient";
+    }
+
+    @PostMapping("clients/{id}/update")
+    public String updateClient(@PathVariable Long id,
+                               @Valid @ModelAttribute("client") UserEditDTO userEditDTO,
+                               BindingResult bindingResult,
+                               Model model) {
+
+        // Встановлюємо ID з URL
+        userEditDTO.setId(id);
+
+        // Перевіряємо чи існує клієнт з таким email (окрім поточного)
+        Optional<Client> existingClient = clientService.findById(id);
+        if (existingClient.isEmpty()) {
+            return "redirect:/admin/clients";
+        }
+
+        // Перевіряємо унікальність email (якщо змінився)
+        if (!existingClient.get().getEmail().equals(userEditDTO.getEmail())) {
+            if (clientService.existsByEmail(userEditDTO.getEmail())) {
+                bindingResult.rejectValue("email", "error.client.email", "Клієнт з таким email вже існує");
+            }
+        }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("isEdit", true);
+            return "admin/client/editClient";
+        }
+
+        clientService.updateClient(userEditDTO);
+        return "redirect:/admin/clients";
+    }
 }

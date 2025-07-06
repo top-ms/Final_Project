@@ -1,5 +1,6 @@
 package com.epam.rd.autocode.assessment.appliances.service.impl;
 
+import com.epam.rd.autocode.assessment.appliances.dto.UserEditDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.clientDTO.ViewClientsByAdminDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.employeeDTO.EmployeeRegisterDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.employeeDTO.ViewEmployeesDTO;
@@ -97,5 +98,56 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setDepartment("sales");
         employeeRepository.save(employee);
         System.out.println("Registered client: " + employee.getEmail() + " with password: " + employee.getPassword() + "");
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Додай ці методи до EmployeeServiceImpl:
+
+    @Override
+    public Optional<UserEditDTO> findByIdForEdit(Long id) {
+        return employeeRepository.findById(id)
+                .map(employee -> {
+                    UserEditDTO dto = new UserEditDTO();
+                    dto.setId(employee.getId());
+                    dto.setName(employee.getName());
+                    dto.setEmail(employee.getEmail());
+                    // Пароль залишаємо порожнім для безпеки
+                    dto.setPassword("");
+                    return dto;
+                });
+    }
+
+    @Override
+    public void updateEmployee(UserEditDTO userEditDTO) {
+        Employee employee = employeeRepository.findById(userEditDTO.getId())
+                .orElseThrow(() -> new RuntimeException("Employee not found with id: " + userEditDTO.getId()));
+
+        employee.setName(userEditDTO.getName());
+        employee.setEmail(userEditDTO.getEmail());
+
+        // Хешуємо новий пароль
+        employee.setPassword(passwordEncoder.encode(userEditDTO.getPassword()));
+
+        employeeRepository.save(employee);
+    }
+
+    @Override
+    public Optional<Employee> findById(Long id) {
+        return employeeRepository.findById(id);
     }
 }

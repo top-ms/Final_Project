@@ -134,7 +134,7 @@
                         <td>
                             <div class="password-hidden">
                                 <i class="bi bi-eye-slash me-2"></i>
-                                <span class="password-mask">••••••</span>
+                                <span class="password-mask">••••••••</span>
                             </div>
                         </td>
                         <td>
@@ -142,6 +142,14 @@
                         </td>
                         <td>
                             <div class="operations-group">
+                                <!-- Кнопка редагування -->
+                                <a th:href="@{/admin/employees/{id}/edit(id=${employee.id})}"
+                                   class="operation-btn btn-edit"
+                                   title="Редагувати">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+
+                                <!-- Кнопка видалення -->
                                 <a th:href="@{/admin/employees/{id}/delete(id=${employee.id}, page=${currentPage})}"
                                    class="operation-btn btn-delete"
                                    title="Видалити">

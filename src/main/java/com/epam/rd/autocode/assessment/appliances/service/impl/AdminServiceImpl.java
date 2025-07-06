@@ -1,5 +1,6 @@
 package com.epam.rd.autocode.assessment.appliances.service.impl;
 
+import com.epam.rd.autocode.assessment.appliances.dto.UserEditDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.adminDTO.RegistrationAdminDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.adminDTO.ViewAdminDTO;
 import com.epam.rd.autocode.assessment.appliances.model.Admin;
@@ -62,6 +63,60 @@ public class AdminServiceImpl implements AdminService {
     public boolean existsByEmail(String email) {
         return adminRepository.findByEmail(email).isPresent();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @Override
+    public Optional<UserEditDTO> findByIdForEdit(Long id) {
+        return adminRepository.findById(id)
+                .map(admin -> {
+                    UserEditDTO dto = new UserEditDTO();
+                    dto.setId(admin.getId());
+                    dto.setName(admin.getName());
+                    dto.setEmail(admin.getEmail());
+                    // Пароль залишаємо порожнім для безпеки
+                    dto.setPassword("");
+                    return dto;
+                });
+    }
+
+    @Override
+    public void updateAdmin(UserEditDTO userEditDTO) {
+        Admin admin = adminRepository.findById(userEditDTO.getId())
+                .orElseThrow(() -> new RuntimeException("Admin not found with id: " + userEditDTO.getId()));
+
+        admin.setName(userEditDTO.getName());
+        admin.setEmail(userEditDTO.getEmail());
+
+        // Хешуємо новий пароль
+        admin.setPassword(passwordEncoder.encode(userEditDTO.getPassword()));
+
+        adminRepository.save(admin);
+    }
+
+    @Override
+    public Optional<Admin> findById(Long id) {
+        return adminRepository.findById(id);
+    }
+
+
 
 
 }

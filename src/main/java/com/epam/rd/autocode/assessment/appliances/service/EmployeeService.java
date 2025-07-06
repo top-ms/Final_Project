@@ -1,5 +1,6 @@
 package com.epam.rd.autocode.assessment.appliances.service;
 
+import com.epam.rd.autocode.assessment.appliances.dto.UserEditDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.clientDTO.ViewClientsByAdminDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.employeeDTO.EmployeeRegisterDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.employeeDTO.ViewEmployeesDTO;
@@ -28,4 +29,17 @@ public interface EmployeeService{
 
     // У EmployeeService interface:
     Employee findEmployeeEntityByEmail(String email);
+
+
+
+
+
+
+
+
+
+    Optional<UserEditDTO> findByIdForEdit(Long id);
+    void updateEmployee(UserEditDTO userEditDTO);
+    Optional<Employee> findById(Long id);
+
 }

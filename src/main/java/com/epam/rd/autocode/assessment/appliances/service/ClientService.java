@@ -1,5 +1,6 @@
 package com.epam.rd.autocode.assessment.appliances.service;
 
+import com.epam.rd.autocode.assessment.appliances.dto.UserEditDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.clientDTO.ClientRegisterDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.clientDTO.ViewClientsByAdminDTO;
 import com.epam.rd.autocode.assessment.appliances.model.Client;
@@ -39,7 +40,9 @@ public interface ClientService {
 
 
 
-
+    Optional<UserEditDTO> findByIdForEdit(Long id);
+    void updateClient(UserEditDTO userEditDTO);
+    Optional<Client> findById(Long id);
 
 
 

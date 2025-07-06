@@ -1,5 +1,6 @@
 package com.epam.rd.autocode.assessment.appliances.controler.adminRole;
 
+import com.epam.rd.autocode.assessment.appliances.dto.UserEditDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.adminDTO.RegistrationAdminDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.adminDTO.ViewAdminDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.applianceDTO.ViewApplianceDTO;
@@ -104,5 +105,50 @@ public class AdminController {
     }
 
 
+
+    // Додай ці методи:
+    @GetMapping("admins/{id}/edit")
+    public String showEditAdminForm(@PathVariable Long id, Model model) {
+        Optional<UserEditDTO> adminOptional = adminService.findByIdForEdit(id);
+
+        if (adminOptional.isEmpty()) {
+            return "redirect:/admin/admins";
+        }
+
+        model.addAttribute("admin", adminOptional.get());
+        model.addAttribute("isEdit", true);
+        return "admin/admin/editAdmin";
+    }
+
+    @PostMapping("admins/{id}/update")
+    public String updateAdmin(@PathVariable Long id,
+                              @Valid @ModelAttribute("admin") UserEditDTO userEditDTO,
+                              BindingResult bindingResult,
+                              Model model) {
+
+        // Встановлюємо ID з URL
+        userEditDTO.setId(id);
+
+        // Перевіряємо чи існує адмін з таким ID
+        Optional<Admin> existingAdmin = adminService.findById(id);
+        if (existingAdmin.isEmpty()) {
+            return "redirect:/admin/admins";
+        }
+
+        // Перевіряємо унікальність email (якщо змінився)
+        if (!existingAdmin.get().getEmail().equals(userEditDTO.getEmail())) {
+            if (adminService.existsByEmail(userEditDTO.getEmail())) {
+                bindingResult.rejectValue("email", "error.admin.email", "Адміністратор з таким email вже існує");
+            }
+        }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("isEdit", true);
+            return "admin/admin/editAdmin";
+        }
+
+        adminService.updateAdmin(userEditDTO);
+        return "redirect:/admin/admins";
+    }
 
 }

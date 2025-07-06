@@ -1,5 +1,6 @@
 package com.epam.rd.autocode.assessment.appliances.service.impl;
 
+import com.epam.rd.autocode.assessment.appliances.dto.UserEditDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.clientDTO.ClientRegisterDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.clientDTO.ViewClientsByAdminDTO;
 import com.epam.rd.autocode.assessment.appliances.model.Client;
@@ -108,5 +109,55 @@ public class ClientServiceImpl implements ClientService {
             sb.append(random.nextInt(10));
         }
         return sb.toString();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Додай ці методи до ClientServiceImpl:
+
+    @Override
+    public Optional<UserEditDTO> findByIdForEdit(Long id) {
+        return clientRepository.findById(id)
+                .map(client -> {
+                    UserEditDTO dto = new UserEditDTO();
+                    dto.setId(client.getId());
+                    dto.setName(client.getName());
+                    dto.setEmail(client.getEmail());
+                    dto.setPassword("");
+                    return dto;
+                });
+    }
+
+    @Override
+    public void updateClient(UserEditDTO userEditDTO) {
+        Client client = clientRepository.findById(userEditDTO.getId())
+                .orElseThrow(() -> new RuntimeException("Client not found with id: " + userEditDTO.getId()));
+
+        client.setName(userEditDTO.getName());
+        client.setEmail(userEditDTO.getEmail());
+
+        // Хешуємо новий пароль
+        client.setPassword(passwordEncoder.encode(userEditDTO.getPassword()));
+
+        clientRepository.save(client);
+    }
+
+    @Override
+    public Optional<Client> findById(Long id) {
+        return clientRepository.findById(id);
     }
 }

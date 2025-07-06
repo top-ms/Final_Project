@@ -132,7 +132,7 @@
                         <td>
                             <div class="password-hidden">
                                 <i class="bi bi-eye-slash me-2"></i>
-                                <span class="password-mask">••••••</span>
+                                <span class="password-mask">••••••••</span>
                             </div>
                         </td>
                         <td>
@@ -140,7 +140,12 @@
                         </td>
                         <td>
                             <div class="operations-group">
-                                <a th:href="@{/admin/clients/{id}/delete(id=${client.id}, page=${currentPage})}"
+                                <a th:href="@{clients/{id}/edit(id=${client.id}, page=${currentPage})}"
+                                   class="operation-btn btn-edit"
+                                   title="Редагувати">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                                <a th:href="@{clients/{id}/delete(id=${client.id}, page=${currentPage})}"
                                    class="operation-btn btn-delete"
                                    title="Видалити">
                                     <i class="fa fa-trash"></i>

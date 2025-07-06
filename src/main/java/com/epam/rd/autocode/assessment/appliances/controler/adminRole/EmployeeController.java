@@ -1,5 +1,6 @@
 package com.epam.rd.autocode.assessment.appliances.controler.adminRole;
 
+import com.epam.rd.autocode.assessment.appliances.dto.UserEditDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.employeeDTO.EmployeeRegisterDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.employeeDTO.ViewEmployeesDTO;
 import com.epam.rd.autocode.assessment.appliances.model.Employee;
@@ -95,5 +96,59 @@ public class EmployeeController {
                                  @RequestParam(defaultValue = "0") int page) {
         employeeService.deleteEmployeeById(id);
         return "redirect:/admin/employees?page=" + page;
+    }
+
+
+
+
+
+
+
+
+
+    // Додай ці методи до EmployeeController:
+
+    @GetMapping("employees/{id}/edit")
+    public String showEditEmployeeForm(@PathVariable Long id, Model model) {
+        Optional<UserEditDTO> employeeOptional = employeeService.findByIdForEdit(id);
+
+        if (employeeOptional.isEmpty()) {
+            return "redirect:/admin/employees";
+        }
+
+        model.addAttribute("employee", employeeOptional.get());
+        model.addAttribute("isEdit", true);
+        return "admin/employee/editEmployee";
+    }
+
+    @PostMapping("employees/{id}/update")
+    public String updateEmployee(@PathVariable Long id,
+                                 @Valid @ModelAttribute("employee") UserEditDTO userEditDTO,
+                                 BindingResult bindingResult,
+                                 Model model) {
+
+        // Встановлюємо ID з URL
+        userEditDTO.setId(id);
+
+        // Перевіряємо чи існує працівник з таким ID
+        Optional<Employee> existingEmployee = employeeService.findById(id);
+        if (existingEmployee.isEmpty()) {
+            return "redirect:/admin/employees";
+        }
+
+        // Перевіряємо унікальність email (якщо змінився)
+        if (!existingEmployee.get().getEmail().equals(userEditDTO.getEmail())) {
+            if (employeeService.existsByEmail(userEditDTO.getEmail())) {
+                bindingResult.rejectValue("email", "error.employee.email", "Працівник з таким email вже існує");
+            }
+        }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("isEdit", true);
+            return "admin/employee/editEmployee";
+        }
+
+        employeeService.updateEmployee(userEditDTO);
+        return "redirect:/admin/employees";
     }
 }
