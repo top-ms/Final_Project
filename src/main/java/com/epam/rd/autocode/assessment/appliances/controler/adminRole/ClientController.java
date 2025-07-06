@@ -131,7 +131,7 @@ public class ClientController {
 
 
 
-    // Додай ці методи до ClientController:
+
 
     @GetMapping("clients/{id}/edit")
     public String showEditClientForm(@PathVariable Long id, Model model) {
