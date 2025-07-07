@@ -24,3 +24,5 @@ INSERT INTO client (name, email, password, card) VALUES ('Daniel', 'daniel.r@exa
 INSERT INTO client (name, email, password, card) VALUES ('Irene', 'irene_dream@example.org', '$2a$10$RGtraDnB55azXAC6/gwVbOVsCYyIqbZ3wteh8uqldIiM/lYR9ul36', '6011333300000000');
 INSERT INTO client (name, email, password, card) VALUES ('Oleg', 'oleg_dev@gmail.com', '$2a$10$RGtraDnB55azXAC6/gwVbOVsCYyIqbZ3wteh8uqldIiM/lYR9ul36', '4556446898754332');
 INSERT INTO client (name, email, password, card) VALUES ('Valeria', 'val.eriia@example.com', '$2a$10$RGtraDnB55azXAC6/gwVbOVsCYyIqbZ3wteh8uqldIiM/lYR9ul36', '4916112233445566');
+INSERT INTO client (name, email, password, card) VALUES ('Mike', 'mykhailosavchuk1@gmail.com', '$2a$10$RGtraDnB55azXAC6/gwVbOVsCYyIqbZ3wteh8uqldIiM/lYR9ul36', '4916112233445566');
+
