@@ -48,6 +48,14 @@ public interface ClientService {
 
 
 
+    /**
+     * Знайти клієнта по email (для reset password)
+     */
+    Optional<Client> findClientByEmail(String email);
 
+    /**
+     * Оновити пароль клієнта по ID
+     */
+    boolean updateClientPassword(Long clientId, String encodedPassword);
 
 }

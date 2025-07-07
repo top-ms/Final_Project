@@ -30,16 +30,19 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register", "/logout", "/test", "/h2-console/**", "/css/**", "/js/**", "/images/**").permitAll()
+                        // ✅ Додав endpoint'и для reset password
+                        .requestMatchers("/login", "/register", "/logout", "/test", "/h2-console/**",
+                                "/css/**", "/js/**", "/images/**",
+                                "/forgot-password", "/reset-password", "/reset-password-error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout
-                        .logoutUrl("/logout")                    // URL для logout
-                        .logoutSuccessUrl("/login?logout=success") // Куди перенаправити після logout
-                        .deleteCookies("jwt", "JSESSIONID")      // Видаляємо cookies
-                        .invalidateHttpSession(true)             // Інвалідуємо сесію
-                        .clearAuthentication(true)               // Очищуємо аутентифікацію
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout=success")
+                        .deleteCookies("jwt", "JSESSIONID")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
                         .permitAll()
                 )
                 .sessionManagement(session -> session
@@ -49,7 +52,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 
     @Bean
     public UserDetailsService userDetailsService() {

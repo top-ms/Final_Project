@@ -145,4 +145,37 @@ public class ClientServiceImpl implements ClientService {
     public Optional<Client> findById(Long id) {
         return clientRepository.findById(id);
     }
+
+
+
+
+
+
+
+
+
+
+
+// Додайте ці методи до ClientServiceImpl:
+
+    @Override
+    public Optional<Client> findClientByEmail(String email) {
+        return clientRepository.findByEmail(email);
+    }
+
+    @Override
+    public boolean updateClientPassword(Long clientId, String encodedPassword) {
+        try {
+            Optional<Client> clientOptional = clientRepository.findById(clientId);
+            if (clientOptional.isPresent()) {
+                Client client = clientOptional.get();
+                client.setPassword(encodedPassword);
+                clientRepository.save(client);
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
