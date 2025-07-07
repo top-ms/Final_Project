@@ -21,41 +21,22 @@ public interface ClientService {
 
     Client findClientEntityByEmail(String email);
 
-
-
-
-
-
-
-
-
     List<Client> getAllClients();
+
     void deleteClientById(Long id);
+
     void deleteAllOrdersOfClientById(Long id);
 
     void register(ClientRegisterDTO clientRegisterDTO);
 
-
-
-
-
-
     Optional<UserEditDTO> findByIdForEdit(Long id);
+
     void updateClient(UserEditDTO userEditDTO);
+
     Optional<Client> findById(Long id);
 
-
-
-
-
-    /**
-     * Знайти клієнта по email (для reset password)
-     */
     Optional<Client> findClientByEmail(String email);
 
-    /**
-     * Оновити пароль клієнта по ID
-     */
     boolean updateClientPassword(Long clientId, String encodedPassword);
 
 }
