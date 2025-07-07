@@ -30,8 +30,10 @@ public class OrdersControllerForEmployee {
     private final EmployeeService employeeService;
     private final ApplianceService applianceService;
 
-    public OrdersControllerForEmployee(OrderService orderService, ClientService clientService,
-                                       EmployeeService employeeService, ApplianceService applianceService) {
+    public OrdersControllerForEmployee(OrderService orderService,
+                                       ClientService clientService,
+                                       EmployeeService employeeService,
+                                       ApplianceService applianceService) {
         this.orderService = orderService;
         this.clientService = clientService;
         this.employeeService = employeeService;
@@ -49,14 +51,11 @@ public class OrdersControllerForEmployee {
                                Model model,
                                RedirectAttributes redirectAttributes) {
         String email = createOrderDTO.getClientEmail();
-
         if (email == null || email.trim().isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Будь ласка, введіть email клієнта");
             return "redirect:/employee/orders/add";
         }
-
         Optional<ViewClientsByAdminDTO> clientOptional = clientService.findByEmail(email.trim());
-
         if (clientOptional.isPresent()) {
             model.addAttribute("createOrderDTO", createOrderDTO);
             model.addAttribute("foundClient", clientOptional.get());
@@ -73,71 +72,45 @@ public class OrdersControllerForEmployee {
     public String createOrder(@ModelAttribute CreateOrderDTO createOrderDTO,
                               Authentication authentication,
                               RedirectAttributes redirectAttributes) {
-
         String clientEmail = createOrderDTO.getClientEmail();
         String currentUserEmail = authentication.getName();
-
         Optional<ViewClientsByAdminDTO> clientOptional = clientService.findByEmail(clientEmail);
-        if (!clientOptional.isPresent()) {
+        if (clientOptional.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Клієнта не знайдено");
             return "redirect:/employee/orders/add";
         }
-
-        // Перевіряємо роль користувача і знаходимо працівника
         boolean isEmployee = authentication.getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ROLE_EMPLOYEE"));
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_EMPLOYEE"));
         boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
-
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
         Employee employee = null;
-
         if (isEmployee) {
-            // Якщо це працівник - шукаємо в таблиці працівників
             employee = employeeService.findEmployeeEntityByEmail(currentUserEmail);
         } else if (isAdmin) {
-            // Якщо це адмін - потрібно створити "віртуального" працівника або використати першого доступного
-            // Варіант 1: Використати першого працівника з БД
             List<Employee> employees = employeeService.getAllEmployees();
             if (!employees.isEmpty()) {
-                employee = employees.get(0); // Беремо першого працівника
+                employee = employees.get(0);
             } else {
                 redirectAttributes.addFlashAttribute("error", "У системі немає жодного працівника");
                 return "redirect:/employee/orders/add";
             }
-
-            // Варіант 2: Можна створити спеціального "системного" працівника для адмінів
-            // або додати логіку створення замовлення без прив'язки до працівника
         } else {
             redirectAttributes.addFlashAttribute("error", "Недостатньо прав для створення замовлення");
             return "redirect:/employee/orders/add";
         }
-
         if (employee == null) {
             redirectAttributes.addFlashAttribute("error", "Не вдалося визначити працівника для замовлення");
             return "redirect:/employee/orders/add";
         }
-
-        // Створюємо замовлення
         Orders order = new Orders();
         Client client = clientService.findClientEntityByEmail(clientEmail);
-
         order.setClient(client);
         order.setEmployee(employee);
         order.setApproved(false);
-
         orderService.saveNewOrder(order);
-
         redirectAttributes.addFlashAttribute("success", "Замовлення успішно створено");
         return "redirect:/employee/orders";
     }
-
-
-
-
-
-
-
-
 
     @GetMapping("orders")
     public String listOfOrders(@RequestParam(defaultValue = "0") int page,
@@ -147,13 +120,10 @@ public class OrdersControllerForEmployee {
                                @RequestParam(required = false) Boolean approved,
                                Model model) {
 
-        // Визначаємо напрямок сортування за ціною
         Sort.Direction sortDirection = priceSort.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "id"));
 
         Page<ViewOrdersDTO> ordersPage;
-
-        // Фільтрація
         if (employeeId != null && approved != null) {
             ordersPage = orderService.getOrdersByEmployeeIdAndApproved(employeeId, approved, pageable);
         } else if (employeeId != null) {
@@ -163,7 +133,6 @@ public class OrdersControllerForEmployee {
         } else {
             ordersPage = orderService.getAllOrdersAsDto(pageable);
         }
-
 
         model.addAttribute("ordersPage", ordersPage);
         model.addAttribute("employees", employeeService.getAllEmployees());
@@ -207,7 +176,7 @@ public class OrdersControllerForEmployee {
     }
 
     @GetMapping("orders/{id}/edit")
-    public String editOrder(@PathVariable("id") Long id, Model model) {
+    public String editOrder(@PathVariable Long id, Model model) {
         Orders orders = orderService.findById(id);
         Set<OrderRow> rows = orders.getOrderRowSet();
         model.addAttribute("order", orders);
@@ -216,7 +185,7 @@ public class OrdersControllerForEmployee {
     }
 
     @GetMapping("orders/{id}/choice-appliance")
-    public String choiceAppliance(@PathVariable("id") Long id, Model model) {
+    public String choiceAppliance(@PathVariable Long id, Model model) {
         List<Appliance> appliances = applianceService.getAllAppliances();
         model.addAttribute("appliances", appliances);
         model.addAttribute("ordersId", id);
@@ -224,9 +193,9 @@ public class OrdersControllerForEmployee {
     }
 
     @PostMapping("orders/{id}/add-into-order")
-    public String addIntoOrder(@PathVariable("id") Long orderId,
-                               @RequestParam("applianceId") Long applianceId,
-                               @RequestParam("numbers") Long number) {
+    public String addIntoOrder(@PathVariable Long orderId,
+                               @RequestParam Long applianceId,
+                               @RequestParam Long number) {
         orderService.saveNewOrderRowById(orderId, applianceId, number);
         return "redirect:/employee/orders/" + orderId + "/edit";
     }

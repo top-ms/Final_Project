@@ -33,11 +33,7 @@ public class ApplianceControllerForEmployee {
             Model model) {
         Sort.Direction direction = sort.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, "name"));
-
-
         Page<ViewApplianceDTO> appliancesPage = applianceService.getAllManufacturersAsDto(pageable);
-
-
         model.addAttribute("appliancesPage", appliancesPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", appliancesPage.getTotalPages());
@@ -50,11 +46,8 @@ public class ApplianceControllerForEmployee {
         if (name == null || name.trim().isEmpty()) {
             return "redirect:/employee/appliances";
         }
-
         Optional<ViewApplianceDTO> applianceOptional = applianceService.getByName(name);
-
         if (applianceOptional.isPresent()) {
-            // Обгортаємо один об'єкт у Page
             Page<ViewApplianceDTO> page = new PageImpl<>(List.of(applianceOptional.get()));
             model.addAttribute("appliancesPage", page);
             model.addAttribute("notFound", false);
@@ -64,12 +57,9 @@ public class ApplianceControllerForEmployee {
             model.addAttribute("notFound", true);
             model.addAttribute("totalPages", 1);
         }
-
         model.addAttribute("currentPage", 0);
-
         return "employee/appliance/appliances";
     }
-
 
     @GetMapping("appliances/{id}/delete")
     public String deleteManufacturer(@PathVariable Long id,
@@ -93,8 +83,6 @@ public class ApplianceControllerForEmployee {
         return "redirect:/employee/appliances";
     }
 
-
-
     @GetMapping("/appliances/{id}/edit")
     public String showEditForm(@PathVariable("id") Long id, Model model) {
         Optional<ViewApplianceDTO> appliance = applianceService.getApplianceById(id);
@@ -114,25 +102,4 @@ public class ApplianceControllerForEmployee {
         applianceService.updateAppliance(id, dto);
         return "redirect:/employee/appliances";
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

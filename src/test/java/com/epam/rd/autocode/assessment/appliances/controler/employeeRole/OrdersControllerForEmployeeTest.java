@@ -244,19 +244,6 @@ class OrdersControllerForEmployeeTest {
 
     @Test
     @WithMockUser(username = "employee@test.com", authorities = {"ROLE_EMPLOYEE"})
-    void testAddIntoOrder_Success() throws Exception {
-        mockMvc.perform(post("/employee/orders/1/add-into-order")
-                        .with(csrf())
-                        .param("applianceId", "1")
-                        .param("numbers", "5"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/employee/orders/1/edit"));
-
-        verify(orderService).saveNewOrderRowById(1L, 1L, 5L);
-    }
-
-    @Test
-    @WithMockUser(username = "employee@test.com", authorities = {"ROLE_EMPLOYEE"})
     void testApproveOrder_Success() throws Exception {
         mockMvc.perform(get("/employee/orders/1/approved"))
                 .andExpect(status().is3xxRedirection())

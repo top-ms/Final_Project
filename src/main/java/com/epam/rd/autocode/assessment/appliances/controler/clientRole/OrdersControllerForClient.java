@@ -38,13 +38,11 @@ public class OrdersControllerForClient {
         this.applianceService = applianceService;
     }
 
-    // Отримуємо поточного клієнта з токена
     private Client getCurrentClient(Authentication authentication) {
         String currentClientEmail = authentication.getName();
         return clientService.findClientEntityByEmail(currentClientEmail);
     }
 
-    // Перевіряємо чи належить замовлення поточному клієнту
     private boolean isOrderOwner(Long orderId, Authentication authentication) {
         Orders order = orderService.findById(orderId);
         Client currentClient = getCurrentClient(authentication);
@@ -54,31 +52,23 @@ public class OrdersControllerForClient {
     @PostMapping("orders/create")
     public String createOrder(Authentication authentication, RedirectAttributes redirectAttributes) {
         try {
-            // Отримуємо поточного клієнта
             Client currentClient = getCurrentClient(authentication);
             if (currentClient == null) {
                 redirectAttributes.addFlashAttribute("error", "Клієнта не знайдено");
                 return "redirect:/client/orders";
             }
-
-            // Отримуємо всіх працівників і вибираємо випадкового
             List<Employee> employees = employeeService.getAllEmployees();
             if (employees.isEmpty()) {
                 redirectAttributes.addFlashAttribute("error", "У системі немає жодного працівника");
                 return "redirect:/client/orders";
             }
-
             Random random = new Random();
             Employee randomEmployee = employees.get(random.nextInt(employees.size()));
-
-            // Створюємо замовлення
             Orders order = new Orders();
             order.setClient(currentClient);
             order.setEmployee(randomEmployee);
             order.setApproved(false);
-
             orderService.saveNewOrder(order);
-
             redirectAttributes.addFlashAttribute("success", "Замовлення успішно створено");
             return "redirect:/client/orders/" + order.getId() + "/edit";
         } catch (Exception e) {
@@ -95,23 +85,15 @@ public class OrdersControllerForClient {
                                @RequestParam(required = false) Boolean approved,
                                Authentication authentication,
                                Model model) {
-
-        // Отримуємо поточного клієнта
         Client currentClient = getCurrentClient(authentication);
         if (currentClient == null) {
             model.addAttribute("error", "Клієнта не знайдено");
             return "client/order/orders";
         }
-
-        // Визначаємо напрямок сортування за ціною
         Sort.Direction sortDirection = priceSort.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "id"));
-
         Page<ViewOrdersDTO> ordersPage;
-
-        // Фільтрація тільки для замовлень поточного клієнта
         Long clientId = currentClient.getId();
-
         if (employeeId != null && approved != null) {
             ordersPage = orderService.getOrdersByClientIdAndEmployeeIdAndApproved(clientId, employeeId, approved, pageable);
         } else if (employeeId != null) {
@@ -121,7 +103,6 @@ public class OrdersControllerForClient {
         } else {
             ordersPage = orderService.getOrdersByClientId(clientId, pageable);
         }
-
         model.addAttribute("ordersPage", ordersPage);
         model.addAttribute("employees", employeeService.getAllEmployees());
         model.addAttribute("currentPage", page);
@@ -129,7 +110,6 @@ public class OrdersControllerForClient {
         model.addAttribute("priceSort", priceSort);
         model.addAttribute("selectedEmployeeId", employeeId);
         model.addAttribute("selectedApproved", approved);
-
         return "client/order/orders";
     }
 
@@ -140,28 +120,22 @@ public class OrdersControllerForClient {
         if (orderId == null || orderId == 0) {
             return "redirect:/client/orders";
         }
-
-        // Перевіряємо чи належить замовлення поточному клієнту
         if (!isOrderOwner(orderId, authentication)) {
             model.addAttribute("error", "Замовлення не знайдено або ви не маєте доступу до нього");
             model.addAttribute("ordersPage", Page.empty());
             model.addAttribute("employees", employeeService.getAllEmployees());
             return "client/order/orders";
         }
-
         Optional<ViewOrdersDTO> orderOptional = orderService.findOrderDtoById(orderId);
-
         if (orderOptional.isPresent()) {
             model.addAttribute("ordersPage", new PageImpl<>(List.of(orderOptional.get())));
         } else {
             model.addAttribute("notFound", true);
             model.addAttribute("ordersPage", Page.empty());
         }
-
         model.addAttribute("employees", employeeService.getAllEmployees());
         model.addAttribute("currentPage", 0);
         model.addAttribute("totalPages", 1);
-
         return "client/order/orders";
     }
 
@@ -170,13 +144,10 @@ public class OrdersControllerForClient {
                               @RequestParam(defaultValue = "0") int page,
                               Authentication authentication,
                               RedirectAttributes redirectAttributes) {
-
-        // Перевіряємо чи належить замовлення поточному клієнту
         if (!isOrderOwner(id, authentication)) {
             redirectAttributes.addFlashAttribute("error", "Ви не маєте права видаляти це замовлення");
             return "redirect:/client/orders?page=" + page;
         }
-
         orderService.deleteOrderById(id);
         redirectAttributes.addFlashAttribute("success", "Замовлення успішно видалено");
         return "redirect:/client/orders?page=" + page;
@@ -187,13 +158,10 @@ public class OrdersControllerForClient {
                             Authentication authentication,
                             Model model,
                             RedirectAttributes redirectAttributes) {
-
-        // Перевіряємо чи належить замовлення поточному клієнту
         if (!isOrderOwner(id, authentication)) {
             redirectAttributes.addFlashAttribute("error", "Ви не маєте права редагувати це замовлення");
             return "redirect:/client/orders";
         }
-
         Orders orders = orderService.findById(id);
         Set<OrderRow> rows = orders.getOrderRowSet();
         model.addAttribute("order", orders);
@@ -206,13 +174,10 @@ public class OrdersControllerForClient {
                                   Authentication authentication,
                                   Model model,
                                   RedirectAttributes redirectAttributes) {
-
-        // Перевіряємо чи належить замовлення поточному клієнту
         if (!isOrderOwner(id, authentication)) {
             redirectAttributes.addFlashAttribute("error", "Ви не маєте права редагувати це замовлення");
             return "redirect:/client/orders";
         }
-
         List<Appliance> appliances = applianceService.getAllAppliances();
         model.addAttribute("appliances", appliances);
         model.addAttribute("ordersId", id);
@@ -225,13 +190,10 @@ public class OrdersControllerForClient {
                                @RequestParam("numbers") Long number,
                                Authentication authentication,
                                RedirectAttributes redirectAttributes) {
-
-        // Перевіряємо чи належить замовлення поточному клієнту
         if (!isOrderOwner(orderId, authentication)) {
             redirectAttributes.addFlashAttribute("error", "Ви не маєте права редагувати це замовлення");
             return "redirect:/client/orders";
         }
-
         orderService.saveNewOrderRowById(orderId, applianceId, number);
         redirectAttributes.addFlashAttribute("success", "Товар успішно додано до замовлення");
         return "redirect:/client/orders/" + orderId + "/edit";
@@ -242,13 +204,10 @@ public class OrdersControllerForClient {
                                @RequestParam(defaultValue = "0") int page,
                                Authentication authentication,
                                RedirectAttributes redirectAttributes) {
-
-        // Перевіряємо чи належить замовлення поточному клієнту
         if (!isOrderOwner(id, authentication)) {
             redirectAttributes.addFlashAttribute("error", "Ви не маєте права змінювати статус цього замовлення");
             return "redirect:/client/orders?page=" + page;
         }
-
         orderService.setApproved(id, true);
         redirectAttributes.addFlashAttribute("success", "Замовлення затверджено");
         return "redirect:/client/orders?page=" + page;
@@ -259,13 +218,10 @@ public class OrdersControllerForClient {
                                  @RequestParam(defaultValue = "0") int page,
                                  Authentication authentication,
                                  RedirectAttributes redirectAttributes) {
-
-        // Перевіряємо чи належить замовлення поточному клієнту
         if (!isOrderOwner(id, authentication)) {
             redirectAttributes.addFlashAttribute("error", "Ви не маєте права змінювати статус цього замовлення");
             return "redirect:/client/orders?page=" + page;
         }
-
         orderService.setApproved(id, false);
         redirectAttributes.addFlashAttribute("success", "Затвердження замовлення скасовано");
         return "redirect:/client/orders?page=" + page;
@@ -276,13 +232,10 @@ public class OrdersControllerForClient {
                                  @PathVariable Long rowId,
                                  Authentication authentication,
                                  RedirectAttributes redirectAttributes) {
-
-        // Перевіряємо чи належить замовлення поточному клієнту
         if (!isOrderOwner(orderId, authentication)) {
             redirectAttributes.addFlashAttribute("error", "Ви не маєте права редагувати це замовлення");
             return "redirect:/client/orders";
         }
-
         orderService.deleteOrderRowById(rowId);
         redirectAttributes.addFlashAttribute("success", "Товар успішно видалено з замовлення");
         return "redirect:/client/orders/" + orderId + "/edit";

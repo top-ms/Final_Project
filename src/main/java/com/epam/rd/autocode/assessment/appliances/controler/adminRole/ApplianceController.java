@@ -34,11 +34,7 @@ public class ApplianceController {
             Model model) {
         Sort.Direction direction = sort.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, "name"));
-
-
         Page<ViewApplianceDTO> appliancesPage = applianceService.getAllManufacturersAsDto(pageable);
-
-
         model.addAttribute("appliancesPage", appliancesPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", appliancesPage.getTotalPages());
@@ -51,7 +47,6 @@ public class ApplianceController {
         if (name == null || name == "") {
             return "redirect:/admin/appliances";
         }
-
         Optional<ViewApplianceDTO> applianceOptional = applianceService.getByName(name);
         if (applianceOptional.isPresent()) {
             model.addAttribute("appliancesPage", applianceOptional.get());
@@ -86,18 +81,13 @@ public class ApplianceController {
         return "redirect:/admin/appliances";
     }
 
-
-
     @GetMapping("/appliances/{id}/edit")
     public String showEditForm(@PathVariable("id") Long id, Model model) {
         Optional<ViewApplianceDTO> appliance = applianceService.getApplianceById(id);
-        System.out.println("Appliance " + appliance.get());
-
         model.addAttribute("categories", Category.values());
         model.addAttribute("powerTypes", PowerType.values());
         model.addAttribute("manufacturers", applianceService.getAllManufacturers());
         model.addAttribute("appliance", appliance.get());
-
         return "admin/appliance/editAppliance";
     }
 

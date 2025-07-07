@@ -43,9 +43,6 @@ public class OrdersController {
         this.applianceService = applianceService;
     }
 
-
-// Додай ці методи до свого OrderController
-
     @GetMapping("orders/add")
     public String showNewOrderForm(Model model) {
         model.addAttribute("createOrderDTO", new CreateOrderDTO());
@@ -57,14 +54,11 @@ public class OrdersController {
                                Model model,
                                RedirectAttributes redirectAttributes) {
         String email = createOrderDTO.getClientEmail();
-
         if (email == null || email.trim().isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Будь ласка, введіть email клієнта");
             return "redirect:/admin/orders/add";
         }
-
         Optional<ViewClientsByAdminDTO> clientOptional = clientService.findByEmail(email.trim());
-
         if (clientOptional.isPresent()) {
             model.addAttribute("createOrderDTO", createOrderDTO);
             model.addAttribute("foundClient", clientOptional.get());
@@ -74,7 +68,6 @@ public class OrdersController {
             model.addAttribute("error", "Клієнта з таким email не знайдено. Спробуйте ще раз.");
             model.addAttribute("clientFound", false);
         }
-
         return "admin/order/newOrder";
     }
 
@@ -82,127 +75,46 @@ public class OrdersController {
     public String createOrder(@ModelAttribute CreateOrderDTO createOrderDTO,
                               Authentication authentication,
                               RedirectAttributes redirectAttributes) {
-
         String clientEmail = createOrderDTO.getClientEmail();
         String currentUserEmail = authentication.getName();
-
-        // Знаходимо клієнта
         Optional<ViewClientsByAdminDTO> clientOptional = clientService.findByEmail(clientEmail);
         if (!clientOptional.isPresent()) {
             redirectAttributes.addFlashAttribute("error", "Клієнта не знайдено");
             return "redirect:/admin/orders/add";
         }
-
-        // Перевіряємо роль користувача і знаходимо працівника
         boolean isEmployee = authentication.getAuthorities().stream()
                 .anyMatch(authority -> authority.getAuthority().equals("ROLE_EMPLOYEE"));
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
-
         Employee employee = null;
-
         if (isEmployee) {
-            // Якщо це працівник - шукаємо в таблиці працівників
             employee = employeeService.findEmployeeEntityByEmail(currentUserEmail);
-        } else if (isAdmin) {
-            // Якщо це адмін - потрібно створити "віртуального" працівника або використати першого доступного
-            // Варіант 1: Використати першого працівника з БД
+        }
+        if (isAdmin) {
             List<Employee> employees = employeeService.getAllEmployees();
             if (!employees.isEmpty()) {
-                employee = employees.get(0); // Беремо першого працівника
+                employee = employees.get(0);
             } else {
                 redirectAttributes.addFlashAttribute("error", "У системі немає жодного працівника");
                 return "redirect:/admin/orders/add";
             }
-
-            // Варіант 2: Можна створити спеціального "системного" працівника для адмінів
-            // або додати логіку створення замовлення без прив'язки до працівника
         } else {
             redirectAttributes.addFlashAttribute("error", "Недостатньо прав для створення замовлення");
             return "redirect:/admin/orders/add";
         }
-
         if (employee == null) {
             redirectAttributes.addFlashAttribute("error", "Не вдалося визначити працівника для замовлення");
             return "redirect:/admin/orders/add";
         }
-
-        // Створюємо замовлення
         Orders order = new Orders();
         Client client = clientService.findClientEntityByEmail(clientEmail);
-
         order.setClient(client);
         order.setEmployee(employee);
         order.setApproved(false);
-
         orderService.saveNewOrder(order);
-
         redirectAttributes.addFlashAttribute("success", "Замовлення успішно створено");
         return "redirect:/admin/orders";
     }
-
-
-
-
-//    @GetMapping("orders/add")
-//    public String showNewOrderForm(Model model) {
-//        model.addAttribute("order", new Orders());
-//        return "admin/order/newOrder";
-//    }
-
-
-
-
-
-//    @GetMapping("/orders/add/search-client")
-//    public String searchClient(@RequestParam("email") String email, Model model) {
-//        if (email == null || email == "") {
-//            return "redirect:/admin/orders/add";
-//        }
-//        Optional<ViewClientsByAdminDTO> clientOptional = clientService.findByEmail(email);
-//
-//        if (clientOptional.isPresent()) {
-//            model.addAttribute("clientsPage", new PageImpl<>(List.of(clientOptional.get())));
-//        } else {
-//            model.addAttribute("notFound", true);
-//            model.addAttribute("clientsPage", Page.empty());
-//        }
-//
-//        model.addAttribute("currentPage", 0);
-//        model.addAttribute("totalPages", 1);
-//
-//
-//        return "admin/order/orders";
-//    }
-
-
-
-//
-//    @PostMapping("orders/add-order")
-//    public String addOrder(@ModelAttribute Orders orders) {
-//        orders.setApproved(false);
-//        orderService.saveNewOrder(orders);
-//        return "redirect:/admin/orders";
-//    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /// ////////---------
 
     @GetMapping("orders")
     public String listOfOrders(@RequestParam(defaultValue = "0") int page,
@@ -211,14 +123,9 @@ public class OrdersController {
                                @RequestParam(required = false) Long employeeId,
                                @RequestParam(required = false) Boolean approved,
                                Model model) {
-
-        // Визначаємо напрямок сортування за ціною
         Sort.Direction sortDirection = priceSort.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "id"));
-
         Page<ViewOrdersDTO> ordersPage;
-
-        // Фільтрація
         if (employeeId != null && approved != null) {
             ordersPage = orderService.getOrdersByEmployeeIdAndApproved(employeeId, approved, pageable);
         } else if (employeeId != null) {
@@ -228,8 +135,6 @@ public class OrdersController {
         } else {
             ordersPage = orderService.getAllOrdersAsDto(pageable);
         }
-
-
         model.addAttribute("ordersPage", ordersPage);
         model.addAttribute("employees", employeeService.getAllEmployees());
         model.addAttribute("clients", clientService.getAllClients());
@@ -238,7 +143,6 @@ public class OrdersController {
         model.addAttribute("priceSort", priceSort);
         model.addAttribute("selectedEmployeeId", employeeId);
         model.addAttribute("selectedApproved", approved);
-
         return "admin/order/orders";
     }
 
@@ -247,20 +151,16 @@ public class OrdersController {
         if (orderId == null || orderId == 0) {
             return "redirect:/admin/orders";
         }
-
         Optional<ViewOrdersDTO> orderOptional = orderService.findOrderDtoById(orderId);
-
         if (orderOptional.isPresent()) {
             model.addAttribute("ordersPage", new PageImpl<>(List.of(orderOptional.get())));
         } else {
             model.addAttribute("notFound", true);
             model.addAttribute("ordersPage", Page.empty());
         }
-
         model.addAttribute("employees", employeeService.getAllEmployees());
         model.addAttribute("currentPage", 0);
         model.addAttribute("totalPages", 1);
-
         return "admin/order/orders";
     }
 

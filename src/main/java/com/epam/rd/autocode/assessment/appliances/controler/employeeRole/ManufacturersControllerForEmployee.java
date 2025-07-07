@@ -26,11 +26,10 @@ public class ManufacturersControllerForEmployee {
     }
 
     @GetMapping("/manufacturers")
-    public String viewListOfManufacturers(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "asc") String sort,
-            Model model) {
+    public String viewListOfManufacturers(@RequestParam(defaultValue = "0") int page,
+                                          @RequestParam(defaultValue = "10") int size,
+                                          @RequestParam(defaultValue = "asc") String sort,
+                                          Model model) {
         Sort.Direction direction = sort.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, "name"));
         Page<ViewManufacturerAsDTO> manufacturersPage = manufacturerService.getAllManufacturersAsDto(pageable);
@@ -46,11 +45,9 @@ public class ManufacturersControllerForEmployee {
         if (name == null || name.trim().isEmpty()) {
             return "redirect:/employee/manufacturers";
         }
-
-        Optional<ViewManufacturerAsDTO> manufacurerOptional = manufacturerService.getByName(name);
-        if (manufacurerOptional.isPresent()) {
-            // 👇 тут ми робимо з одного елемента повноцінну Page<>
-            List<ViewManufacturerAsDTO> list = List.of(manufacurerOptional.get());
+        Optional<ViewManufacturerAsDTO> manufacturerOptional = manufacturerService.getByName(name);
+        if (manufacturerOptional.isPresent()) {
+            List<ViewManufacturerAsDTO> list = List.of(manufacturerOptional.get());
             Page<ViewManufacturerAsDTO> page = new PageImpl<>(list);
             model.addAttribute("manufacturersPage", page);
             model.addAttribute("notFound", false);
@@ -58,7 +55,6 @@ public class ManufacturersControllerForEmployee {
             model.addAttribute("notFound", true);
             model.addAttribute("manufacturersPage", Page.empty());
         }
-
         model.addAttribute("currentPage", 0);
         model.addAttribute("totalPages", 1);
         model.addAttribute("sort", "asc");

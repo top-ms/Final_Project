@@ -34,18 +34,14 @@ public class ClientController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "asc") String sort,
             Model model) {
-
         Sort.Direction direction = sort.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, "name"));
         Page<ViewClientsByAdminDTO> clientsPage = clientService.getAllClientsAsDto(pageable);
-
         model.addAttribute("clientsPage", clientsPage);
-        model.addAttribute("clients", clientService.getAllClients()); // якщо використовуєш ще десь
+        model.addAttribute("clients", clientService.getAllClients());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", clientsPage.getTotalPages());
-        model.addAttribute("sort", sort); // щоб пагінація пам’ятала sort
-
+        model.addAttribute("sort", sort);
         return "admin/client/clients";
     }
 
@@ -55,18 +51,14 @@ public class ClientController {
             return "redirect:/admin/clients";
         }
         Optional<ViewClientsByAdminDTO> clientOptional = clientService.findByEmail(email);
-
         if (clientOptional.isPresent()) {
             model.addAttribute("clientsPage", new PageImpl<>(List.of(clientOptional.get())));
         } else {
             model.addAttribute("notFound", true);
             model.addAttribute("clientsPage", Page.empty());
         }
-
         model.addAttribute("currentPage", 0);
         model.addAttribute("totalPages", 1);
-
-
         return "admin/client/clients";
     }
 
@@ -76,13 +68,10 @@ public class ClientController {
         return "admin/client/newClient";
     }
 
-
     @PostMapping("/register")
     public String registerClient(@Valid @ModelAttribute("client") ClientRegisterDTO dto,
                                  BindingResult bindingResult,
                                  Model model) {
-
-
         if (clientService.existsByEmail(dto.getEmail())) {
             bindingResult.rejectValue("email", "error.client.email");
             return "entrance/register";
@@ -96,7 +85,6 @@ public class ClientController {
 
     @PostMapping("clients/add-client")
     public String addNewClient(@Valid @ModelAttribute("client") ClientRegisterDTO dto, BindingResult bindingResult) {
-
         if (clientService.existsByEmail(dto.getEmail())) {
             bindingResult.rejectValue("email", "error.client.email");
             return "admin/client/newClient";
@@ -115,32 +103,12 @@ public class ClientController {
         return "redirect:/admin/clients?page=" + page;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @GetMapping("clients/{id}/edit")
     public String showEditClientForm(@PathVariable Long id, Model model) {
         Optional<UserEditDTO> clientOptional = clientService.findByIdForEdit(id);
-
         if (clientOptional.isEmpty()) {
             return "redirect:/admin/clients";
         }
-
         model.addAttribute("client", clientOptional.get());
         model.addAttribute("isEdit", true);
         return "admin/client/editClient";
@@ -151,28 +119,20 @@ public class ClientController {
                                @Valid @ModelAttribute("client") UserEditDTO userEditDTO,
                                BindingResult bindingResult,
                                Model model) {
-
-        // Встановлюємо ID з URL
         userEditDTO.setId(id);
-
-        // Перевіряємо чи існує клієнт з таким email (окрім поточного)
         Optional<Client> existingClient = clientService.findById(id);
         if (existingClient.isEmpty()) {
             return "redirect:/admin/clients";
         }
-
-        // Перевіряємо унікальність email (якщо змінився)
         if (!existingClient.get().getEmail().equals(userEditDTO.getEmail())) {
             if (clientService.existsByEmail(userEditDTO.getEmail())) {
                 bindingResult.rejectValue("email", "error.client.email", "Клієнт з таким email вже існує");
             }
         }
-
         if (bindingResult.hasErrors()) {
             model.addAttribute("isEdit", true);
             return "admin/client/editClient";
         }
-
         clientService.updateClient(userEditDTO);
         return "redirect:/admin/clients";
     }

@@ -90,10 +90,12 @@
                                 <input type="hidden" name="approved" th:value="${selectedApproved}"/>
                                 <select name="employeeId" class="form-select form-select-sm form-select-custom" onchange="this.form.submit()">
                                     <option value="" th:text="#{filter.all.employees}">Всі працівники</option>
-                                    <option th:each="employee : ${employees}"
+                                    <option
+                                            th:each="employee : ${employees}"
                                             th:value="${employee.id}"
                                             th:selected="${employee.id == selectedEmployeeId}"
-                                            th:text="${employee.name}">Employee Name</option>
+                                            th:text="${employee.name + ': ' + employee.email}">
+                                    </option>
                                 </select>
                             </form>
                         </th>

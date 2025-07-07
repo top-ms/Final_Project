@@ -36,14 +36,9 @@ public class AdminController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "asc") String sort,
             Model model) {
-
         Sort.Direction direction = sort.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, "name"));
-
-
         Page<ViewAdminDTO> adminsPage = adminService.getAllAdminsAsDto(pageable);
-
-
         model.addAttribute("adminsPage", adminsPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", adminsPage.getTotalPages());
@@ -54,20 +49,16 @@ public class AdminController {
 
     @GetMapping("admins/search")
     public String searchAdmins(@RequestParam("email") String email, Model model) {
-
         if (email == null || email == "") {
             return "redirect:/admin/admins";
         }
-
         Optional<ViewAdminDTO> adminOptional = adminService.getAdminByEmail(email);
-
         if (adminOptional.isPresent()) {
             model.addAttribute("adminsPage", adminOptional.get());
         } else {
             model.addAttribute("notFound", true);
             model.addAttribute("adminsPage", Page.empty());
         }
-
         model.addAttribute("currentPage", 0);
         model.addAttribute("totalPages", 1);
         return "admin/admin/admins";
@@ -95,26 +86,19 @@ public class AdminController {
             return "admin/admin/newAdmin";
         }
         if (bindingResult.hasErrors()) {
-            // Повертаємо ту саму форму з помилками
             model.addAttribute("admin", dto);
             return "admin/admin/newAdmin";
         }
-
         adminService.register(dto);
         return "redirect:/admin/admins";
     }
 
-
-
-    // Додай ці методи:
     @GetMapping("admins/{id}/edit")
     public String showEditAdminForm(@PathVariable Long id, Model model) {
         Optional<UserEditDTO> adminOptional = adminService.findByIdForEdit(id);
-
         if (adminOptional.isEmpty()) {
             return "redirect:/admin/admins";
         }
-
         model.addAttribute("admin", adminOptional.get());
         model.addAttribute("isEdit", true);
         return "admin/admin/editAdmin";
@@ -125,28 +109,20 @@ public class AdminController {
                               @Valid @ModelAttribute("admin") UserEditDTO userEditDTO,
                               BindingResult bindingResult,
                               Model model) {
-
-        // Встановлюємо ID з URL
         userEditDTO.setId(id);
-
-        // Перевіряємо чи існує адмін з таким ID
         Optional<Admin> existingAdmin = adminService.findById(id);
         if (existingAdmin.isEmpty()) {
             return "redirect:/admin/admins";
         }
-
-        // Перевіряємо унікальність email (якщо змінився)
         if (!existingAdmin.get().getEmail().equals(userEditDTO.getEmail())) {
             if (adminService.existsByEmail(userEditDTO.getEmail())) {
                 bindingResult.rejectValue("email", "error.admin.email", "Адміністратор з таким email вже існує");
             }
         }
-
         if (bindingResult.hasErrors()) {
             model.addAttribute("isEdit", true);
             return "admin/admin/editAdmin";
         }
-
         adminService.updateAdmin(userEditDTO);
         return "redirect:/admin/admins";
     }

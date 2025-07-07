@@ -46,10 +46,8 @@ public class ManufacturersController {
         if (name == null || name.trim().isEmpty()) {
             return "redirect:/admin/manufacturers";
         }
-
         Optional<ViewManufacturerAsDTO> manufacurerOptional = manufacturerService.getByName(name);
         if (manufacurerOptional.isPresent()) {
-            // 👇 тут ми робимо з одного елемента повноцінну Page<>
             List<ViewManufacturerAsDTO> list = List.of(manufacurerOptional.get());
             Page<ViewManufacturerAsDTO> page = new PageImpl<>(list);
             model.addAttribute("manufacturersPage", page);
@@ -58,7 +56,6 @@ public class ManufacturersController {
             model.addAttribute("notFound", true);
             model.addAttribute("manufacturersPage", Page.empty());
         }
-
         model.addAttribute("currentPage", 0);
         model.addAttribute("totalPages", 1);
         model.addAttribute("sort", "asc");
