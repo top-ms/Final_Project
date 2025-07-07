@@ -38,9 +38,6 @@ public class OrdersControllerForEmployee {
         this.applianceService = applianceService;
     }
 
-
-// Додай ці методи до свого OrderController
-
     @GetMapping("orders/add")
     public String showNewOrderForm(Model model) {
         model.addAttribute("createOrderDTO", new CreateOrderDTO());
@@ -69,7 +66,6 @@ public class OrdersControllerForEmployee {
             model.addAttribute("error", "Клієнта з таким email не знайдено. Спробуйте ще раз.");
             model.addAttribute("clientFound", false);
         }
-
         return "employee/order/newOrder";
     }
 
@@ -81,7 +77,6 @@ public class OrdersControllerForEmployee {
         String clientEmail = createOrderDTO.getClientEmail();
         String currentUserEmail = authentication.getName();
 
-        // Знаходимо клієнта
         Optional<ViewClientsByAdminDTO> clientOptional = clientService.findByEmail(clientEmail);
         if (!clientOptional.isPresent()) {
             redirectAttributes.addFlashAttribute("error", "Клієнта не знайдено");
