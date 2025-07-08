@@ -35,22 +35,6 @@ public class ClientServiceImpl implements ClientService {
         this.modelMapper = modelMapper;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /// ///////////////
-
-
     @Override
     public Optional<ViewClientsByAdminDTO> findByEmail(String email) {
         return clientRepository.findByEmail(email)
@@ -72,7 +56,6 @@ public class ClientServiceImpl implements ClientService {
                 .orElseThrow(() -> new RuntimeException("Client not found with email: " + email));
     }
 
-
     @Override
     public List<Client> getAllClients() {
         return clientRepository.findAll();
@@ -90,8 +73,6 @@ public class ClientServiceImpl implements ClientService {
         ordersRepository.deleteAll(orders);
     }
 
-
-    // ✅ Метод для реєстрації користувача з хешуванням пароля і генерацією карти
     public void register(ClientRegisterDTO dto) {
         Client client = modelMapper.map(dto, Client.class);
 
@@ -101,7 +82,6 @@ public class ClientServiceImpl implements ClientService {
         clientRepository.save(client);
     }
 
-    // 🧠 Генерація випадкового номера карти (16 цифр)
     private String generateCardNumber() {
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
@@ -110,9 +90,6 @@ public class ClientServiceImpl implements ClientService {
         }
         return sb.toString();
     }
-
-
-    // Додай ці методи до ClientServiceImpl:
 
     @Override
     public Optional<UserEditDTO> findByIdForEdit(Long id) {
@@ -145,18 +122,6 @@ public class ClientServiceImpl implements ClientService {
     public Optional<Client> findById(Long id) {
         return clientRepository.findById(id);
     }
-
-
-
-
-
-
-
-
-
-
-
-// Додайте ці методи до ClientServiceImpl:
 
     @Override
     public Optional<Client> findClientByEmail(String email) {

@@ -24,15 +24,12 @@ public class LogoutController {
         this.jwtService = jwtService;
     }
 
-    // 🚪 POST logout (основний метод)
     @PostMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         String username = "UNKNOWN";
         String userId = null;
         String role = null;
-
         try {
-            // 🔍 Витягуємо інформацію з JWT перед видаленням
             String jwtToken = extractJwtFromCookies(request);
             if (jwtToken != null && jwtService.isValidJwtFormat(jwtToken)) {
                 try {
@@ -46,43 +43,28 @@ public class LogoutController {
                     username = "INVALID_TOKEN_USER";
                 }
             }
-
-            // 🗑️ Видаляємо JWT cookie
             Cookie jwtCookie = new Cookie("jwt", null);
-            jwtCookie.setHttpOnly(true); // Захист від JavaScript
-            jwtCookie.setSecure(false); // Поставте true для HTTPS
-            jwtCookie.setPath("/"); // Доступний для всього сайту
-            jwtCookie.setMaxAge(0); // Видаляємо cookie (встановлюємо час життя = 0)
-
+            jwtCookie.setHttpOnly(true);
+            jwtCookie.setSecure(false);
+            jwtCookie.setPath("/");
+            jwtCookie.setMaxAge(0);
             response.addCookie(jwtCookie);
-
-            // 🧹 Очищуємо Security Context (Spring Security)
             SecurityContextHolder.clearContext();
-
-            // 📊 Логуємо logout в аудит систему
             String clientIp = getClientIpAddress(request);
             String userAgent = request.getHeader("User-Agent");
-
-
             log.info("👋 User {} successfully logged out from IP: {}", username, clientIp);
-
         } catch (Exception e) {
             log.error("❌ Error during logout process: {}", e.getMessage(), e);
-            // Навіть якщо помилка - все одно виконуємо logout
         }
-
-        // 🔄 Перенаправляємо на сторінку логіну з повідомленням про успішний вихід
         return "redirect:/login?logout=success";
     }
 
-    // 🚪 GET logout (для посилань типу <a href="/logout">)
     @GetMapping("/logout")
     public String logoutGet(HttpServletRequest request, HttpServletResponse response) {
         log.debug("🔗 GET logout request received, redirecting to POST logout logic");
         return logout(request, response);
     }
 
-    // 🍪 Витягуємо JWT токен з cookies
     private String extractJwtFromCookies(HttpServletRequest request) {
         if (request.getCookies() != null) {
             return Arrays.stream(request.getCookies())
@@ -94,31 +76,23 @@ public class LogoutController {
         return null;
     }
 
-    // 🌐 Отримуємо реальний IP адрес клієнта (враховуємо проксі)
     private String getClientIpAddress(HttpServletRequest request) {
-        // Перевіряємо заголовки проксі серверів
         String xForwardedFor = request.getHeader("X-Forwarded-For");
         if (xForwardedFor != null && !xForwardedFor.isEmpty() && !"unknown".equalsIgnoreCase(xForwardedFor)) {
-            // Беремо перший IP (якщо їх кілька через кому)
             return xForwardedFor.split(",")[0].trim();
         }
-
         String xRealIp = request.getHeader("X-Real-IP");
         if (xRealIp != null && !xRealIp.isEmpty() && !"unknown".equalsIgnoreCase(xRealIp)) {
             return xRealIp;
         }
-
         String xForwarded = request.getHeader("X-Forwarded");
         if (xForwarded != null && !xForwarded.isEmpty() && !"unknown".equalsIgnoreCase(xForwarded)) {
             return xForwarded;
         }
-
         String forwarded = request.getHeader("Forwarded");
         if (forwarded != null && !forwarded.isEmpty() && !"unknown".equalsIgnoreCase(forwarded)) {
             return forwarded;
         }
-
-        // Якщо немає проксі - повертаємо звичайний remote address
         return request.getRemoteAddr();
     }
 }

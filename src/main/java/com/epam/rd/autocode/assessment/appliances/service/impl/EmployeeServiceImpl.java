@@ -40,21 +40,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.modelMapper = modelMapper;
     }
 
-
-
-    // У EmployeeServiceImpl:
     @Override
     public Employee findEmployeeEntityByEmail(String email) {
         return employeeRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Employee not found with email: " + email));
     }
-
-
-
-
-
-
-    /// //////
 
     @Override
     public Optional<ViewEmployeesDTO> findByEmail(String email) {
@@ -97,11 +87,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setPassword(passwordEncoder.encode(employee.getPassword()));
         employee.setDepartment("sales");
         employeeRepository.save(employee);
-        System.out.println("Registered client: " + employee.getEmail() + " with password: " + employee.getPassword() + "");
     }
-
-
-    // Додай ці методи до EmployeeServiceImpl:
 
     @Override
     public Optional<UserEditDTO> findByIdForEdit(Long id) {
@@ -121,13 +107,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void updateEmployee(UserEditDTO userEditDTO) {
         Employee employee = employeeRepository.findById(userEditDTO.getId())
                 .orElseThrow(() -> new RuntimeException("Employee not found with id: " + userEditDTO.getId()));
-
         employee.setName(userEditDTO.getName());
         employee.setEmail(userEditDTO.getEmail());
-
-        // Хешуємо новий пароль
         employee.setPassword(passwordEncoder.encode(userEditDTO.getPassword()));
-
         employeeRepository.save(employee);
     }
 

@@ -38,52 +38,33 @@ public class JwtAuthController {
         this.clientService = clientService;
     }
 
-    // 📄 Показуємо кастомну форму логіну
     @GetMapping("/login")
     public String showLoginForm() {
-        return "entrance/login"; // Thymeleaf форма
+        return "entrance/login";
     }
 
-    // 🔐 Обробка логіну через JWT
     @PostMapping("/login")
     public String processLogin(
             @RequestParam("username") String email,
             @RequestParam String password,
             HttpServletResponse response
     ) {
-        System.out.println("Login: " + email + " " + password + "");
         try {
-
-            // 1. Аутентифікація користувача
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password)
             );
-            System.out.println("Login2: " + email + " " + password + "");
-            // 2. Зберігаємо аутентифікацію в контексті
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            System.out.println("Login3: " + email + " " + password + "");
-            // 3. Генеруємо JWT
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String jwtToken = jwtService.generateToken(userDetails);
             System.out.println("JWT Token: " + jwtToken);
-
-            // 4. Створюємо cookie з JWT
             Cookie jwtCookie = new Cookie("jwt", jwtToken);
-            jwtCookie.setHttpOnly(true); // захист від JavaScript
+            jwtCookie.setHttpOnly(true);
             jwtCookie.setPath("/");
-            jwtCookie.setMaxAge(7 * 24 * 60 * 60); // тиждень
-
-            // 5. Додаємо cookie в response
-            System.out.println("Cookie: " + jwtCookie);
+            jwtCookie.setMaxAge(7 * 24 * 60 * 10);
             response.addCookie(jwtCookie);
-
-            // 6. Редірект на головну
-
-            System.out.println("Response headers: " + response.getHeaderNames());
             for (String headerName : response.getHeaderNames()) {
                 System.out.println(headerName + ": " + response.getHeader(headerName));
             }
-
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
             for (GrantedAuthority authority : authorities) {
                 String role = authority.getAuthority();
@@ -96,7 +77,6 @@ public class JwtAuthController {
                 }
             }
             return "redirect:/access-denied";
-
         } catch (BadCredentialsException e) {
             logger.error("Invalid credentials for user: {}", email, e);
             return "redirect:/login?error=invalid_credentials";
@@ -106,20 +86,17 @@ public class JwtAuthController {
         }
     }
 
-        // 📄 Показати форму реєстрації
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
-        model.addAttribute("client", new Client()); // додати порожній об’єкт для заповнення форми
+        model.addAttribute("client", new Client());
         System.out.println("showRegistrationForm() method called. Client object added to the model. Client object: " + model.getAttribute("client") + "");
-        return "entrance/register"; // Thymeleaf-шаблон register.html
+        return "entrance/register";
     }
 
     @PostMapping("/register")
     public String registerClient(@Valid @ModelAttribute("client") ClientRegisterDTO dto,
                                  BindingResult bindingResult,
                                  Model model) {
-
-
         if (clientService.existsByEmail(dto.getEmail())) {
             bindingResult.rejectValue("email", "error.client.email");
             return "entrance/register";
@@ -130,5 +107,4 @@ public class JwtAuthController {
         clientService.register(dto);
         return "redirect:/login";
     }
-
 }

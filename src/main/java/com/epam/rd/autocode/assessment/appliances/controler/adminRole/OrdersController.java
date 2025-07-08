@@ -191,8 +191,10 @@ public class OrdersController {
     @PostMapping("orders/{id}/add-into-order")
     public String addIntoOrder(@PathVariable("id") Long orderId,
                                @RequestParam("applianceId") Long applianceId,
-                               @RequestParam("numbers") Long number) {
+                               @RequestParam("numbers") Long number,
+                               RedirectAttributes redirectAttributes) {
         orderService.saveNewOrderRowById(orderId, applianceId, number);
+        redirectAttributes.addFlashAttribute("success", "Товар успішно додано до замовлення");
         return "redirect:/admin/orders/" + orderId + "/edit";
     }
 

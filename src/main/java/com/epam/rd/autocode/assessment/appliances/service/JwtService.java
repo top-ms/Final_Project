@@ -13,35 +13,26 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    // 🔐 Секретний ключ має бути мінімум 32 символи (BASE64)
     private static final String SECRET_KEY = "DyZ9O7ykcN6p+TzhCEF6p9Ucjb6e5zdYxLJeLzHWgS8=";
     private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(JwtService.class);
 
-    // 🛠 Розширюємо генерацію токена
-    // 🛠 Генеруємо токен без CustomUserDetails
     public String generateToken(UserDetails userDetails) {
         try {
             Map<String, Object> claims = new HashMap<>();
-
-            // Витягуємо роль зі стандартного UserDetails
             String role = userDetails.getAuthorities().stream()
                     .findFirst()
                     .map(Object::toString)
                     .orElse("ROLE_UNKNOWN");
-
-            // Використовуємо email/username як основні дані
             claims.put("role", role);
-            claims.put("userId", userDetails.getUsername()); // email як userId
-            claims.put("name", userDetails.getUsername());   // email як name
-
+            claims.put("userId", userDetails.getUsername());
+            claims.put("name", userDetails.getUsername());
             return Jwts.builder()
                     .setClaims(claims)
                     .setSubject(userDetails.getUsername())
                     .setIssuedAt(new Date(System.currentTimeMillis()))
-                    .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 годин
+                    .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 1))
                     .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                     .compact();
-
         } catch (IllegalArgumentException e) {
             logger.error("Error creating JWT token - invalid argument: {}", e.getMessage(), e);
             throw new RuntimeException("Could not create JWT token: invalid argument", e);
@@ -55,8 +46,6 @@ public class JwtService {
         }
     }
 
-
-    // 🔍 Методи для витягування даних з токена
     public String extractUserId(String token) {
         try {
             return extractClaim(token, claims -> {
@@ -93,7 +82,6 @@ public class JwtService {
         }
     }
 
-    // 🔎 Витягуємо email або username
     public String extractUsername(String token) {
         try {
             return extractClaim(token, Claims::getSubject);
@@ -103,7 +91,6 @@ public class JwtService {
         }
     }
 
-    // ✅ Перевіряємо, чи токен валідний
     public boolean isTokenValid(String token, UserDetails userDetails) {
         try {
             final String username = extractUsername(token);
@@ -116,27 +103,23 @@ public class JwtService {
         }
     }
 
-    // 🔒 Перевіряємо, чи токен не прострочений
     public boolean isTokenExpired(String token) {
         try {
             return extractExpiration(token).before(new Date());
         } catch (Exception e) {
             logger.warn("Could not check token expiration: {}", e.getMessage());
-            return true; // Вважаємо прострочений якщо не можемо перевірити
+            return true;
         }
     }
 
-    // 📅 Отримуємо дату завершення токену
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    // 📅 Отримуємо дату створення токену
     public Date extractIssuedAt(String token) {
         return extractClaim(token, Claims::getIssuedAt);
     }
 
-    // 🧠 Витягуємо конкретне поле (загальний метод)
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         try {
             final Claims claims = extractAllClaims(token);
@@ -162,7 +145,6 @@ public class JwtService {
         }
     }
 
-    // 📦 Отримуємо всі claims (всередині токена)
     private Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
@@ -172,15 +154,11 @@ public class JwtService {
                 .getBody();
     }
 
-    // 🔑 Створюємо ключ з BASE64 строки
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // 🔍 Додаткові корисні методи
-
-    // ⏰ Отримуємо час до закінчення токена в мілісекундах
     public long getTokenExpirationTime(String token) {
         try {
             Date expiration = extractExpiration(token);
@@ -191,7 +169,6 @@ public class JwtService {
         }
     }
 
-    // 🔄 Перевіряємо чи потребує токен оновлення (менше 2 годин до закінчення)
     public boolean isTokenNearExpiry(String token) {
         try {
             long timeLeft = getTokenExpirationTime(token);
@@ -203,7 +180,6 @@ public class JwtService {
         }
     }
 
-    // 📊 Отримуємо всю інформацію з токена для аудиту
     public Map<String, Object> extractAllTokenInfo(String token) {
         try {
             Claims claims = extractAllClaims(token);
@@ -225,7 +201,6 @@ public class JwtService {
         }
     }
 
-    // 🧹 Валідація токена без винятків (для фільтрів)
     public boolean isTokenValidSilent(String token) {
         try {
             extractAllClaims(token);
@@ -235,7 +210,6 @@ public class JwtService {
         }
     }
 
-    // 🆔 Отримуємо ID користувача числовий (якщо потрібно)
     public Long extractUserIdAsLong(String token) {
         try {
             String userId = extractUserId(token);
@@ -249,7 +223,6 @@ public class JwtService {
         }
     }
 
-    // 🎭 Перевіряємо чи має користувач конкретну роль
     public boolean hasRole(String token, String requiredRole) {
         try {
             String userRole = extractRole(token);
@@ -260,17 +233,14 @@ public class JwtService {
         }
     }
 
-    // 👑 Перевіряємо чи є користувач адміном
     public boolean isAdmin(String token) {
         return hasRole(token, "ROLE_ADMIN");
     }
 
-    // 👤 Перевіряємо чи є користувач звичайним юзером
     public boolean isUser(String token) {
         return hasRole(token, "ROLE_USER");
     }
 
-    // 🔍 Логування інформації про токен (для дебагу)
     public void logTokenInfo(String token, String action) {
         if (logger.isDebugEnabled()) {
             try {
@@ -287,18 +257,14 @@ public class JwtService {
         }
     }
 
-    // 🔄 Генерація нового токена з тими ж claims (для refresh)
     public String refreshToken(String oldToken) {
         try {
             Claims claims = extractAllClaims(oldToken);
             String username = claims.getSubject();
-
-            // Створюємо новий токен з тими ж claims але новим часом
             Map<String, Object> newClaims = new HashMap<>();
             newClaims.put("userId", claims.get("userId"));
             newClaims.put("role", claims.get("role"));
             newClaims.put("name", claims.get("name"));
-
             return Jwts.builder()
                     .setClaims(newClaims)
                     .setSubject(username)
@@ -306,37 +272,28 @@ public class JwtService {
                     .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 годин
                     .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                     .compact();
-
         } catch (Exception e) {
             logger.error("Could not refresh token: {}", e.getMessage(), e);
             throw new RuntimeException("Could not refresh token", e);
         }
     }
 
-    // ⚡ Швидка перевірка чи токен взагалі схожий на JWT
     public boolean isValidJwtFormat(String token) {
         if (token == null || token.trim().isEmpty()) {
             return false;
         }
-
-        // JWT має 3 частини розділені крапками
         String[] parts = token.split("\\.");
         return parts.length == 3;
     }
 
-    // 🧼 Очищення токена від зайвих символів
     public String cleanToken(String token) {
         if (token == null) return null;
-
-        // Видаляємо Bearer prefix якщо є
         if (token.startsWith("Bearer ")) {
             token = token.substring(7);
         }
-
         return token.trim();
     }
 
-    // 📝 Створення короткого опису токена для логів
     public String getTokenSummary(String token) {
         try {
             String username = extractUsername(token);

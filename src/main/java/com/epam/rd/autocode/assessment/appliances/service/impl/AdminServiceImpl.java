@@ -12,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,7 +26,6 @@ public class AdminServiceImpl implements AdminService {
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
     }
-
 
     @Override
     public Page<ViewAdminDTO> getAllAdminsAsDto(Pageable pageable) {
@@ -46,18 +44,12 @@ public class AdminServiceImpl implements AdminService {
         adminRepository.deleteById(id);
     }
 
-
-
-
-
-
     @Override
     public void register(RegistrationAdminDTO registrationAdminDTO) {
         Admin admin = modelMapper.map(registrationAdminDTO, Admin.class);
         admin.setPassword(passwordEncoder.encode(registrationAdminDTO.getPassword()));
         adminRepository.save(admin);
     }
-
 
     @Override
     public boolean existsByEmail(String email) {
@@ -67,28 +59,23 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Optional<UserEditDTO> findByIdForEdit(Long id) {
         return adminRepository.findById(id)
-                .map(admin -> {
-                    UserEditDTO dto = new UserEditDTO();
-                    dto.setId(admin.getId());
-                    dto.setName(admin.getName());
-                    dto.setEmail(admin.getEmail());
-                    // Пароль залишаємо порожнім для безпеки
-                    dto.setPassword("");
-                    return dto;
-                });
+        .map(admin -> {
+            UserEditDTO dto = new UserEditDTO();
+            dto.setId(admin.getId());
+            dto.setName(admin.getName());
+            dto.setEmail(admin.getEmail());
+            dto.setPassword("");
+            return dto;
+        });
     }
 
     @Override
     public void updateAdmin(UserEditDTO userEditDTO) {
         Admin admin = adminRepository.findById(userEditDTO.getId())
                 .orElseThrow(() -> new RuntimeException("Admin not found with id: " + userEditDTO.getId()));
-
         admin.setName(userEditDTO.getName());
         admin.setEmail(userEditDTO.getEmail());
-
-        // Хешуємо новий пароль
         admin.setPassword(passwordEncoder.encode(userEditDTO.getPassword()));
-
         adminRepository.save(admin);
     }
 
@@ -96,6 +83,4 @@ public class AdminServiceImpl implements AdminService {
     public Optional<Admin> findById(Long id) {
         return adminRepository.findById(id);
     }
-
-
 }

@@ -30,44 +30,28 @@ public class EmailService {
     @Value("${app.name:Appliances Store}")
     private String appName;
 
-    /**
-     * Відправити email для скидання пароля
-     */
     public boolean sendPasswordResetEmail(String toEmail, String resetLink, String clientName) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-
-            // Налаштування повідомлення
             helper.setFrom(fromEmail);
             helper.setTo(toEmail);
             helper.setSubject("Скидання пароля - " + appName);
-
-            // Створюємо контекст для Thymeleaf
             Context context = new Context();
             context.setVariable("clientName", clientName);
             context.setVariable("resetLink", resetLink);
             context.setVariable("appName", appName);
-
-            // Генеруємо HTML контент з шаблону
             String htmlContent = templateEngine.process("email/password-reset", context);
             helper.setText(htmlContent, true);
-
-            // Відправляємо
             mailSender.send(message);
-
             logger.info("Password reset email sent successfully to: " + toEmail);
             return true;
-
         } catch (MessagingException | MailException e) {
             logger.severe("Failed to send password reset email to " + toEmail + ": " + e.getMessage());
             return false;
         }
     }
 
-    /**
-     * Відправити простий текстовий email (fallback)
-     */
     public boolean sendSimplePasswordResetEmail(String toEmail, String resetLink, String clientName) {
         try {
             MimeMessage message = mailSender.createMimeMessage();

@@ -29,8 +29,6 @@ public class UniversalUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        // 1. Перевіряємо в адмінах
         var adminOpt = adminRepository.findByEmail(username);
         if (adminOpt.isPresent()) {
             var admin = adminOpt.get();
@@ -41,8 +39,6 @@ public class UniversalUserDetailsService implements UserDetailsService {
                     List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
             );
         }
-
-        // 2. Перевіряємо в працівниках
         var employeeOpt = employeeRepository.findByEmail(username);
         if (employeeOpt.isPresent()) {
             Employee employee = employeeOpt.get();
@@ -53,8 +49,6 @@ public class UniversalUserDetailsService implements UserDetailsService {
                     List.of(new SimpleGrantedAuthority("ROLE_EMPLOYEE"))
             );
         }
-
-        // 3. Перевіряємо в клієнтах
         var clientOpt = clientRepository.findByEmail(username);
         if (clientOpt.isPresent()) {
             Client client = clientOpt.get();
@@ -65,8 +59,6 @@ public class UniversalUserDetailsService implements UserDetailsService {
                     List.of(new SimpleGrantedAuthority("ROLE_CLIENT"))
             );
         }
-
-        // 4. Якщо не знайдено — кидаємо помилку
         throw new UsernameNotFoundException("User with email '" + username + "' not found");
     }
 }

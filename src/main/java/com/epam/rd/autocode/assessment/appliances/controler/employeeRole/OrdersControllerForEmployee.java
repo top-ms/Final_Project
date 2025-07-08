@@ -192,11 +192,16 @@ public class OrdersControllerForEmployee {
         return "employee/order/choiceAppliance";
     }
 
+
     @PostMapping("orders/{id}/add-into-order")
-    public String addIntoOrder(@PathVariable Long orderId,
-                               @RequestParam Long applianceId,
-                               @RequestParam Long number) {
+    public String addIntoOrder(@PathVariable("id") Long orderId,
+                               @RequestParam("applianceId") Long applianceId,
+                               @RequestParam("numbers") Long number,
+                               Authentication authentication,
+                               RedirectAttributes redirectAttributes) {
+
         orderService.saveNewOrderRowById(orderId, applianceId, number);
+        redirectAttributes.addFlashAttribute("success", "Товар успішно додано до замовлення");
         return "redirect:/employee/orders/" + orderId + "/edit";
     }
 

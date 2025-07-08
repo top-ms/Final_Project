@@ -41,7 +41,6 @@ public class ApplianceServiceImpl implements ApplianceService {
         this.orderRowRepository = orderRowRepository;
     }
 
-
     @Override
     public Page<ViewApplianceDTO> getAllManufacturersAsDto(Pageable pageable) {
         System.out.println("getAllManufacturersAsDto: " + pageable);
@@ -63,22 +62,14 @@ public class ApplianceServiceImpl implements ApplianceService {
         applianceRepository.deleteById(id);
     }
 
-
     @Override
     public void addNewAppliance(ViewApplianceDTO viewApplianceDTO) {
-        System.out.println("Before save: " + viewApplianceDTO.toString() + "");
-        System.out.println("Looking for manufacturer name: " + viewApplianceDTO.getManufacturer());
-
         Optional<Manufacturer> optionalManufacturer = manufacturerRepository.findByName(viewApplianceDTO.getManufacturer());
         Manufacturer manufacturer = optionalManufacturer.orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.BAD_REQUEST, "Manufacturer not found: " + viewApplianceDTO.getManufacturer()));
-
         Appliance appliance = viewApplianceMapper.toEntity(viewApplianceDTO, manufacturer);
-        System.out.println("After save: " + appliance.toString() + "");
-
         applianceRepository.save(appliance);
     }
-
 
     @Override
     public Optional<ViewApplianceDTO> getApplianceById(Long id) {
@@ -86,13 +77,9 @@ public class ApplianceServiceImpl implements ApplianceService {
                 .map(viewApplianceMapper::toDTO);
     }
 
-
-
     public void updateAppliance(Long id, ViewApplianceDTO dto) {
         Appliance appliance = applianceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Appliance not found with id: " + id));
-
-        // оновлюємо поля
         appliance.setName(dto.getName());
         appliance.setModel(dto.getModel());
         appliance.setCategory(Category.valueOf(dto.getCategory()));
@@ -101,16 +88,11 @@ public class ApplianceServiceImpl implements ApplianceService {
         appliance.setDescription(dto.getDescription());
         appliance.setPower(dto.getPower());
         appliance.setPrice(dto.getPrice());
-
-        // оновлюємо manufacturer, якщо треба
         Manufacturer manufacturer = manufacturerRepository.findByName(dto.getManufacturer())
                 .orElseThrow(() -> new RuntimeException("Manufacturer not found"));
         appliance.setManufacturer(manufacturer);
-
-        applianceRepository.save(appliance); // зберігаємо оновлений об'єкт
+        applianceRepository.save(appliance);
     }
-
-
 
     @Override
     public List<Appliance> getAllAppliance() {
@@ -127,6 +109,4 @@ public class ApplianceServiceImpl implements ApplianceService {
     public List<Appliance> getAllAppliances() {
         return applianceRepository.findAll();
     }
-
-
 }

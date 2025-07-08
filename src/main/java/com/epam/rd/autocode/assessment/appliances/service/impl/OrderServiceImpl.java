@@ -66,11 +66,7 @@ public class OrderServiceImpl implements OrderService {
 
         Appliance appliance = applianceRepository.findById(applianceId)
                 .orElseThrow(() -> new RuntimeException("Appliance not found"));
-
-        System.out.println("Order: " + order.toString() + " Appliance: " + appliance.toString() + " Number: " + number + "");
-
         OrderRow orderRow = new OrderRow();
-
         orderRow.setOrder(order);
         orderRow.setAppliance(appliance);
         orderRow.setNumber(number);
@@ -123,22 +119,16 @@ public class OrderServiceImpl implements OrderService {
 
     private ViewOrdersDTO convertToDto(Orders order) {
         ViewOrdersDTO dto = modelMapper.map(order, ViewOrdersDTO.class);
-
-        // Встановлюємо імена клієнта та працівника
         if (order.getClient() != null) {
             dto.setClientName(order.getClient().getName());
             dto.setClientEmail(order.getClient().getEmail());
         }
-
         if (order.getEmployee() != null) {
             dto.setEmployeeName(order.getEmployee().getName());
             dto.setEmployeeEmail(order.getEmployee().getEmail());
         }
-
-        // Обчислюємо загальну ціну замовлення
         BigDecimal totalPrice = calculateTotalPrice(order);
         dto.setPrice(totalPrice);
-
         return dto;
     }
 
@@ -155,16 +145,6 @@ public class OrderServiceImpl implements OrderService {
         }
         return total;
     }
-
-
-
-
-
-
-
-
-
-// Імплементація методів (додайте до ServiceImpl):
 
     @Override
     public Page<ViewOrdersDTO> getOrdersByClientId(Long clientId, Pageable pageable) {

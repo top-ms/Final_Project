@@ -18,45 +18,29 @@ public class PasswordResetController {
     @Autowired
     private PasswordResetService passwordResetService;
 
-    /**
-     * Показати форму для введення email
-     */
     @GetMapping("/forgot-password")
     public String showForgotPasswordForm() {
         return "auth/forgot-password";
     }
 
-    /**
-     * Обробити запит на скидання пароля
-     */
     @PostMapping("/forgot-password")
     public String processForgotPassword(@RequestParam("email") String email,
                                         RedirectAttributes redirectAttributes) {
-
-        // Валідація email
         if (email == null || email.trim().isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Будь ласка, введіть email адресу");
             return "redirect:/forgot-password";
         }
-
         email = email.trim().toLowerCase();
-
-        // Перевіряємо базовий формат email
         if (!email.contains("@") || !email.contains(".")) {
             redirectAttributes.addFlashAttribute("error", "Неправильний формат email адреси");
             return "redirect:/forgot-password";
         }
-
-        // Перевіряємо чи є активний токен
         if (passwordResetService.hasActiveToken(email)) {
             redirectAttributes.addFlashAttribute("warning",
                     "Запит на скидання пароля вже відправлено. Перевірте пошту або спробуйте пізніше.");
             return "redirect:/forgot-password";
         }
-
-        // Створюємо токен та відправляємо email
         boolean success = passwordResetService.createPasswordResetToken(email);
-
         if (success) {
             redirectAttributes.addFlashAttribute("success",
                     "Інструкції для скидання пароля відправлено на вашу пошту. Перевірте папку 'Спам' якщо не знайдете лист.");
@@ -64,13 +48,9 @@ public class PasswordResetController {
             redirectAttributes.addFlashAttribute("error",
                     "Клієнт з таким email не знайдений або сталася помилка при відправці листа");
         }
-
         return "redirect:/forgot-password";
     }
 
-    /**
-     * Показати форму для встановлення нового пароля
-     */
     @GetMapping("/reset-password")
     public String showResetPasswordForm(@RequestParam("token") String token, Model model) {
 
@@ -78,62 +58,45 @@ public class PasswordResetController {
             model.addAttribute("error", "Невірне посилання для скидання пароля");
             return "auth/reset-password-error";
         }
-
-        // Перевіряємо токен
         if (!passwordResetService.isValidToken(token)) {
             model.addAttribute("error", "Посилання недійсне або застаріло. Спробуйте запросити скидання пароля ще раз.");
             return "auth/reset-password-error";
         }
-
-        // Отримуємо email для відображення
         Optional<String> emailOptional = passwordResetService.getEmailByToken(token);
         if (emailOptional.isPresent()) {
             model.addAttribute("email", emailOptional.get());
         }
-
         model.addAttribute("token", token);
         return "auth/reset-password-form";
     }
 
-    /**
-     * Обробити встановлення нового пароля
-     */
     @PostMapping("/reset-password")
     public String processResetPassword(@RequestParam("token") String token,
                                        @RequestParam("newPassword") String newPassword,
                                        @RequestParam("confirmPassword") String confirmPassword,
                                        RedirectAttributes redirectAttributes) {
-
-        // Валідація токена
         if (token == null || token.trim().isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Невірний токен");
             return "redirect:/login";
         }
-
         if (!passwordResetService.isValidToken(token)) {
             redirectAttributes.addFlashAttribute("error", "Токен недійсний або застарів");
             return "redirect:/forgot-password";
         }
-
-        // Валідація пароля
         if (newPassword == null || newPassword.trim().isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Пароль не може бути порожнім");
             return "redirect:/reset-password?token=" + token;
         }
-
         if (newPassword.length() < 6) {
             redirectAttributes.addFlashAttribute("error", "Пароль повинен містити принаймні 6 символів");
             return "redirect:/reset-password?token=" + token;
         }
-
         if (!newPassword.equals(confirmPassword)) {
             redirectAttributes.addFlashAttribute("error", "Паролі не співпадають");
             return "redirect:/reset-password?token=" + token;
         }
 
-        // Змінюємо пароль
         boolean success = passwordResetService.resetPassword(token, newPassword);
-
         if (success) {
             redirectAttributes.addFlashAttribute("success",
                     "Пароль успішно змінено! Тепер ви можете увійти з новим паролем.");
@@ -145,9 +108,6 @@ public class PasswordResetController {
         }
     }
 
-    /**
-     * Показати сторінку з помилкою
-     */
     @GetMapping("/reset-password-error")
     public String showResetPasswordError() {
         return "auth/reset-password-error";

@@ -61,7 +61,6 @@ public class ManufacturerServiceImpl implements ManufacturerService {
         manufacturerRepository.save(manufacturer);
     }
 
-
     @Transactional
     @Override
     public void deleteManufacturerById(Long manufacturerId) {
