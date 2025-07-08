@@ -14,17 +14,14 @@
                 </div>
                 <div class="card-body">
 
-                    <!-- ✅ Повідомлення про успішний logout -->
                     <div th:if="${param.logout}" class="alert alert-success" role="alert">
                         👋 Ви успішно вийшли з системи!
                     </div>
 
-                    <!-- ❌ Повідомлення про помилку логіну -->
                     <div th:if="${param.error}" class="alert alert-danger" role="alert">
                         ❌ Невірний email або пароль!
                     </div>
 
-                    <!-- Форма логіну -->
                     <form th:action="@{/login}" method="post">
                         <div class="mb-3">
                             <label for="username" class="form-label">📧 Email:</label>
@@ -41,14 +38,12 @@
                         </button>
                     </form>
 
-                    <!-- Розділювач -->
                     <div class="text-center mb-3">
                         <hr class="my-3">
                         <span class="text-muted small">або</span>
                         <hr class="my-3">
                     </div>
 
-                    <!-- Секція реєстрації -->
                     <div class="text-center">
                         <p class="text-muted mb-2">
                             Немає акаунта? 🤔
