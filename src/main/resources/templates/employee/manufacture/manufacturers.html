@@ -2,19 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!-- ✅ ТВІЙ ГОЛОВНИЙ CSS ФАЙЛ -->
     <link rel="stylesheet" th:href="@{/css/main.css}" />
-
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <title>Список виробників</title>
+    <title th:text="#{manufacturer.page.title}">Список виробників</title>
 </head>
 <body class="d-flex flex-column min-vh-100">
 <div class="flex-grow-1">
@@ -25,19 +18,14 @@
             <h1 class="page-title" th:text="#{manufacturer.header.list}">Список виробників</h1>
         </div>
 
-        <!-- Панель дій та фільтрів -->
         <div class="controls-panel">
-            <!-- Кнопка додавання -->
             <div class="action-section">
                 <a th:href="@{/employee/manufacturers/add}" class="btn-custom btn-success-custom" th:text="#{manufacturer.btn.new}">
-                    <i class="bi bi-plus-circle"></i>
                     Новий виробник
                 </a>
             </div>
 
-            <!-- Панель фільтрів -->
             <div class="filters-section">
-                <!-- Пошук -->
                 <form th:action="@{/employee/manufacturers/search}" method="get" class="search-form">
                     <div class="search-group">
                         <div class="search-input-wrapper">
@@ -45,36 +33,32 @@
                             <input class="form-control-custom search-input"
                                    type="search"
                                    name="name"
-                                   placeholder="Пошук за назвою"
+                                   th:placeholder="#{manufacturer.search.placeholder}"
                                    aria-label="Search"
                                    th:classappend="${notFound} ? 'search-error' : ''"/>
                         </div>
                         <button class="btn-custom btn-primary-custom search-btn" type="submit">
                             <i class="bi bi-search"></i>
-                            Пошук
+                            <span th:text="#{button.search}">Пошук</span>
                         </button>
                     </div>
                 </form>
 
-                <!-- Сортування -->
                 <form method="get" th:action="@{/employee/manufacturers}" class="sort-form">
                     <input type="hidden" name="page" th:value="${currentPage}"/>
                     <input type="hidden" name="size" th:value="10"/>
                     <div class="sort-group">
                         <label class="sort-label">
                             <i class="bi bi-sort-alpha-down me-2"></i>
-                            Сортування:
+                            <span th:text="#{label.sort}">Сортування:</span>
                         </label>
                         <select name="sort" class="form-select-custom sort-select" onchange="this.form.submit()">
-                            <option th:value="asc" th:selected="${sort == 'asc'}"
-                                    th:text="#{sort.asc}">Назва A-Z</option>
-                            <option th:value="desc" th:selected="${sort == 'desc'}"
-                                    th:text="#{sort.desc}">Назва Z-A</option>
+                            <option th:value="asc" th:selected="${sort == 'asc'}" th:text="#{sort.asc}">Назва A-Z</option>
+                            <option th:value="desc" th:selected="${sort == 'desc'}" th:text="#{sort.desc}">Назва Z-A</option>
                         </select>
                     </div>
                 </form>
 
-                <!-- Кнопка скидання -->
                 <a th:href="@{/employee/manufacturers}" class="btn-custom btn-secondary-custom reset-btn" th:text="#{button.reset}">
                     <i class="bi bi-arrow-clockwise"></i>
                     Скинути
@@ -82,45 +66,30 @@
             </div>
         </div>
 
-        <!-- Повідомлення про помилку -->
         <div th:if="${notFound}" class="alert-custom search-not-found">
             <i class="bi bi-exclamation-triangle me-2"></i>
-            <span th:text="#{notfound}">Виробника з такою назвою не знайдено</span>
+            <span th:text="#{manufacturer.notfound}">Виробника з такою назвою не знайдено</span>
         </div>
 
-        <!-- Таблиця виробників -->
         <div class="table-container">
             <div class="table-responsive">
                 <table class="table table-custom">
                     <thead>
                     <tr>
-                        <th>
-                            <i class="bi bi-hash me-2"></i>
-                            <span th:text="#{object.manufacturer.id}">ID</span>
-                        </th>
-                        <th>
-                            <i class="bi bi-building me-2"></i>
-                            <span th:text="#{object.manufacturer.name}">Назва</span>
-                        </th>
-                        <th>
-                            <i class="bi bi-gear-wide-connected me-2"></i>
-                            <span th:text="#{manufacturer.operation}">Операції</span>
-                        </th>
+                        <th><i class="bi bi-hash me-2"></i> <span th:text="#{object.manufacturer.id}">ID</span></th>
+                        <th><i class="bi bi-building me-2"></i> <span th:text="#{object.manufacturer.name}">Назва</span></th>
+                        <th><i class="bi bi-gear-wide-connected me-2"></i> <span th:text="#{manufacturer.operation}">Операції</span></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="manufacturer : ${manufacturersPage}">
-                        <td>
-                            <span class="id-cell" th:text="${manufacturer.id}">1</span>
-                        </td>
-                        <td>
-                            <div class="manufacturer-name" th:text="${manufacturer.name}">Назва виробника</div>
-                        </td>
+                        <td><span class="id-cell" th:text="${manufacturer.id}">1</span></td>
+                        <td><div class="manufacturer-name" th:text="${manufacturer.name}">Назва виробника</div></td>
                         <td>
                             <div class="operations-group">
                                 <a th:href="@{/employee/manufacturers/{id}/delete(id=${manufacturer.id}, page=${currentPage})}"
                                    class="operation-btn btn-delete"
-                                   title="Видалити">
+                                   th:title="#{button.delete}">
                                     <i class="fa fa-trash"></i>
                                 </a>
                             </div>
@@ -131,36 +100,29 @@
             </div>
         </div>
 
-        <!-- Empty State -->
         <div th:if="${manufacturersPage.isEmpty()}" class="empty-state">
             <i class="bi bi-building-x"></i>
-            <h3>Виробники відсутні</h3>
-            <p>На даний момент немає виробників для відображення.</p>
+            <h3 th:text="#{manufacturer.empty.title}">Виробники відсутні</h3>
+            <p th:text="#{manufacturer.empty.description}">На даний момент немає виробників для відображення.</p>
             <a th:href="@{/employee/manufacturers/add}" class="btn-custom btn-success-custom mt-3">
                 <i class="bi bi-plus-circle"></i>
-                Додати першого виробника
+                <span th:text="#{manufacturer.add.first}">Додати першого виробника</span>
             </a>
         </div>
     </div>
 
-    <!-- Пагінація -->
     <div class="pagination-container" th:if="${!manufacturersPage.isEmpty()}">
         <nav aria-label="Pagination">
             <ul class="pagination pagination-custom justify-content-center">
-
-                <!-- Кнопка "Назад" -->
                 <li class="page-item" th:if="${currentPage > 0}">
                     <a class="page-link"
                        th:href="@{/employee/manufacturers(page=${currentPage - 1}, size=10, sort=${sort})}"
                        th:text="#{pagination.previous}">← Попередня</a>
                 </li>
                 <li class="page-item disabled" th:if="${currentPage == 0}">
-                    <a class="page-link"
-                       href="#" tabindex="-1" aria-disabled="true"
-                       th:text="#{pagination.previous}">← Попередня</a>
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true" th:text="#{pagination.previous}">← Попередня</a>
                 </li>
 
-                <!-- Номери сторінок -->
                 <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                     th:classappend="${i == currentPage} ? 'active'">
                     <a class="page-link"
@@ -168,18 +130,14 @@
                        th:text="${i + 1}">1</a>
                 </li>
 
-                <!-- Кнопка "Вперед" -->
                 <li class="page-item" th:if="${currentPage + 1 < totalPages}">
                     <a class="page-link"
                        th:href="@{/employee/manufacturers(page=${currentPage + 1}, size=10, sort=${sort})}"
                        th:text="#{pagination.next}">Наступна →</a>
                 </li>
                 <li class="page-item disabled" th:if="${currentPage + 1 >= totalPages}">
-                    <a class="page-link"
-                       href="#" tabindex="-1" aria-disabled="true"
-                       th:text="#{pagination.next}">Наступна →</a>
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true" th:text="#{pagination.next}">Наступна →</a>
                 </li>
-
             </ul>
         </nav>
     </div>

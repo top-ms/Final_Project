@@ -2,20 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <!-- Bootstrap CSS -->
+    <title th:text="#{appliance.title.list}">Appliance Selection</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-    <!-- FontAwesome (якщо потрібно) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!-- ✅ ТВІЙ ГОЛОВНИЙ CSS ФАЙЛ -->
     <link rel="stylesheet" th:href="@{/css/main.css}" />
-
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <title>Вибір товарів</title>
 </head>
+
 <body>
 <header>
     <div th:insert="~{client/menunavy::navy}"></div>
@@ -23,27 +18,26 @@
 
 <div class="main-container">
     <div class="page-header">
-        <h1 class="page-title" th:text="#{appliance.header.list}">Список товарів</h1>
-        <p class="page-subtitle">Оберіть товари та вкажіть кількість для додавання до замовлення</p>
+        <h1 class="page-title" th:text="#{appliance.header.list}">Appliance List</h1>
+        <p class="page-subtitle" th:text="#{appliance.select.instruction}">Choose items and specify quantity</p>
     </div>
 
-    <!-- Повідомлення про успіх/помилки -->
     <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
         <i class="bi bi-check-circle me-2"></i>
-        <span th:text="${success}">Повідомлення про успіх</span>
+        <span th:text="${success}">Success message</span>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 
     <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
         <i class="bi bi-exclamation-triangle me-2"></i>
-        <span th:text="${error}">Повідомлення про помилку</span>
+        <span th:text="${error}">Error message</span>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 
     <div class="d-flex justify-content-start mb-4">
-        <a th:href="@{/client/orders/{id}/edit(id=${ordersId})}"
-           class="back-button">
-            <i class="bi bi-arrow-left me-2"></i>Повернутися до замовлення
+        <a th:href="@{/client/orders/{id}/edit(id=${ordersId})}" class="back-button">
+            <i class="bi bi-arrow-left me-2"></i>
+            <span th:text="#{button.backToOrder}">Back to Order</span>
         </a>
     </div>
 
@@ -57,10 +51,8 @@
 
                 <div class="card-header">
                     <h5 class="appliance-name">
-                        <span class="appliance-icon">
-                            <i class="bi bi-gear"></i>
-                        </span>
-                        <span th:text="${appliance.name}">Назва товару</span>
+                        <span class="appliance-icon"><i class="bi bi-gear"></i></span>
+                        <span th:text="${appliance.name}">Appliance Name</span>
                     </h5>
                 </div>
 
@@ -68,30 +60,30 @@
                     <div class="form-group">
                         <label class="form-label">
                             <i class="bi bi-hash text-primary"></i>
-                            Кількість
+                            <span th:text="#{appliance.label.quantity}">Quantity</span>
                         </label>
                         <div class="input-wrapper">
                             <input type="number" name="numbers" class="form-control"
-                                   placeholder="Введіть кількість" min="1" required/>
-                            <span class="input-suffix">шт</span>
+                                   th:placeholder="#{appliance.placeholder.quantity}" min="1" required/>
+                            <span class="input-suffix" th:text="#{appliance.unit.piece}">pcs</span>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">
                             <i class="bi bi-currency-dollar text-success"></i>
-                            Ціна за одиницю
+                            <span th:text="#{appliance.label.unitPrice}">Unit Price</span>
                         </label>
                         <div class="input-wrapper">
                             <input type="number" name="price" th:value="${appliance.price}"
                                    class="form-control price-display" required readonly/>
-                            <span class="input-suffix">₴</span>
+                            <span class="input-suffix" th:text="#{appliance.currency}">₴</span>
                         </div>
                     </div>
 
                     <button type="submit" class="add-button">
                         <i class="bi bi-plus-circle me-2"></i>
-                        Додати до замовлення
+                        <span th:text="#{appliance.button.addToOrder}">Add to Order</span>
                     </button>
                 </div>
             </form>
@@ -100,8 +92,8 @@
 
     <div th:if="${appliances} == null or ${#lists.size(appliances)} == 0" class="empty-state">
         <i class="bi bi-box-seam"></i>
-        <h3>Товари відсутні</h3>
-        <p>На даний момент немає доступних товарів для додавання до замовлення.</p>
+        <h3 th:text="#{appliance.empty.title}">No Appliances</h3>
+        <p th:text="#{appliance.empty.text}">There are currently no appliances to display.</p>
     </div>
 </div>
 

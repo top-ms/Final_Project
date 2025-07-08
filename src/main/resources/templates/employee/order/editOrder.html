@@ -2,26 +2,19 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-    <!-- FontAwesome (якщо потрібно) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!-- ✅ ТВІЙ ГОЛОВНИЙ CSS ФАЙЛ -->
     <link rel="stylesheet" th:href="@{/css/main.css}" />
-
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <title>Редагування замовлення</title>
+    <title th:text="#{order.edit.title}">Редагування замовлення</title>
 </head>
 <body>
 <div th:insert="~{employee/menunavy::navy}"></div>
 
 <div class="main-container">
     <div class="page-header">
-        <h1 class="page-title">Редагування замовлення</h1>
+        <h1 class="page-title" th:text="#{order.edit.title}">Редагування замовлення</h1>
     </div>
 
     <div th:object="${order}">
@@ -58,11 +51,11 @@
         <div class="action-buttons">
             <a th:href="@{choice-appliance}" class="btn-custom btn-add">
                 <i class="bi bi-plus-circle"></i>
-                Додати товар
+                <span th:text="#{order.button.addItem}">Додати товар</span>
             </a>
             <a th:href="@{/employee/orders}" class="btn-custom btn-back">
                 <i class="bi bi-arrow-left"></i>
-                До замовлень
+                <span th:text="#{order.button.toOrders}">До замовлень</span>
             </a>
         </div>
 
@@ -72,25 +65,25 @@
                 <table class="table orders-table">
                     <thead>
                     <tr>
-                        <th><i class="bi bi-hash me-2"></i>ID</th>
-                        <th><i class="bi bi-gear me-2"></i>Товар</th>
-                        <th><i class="bi bi-123 me-2"></i>Кількість</th>
-                        <th><i class="bi bi-currency-dollar me-2"></i>Сума</th>
-                        <th><i class="bi bi-gear-wide-connected me-2"></i>Дії</th>
+                        <th><i class="bi bi-hash me-2"></i><span th:text="#{order.table.id}">ID</span></th>
+                        <th><i class="bi bi-gear me-2"></i><span th:text="#{order.table.item}">Товар</span></th>
+                        <th><i class="bi bi-123 me-2"></i><span th:text="#{order.table.quantity}">Кількість</span></th>
+                        <th><i class="bi bi-currency-dollar me-2"></i><span th:text="#{order.table.total}">Сума</span></th>
+                        <th><i class="bi bi-gear-wide-connected me-2"></i><span th:text="#{order.table.actions}">Дії</span></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="row: ${rows}">
                         <td><span class="id-cell" th:text="${row.id}">1</span></td>
                         <td th:text="${row.appliance.name}">Назва товару</td>
-                        <td><span th:text="${row.number}">5</span> шт</td>
+                        <td><span th:text="${row.number}">5</span> <span th:text="#{order.unit}">шт</span></td>
                         <td class="amount-cell" th:text="${row.amount} + ' ₴'">1500 ₴</td>
                         <td>
                             <a th:href="@{'edit/row/' + ${row.id} + '/delete'}"
                                class="btn-delete"
-                               onclick="return confirm('Ви впевнені, що хочете видалити цей товар?')">
+                               th:onclick="'return confirm(\'' + #{order.confirm.delete} + '\')'">
                                 <i class="bi bi-trash"></i>
-                                Видалити
+                                <span th:text="#{order.button.delete}">Видалити</span>
                             </a>
                         </td>
                     </tr>
@@ -102,8 +95,8 @@
         <!-- Empty State -->
         <div th:if="${rows} == null or ${#lists.size(rows)} == 0" class="empty-state">
             <i class="bi bi-cart-x"></i>
-            <h3>Замовлення порожнє</h3>
-            <p>Додайте товари до замовлення, натиснувши кнопку "Додати товар" вище.</p>
+            <h3 th:text="#{order.empty.title}">Замовлення порожнє</h3>
+            <p th:text="#{order.empty.description}">Додайте товари до замовлення, натиснувши кнопку "Додати товар" вище.</p>
         </div>
     </div>
 </div>

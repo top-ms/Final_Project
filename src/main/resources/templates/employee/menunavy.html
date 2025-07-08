@@ -1,20 +1,21 @@
 <div th:fragment="navy">
     <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/main" th:text="#{shop.name}"></a>
+            <a class="navbar-brand" href="/main" th:text="#{shop.name}">Appliances Shop</a>
+
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/employee/clients}" th:text="#{clients.menu.name}"></a>
+                        <a class="nav-link" th:href="@{/employee/clients}" th:text="#{clients.menu.name}">Clients</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/employee/manufacturers}" th:text="#{manufacturers.menu.name}"></a>
+                        <a class="nav-link" th:href="@{/employee/manufacturers}" th:text="#{manufacturers.menu.name}">Manufacturers</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/employee/appliances}" th:text="#{appliances.menu.name}"></a>
+                        <a class="nav-link" th:href="@{/employee/appliances}" th:text="#{appliances.menu.name}">Appliances</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/employee/orders}" th:text="#{order.menu.name}"></a>
+                        <a class="nav-link" th:href="@{/employee/orders}" th:text="#{order.menu.name}">Orders</a>
                     </li>
                 </ul>
 
@@ -35,18 +36,16 @@
                     </li>
                 </ul>
 
+                <!-- Logout -->
                 <ul class="navbar-nav">
                     <li class="nav-item position-relative">
                         <form th:action="@{/logout}" method="post" style="display: inline;">
                             <button type="submit" class="btn btn-outline-light btn-sm px-3 py-1 logout-btn-with-icon">
                                 <span class="icon logout-variant">🔓</span>
-                                <span th:text="#{logout.button}" class="ms-4">Вийти</span>
+                                <span th:text="#{logout.button}" class="ms-4">Logout</span>
                             </button>
                         </form>
                     </li>
-                </ul>
-
-
                 </ul>
             </div>
         </div>

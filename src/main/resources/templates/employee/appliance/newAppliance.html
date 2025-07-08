@@ -19,30 +19,26 @@
         <div class="card-body">
             <form th:action="@{add-appliance}" th:object="${appliance}" method="post">
 
-                <!-- Name -->
                 <div class="mb-3">
                     <label class="form-label" th:text="#{object.appliance.name}">Name</label>
                     <input type="text" class="form-control" th:field="*{name}">
-                    <div class="text-danger" th:if="${#fields.hasErrors('name')}">Invalid name</div>
+                    <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:text="#{error.invalid.name}">Invalid name</div>
                 </div>
 
-                <!-- Category -->
                 <div class="mb-3">
                     <label class="form-label" th:text="#{object.appliance.category}">Category</label>
                     <select class="form-select" th:field="*{category}">
                         <option th:each="category : ${categories}" th:value="${category}" th:text="${category}"></option>
                     </select>
-                    <div class="text-danger" th:if="${#fields.hasErrors('category')}">Invalid category</div>
+                    <div class="text-danger" th:if="${#fields.hasErrors('category')}" th:text="#{error.invalid.category}">Invalid category</div>
                 </div>
 
-                <!-- Model -->
                 <div class="mb-3">
                     <label class="form-label" th:text="#{object.appliance.model}">Model</label>
                     <input type="text" class="form-control" th:field="*{model}">
-                    <div class="text-danger" th:if="${#fields.hasErrors('model')}">Invalid model</div>
+                    <div class="text-danger" th:if="${#fields.hasErrors('model')}" th:text="#{error.invalid.model}">Invalid model</div>
                 </div>
 
-                <!-- Manufacturer -->
                 <div class="mb-3">
                     <label class="form-label" th:text="#{object.appliance.manufacturer}">Manufacturer</label>
                     <select class="form-select" th:field="*{manufacturer}">
@@ -51,50 +47,44 @@
                                 th:text="${manufacturer.name}">
                         </option>
                     </select>
-                    <div class="text-danger" th:if="${#fields.hasErrors('manufacturer')}">Invalid manufacturer</div>
+                    <div class="text-danger" th:if="${#fields.hasErrors('manufacturer')}" th:text="#{error.invalid.manufacturer}">Invalid manufacturer</div>
                 </div>
 
-                <!-- Power Type -->
                 <div class="mb-3">
                     <label class="form-label" th:text="#{object.appliance.powerType}">Power Type</label>
                     <select class="form-select" th:field="*{powerType}">
                         <option th:each="powerType : ${powerTypes}" th:value="${powerType}" th:text="${powerType}"></option>
                     </select>
-                    <div class="text-danger" th:if="${#fields.hasErrors('powerType')}">Invalid power type</div>
+                    <div class="text-danger" th:if="${#fields.hasErrors('powerType')}" th:text="#{error.invalid.powerType}">Invalid power type</div>
                 </div>
 
-                <!-- Characteristic -->
                 <div class="mb-3">
                     <label class="form-label" th:text="#{object.appliance.characteristic}">Characteristic</label>
                     <input type="text" class="form-control" th:field="*{characteristic}">
-                    <div class="text-danger" th:if="${#fields.hasErrors('characteristic')}">Invalid characteristic</div>
+                    <div class="text-danger" th:if="${#fields.hasErrors('characteristic')}" th:text="#{error.invalid.characteristic}">Invalid characteristic</div>
                 </div>
 
-                <!-- Description -->
                 <div class="mb-3">
                     <label class="form-label" th:text="#{object.appliance.description}">Description</label>
                     <input type="text" class="form-control" th:field="*{description}">
-                    <div class="text-danger" th:if="${#fields.hasErrors('description')}">Invalid description</div>
+                    <div class="text-danger" th:if="${#fields.hasErrors('description')}" th:text="#{error.invalid.description}">Invalid description</div>
                 </div>
 
-                <!-- Power -->
                 <div class="mb-3">
                     <label class="form-label" th:text="#{object.appliance.power}">Power</label>
                     <input type="number" class="form-control" th:field="*{power}">
-                    <div class="text-danger" th:if="${#fields.hasErrors('power')}">Invalid power</div>
+                    <div class="text-danger" th:if="${#fields.hasErrors('power')}" th:text="#{error.invalid.power}">Invalid power</div>
                 </div>
 
-                <!-- Price -->
                 <div class="mb-3">
                     <label class="form-label" th:text="#{object.appliance.price}">Price</label>
                     <input type="number" step="0.01" class="form-control" th:field="*{price}">
-                    <div class="text-danger" th:if="${#fields.hasErrors('price')}">Invalid price</div>
+                    <div class="text-danger" th:if="${#fields.hasErrors('price')}" th:text="#{error.invalid.price}">Invalid price</div>
                 </div>
 
-                <!-- Buttons -->
                 <div class="text-center">
-                    <button type="submit" class="btn btn-success me-2">Submit</button>
-                    <button type="reset" class="btn btn-secondary">Reset</button>
+                    <button type="submit" class="btn btn-success me-2" th:text="#{button.submit}">Submit</button>
+                    <button type="reset" class="btn btn-secondary" th:text="#{button.reset}">Reset</button>
                 </div>
             </form>
         </div>
