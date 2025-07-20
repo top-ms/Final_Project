@@ -51,35 +51,4 @@ public class EmailService {
             return false;
         }
     }
-
-    public boolean sendSimplePasswordResetEmail(String toEmail, String resetLink, String clientName) {
-        try {
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
-
-            helper.setFrom(fromEmail);
-            helper.setTo(toEmail);
-            helper.setSubject("Скидання пароля - " + appName);
-
-            String textContent = String.format(
-                    "Вітаємо, %s!\n\n" +
-                            "Ви запросили скидання пароля для вашого акаунту в %s.\n\n" +
-                            "Щоб встановити новий пароль, перейдіть за посиланням:\n%s\n\n" +
-                            "Посилання дійсне протягом 1 години.\n\n" +
-                            "Якщо ви не запитували скидання пароля, проігноруйте цей лист.\n\n" +
-                            "З повагою,\nКоманда %s",
-                    clientName, appName, resetLink, appName
-            );
-
-            helper.setText(textContent, false);
-            mailSender.send(message);
-
-            logger.info("Simple password reset email sent successfully to: " + toEmail);
-            return true;
-
-        } catch (MessagingException | MailException e) {
-            logger.severe("Failed to send simple password reset email to " + toEmail + ": " + e.getMessage());
-            return false;
-        }
-    }
 }
