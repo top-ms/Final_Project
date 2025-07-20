@@ -16,23 +16,25 @@ import java.util.UUID;
 @Service
 public class PasswordResetService {
 
-    @Autowired
-    private PasswordResetTokenRepository tokenRepository;
+    private final PasswordResetTokenRepository tokenRepository;
+    private final ClientService clientService;
+    private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private ClientService clientService;
 
-    @Autowired
-    private EmailService emailService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Value("${app.password-reset.token-expiry-hours:1}")
     private int tokenExpiryHours;
 
     @Value("${app.base-url:http://localhost:8080}")
     private String baseUrl;
+
+    public PasswordResetService(PasswordResetTokenRepository tokenRepository, ClientService clientService, EmailService emailService, PasswordEncoder passwordEncoder) {
+        this.tokenRepository = tokenRepository;
+        this.clientService = clientService;
+        this.emailService = emailService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Transactional
     public boolean createPasswordResetToken(String email) {
@@ -46,8 +48,8 @@ public class PasswordResetService {
         PasswordResetToken resetToken = new PasswordResetToken(email, token, expiryDate);
         tokenRepository.save(resetToken);
         String resetLink = baseUrl + "/reset-password?token=" + token;
-        boolean emailSent = emailService.sendPasswordResetEmail(email, resetLink, clientOptional.get().getName());
-        return emailSent;
+        emailService.sendPasswordResetEmail(email, resetLink, clientOptional.get().getName());
+        return true;
     }
 
     public boolean isValidToken(String token) {

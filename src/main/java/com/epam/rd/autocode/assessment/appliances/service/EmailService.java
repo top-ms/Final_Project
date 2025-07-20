@@ -5,12 +5,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
 @Service
@@ -30,7 +32,8 @@ public class EmailService {
     @Value("${app.name:Appliances Store}")
     private String appName;
 
-    public boolean sendPasswordResetEmail(String toEmail, String resetLink, String clientName) {
+    @Async
+    public CompletableFuture<Boolean> sendPasswordResetEmail(String toEmail, String resetLink, String clientName) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -45,10 +48,10 @@ public class EmailService {
             helper.setText(htmlContent, true);
             mailSender.send(message);
             logger.info("Password reset email sent successfully to: " + toEmail);
-            return true;
+            return CompletableFuture.completedFuture(true);
         } catch (MessagingException | MailException e) {
             logger.severe("Failed to send password reset email to " + toEmail + ": " + e.getMessage());
-            return false;
+            return CompletableFuture.completedFuture(false);
         }
     }
 }
