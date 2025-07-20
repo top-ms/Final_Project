@@ -12,8 +12,8 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"manufacturer"}) // Виключити manufacturer щоб уникнути циклічних викликів
-@ToString(exclude = {"manufacturer"}) // Виключити manufacturer з toString
+@EqualsAndHashCode(exclude = {"manufacturer"})
+@ToString(exclude = {"manufacturer"})
 public class Appliance {
 
     @Id
@@ -30,7 +30,7 @@ public class Appliance {
     @Column(nullable = false)
     private String model;
 
-    @ManyToOne(fetch = FetchType.LAZY) // Додати LAZY завантаження
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manufacturer_id", nullable = false)
     private Manufacturer manufacturer;
 

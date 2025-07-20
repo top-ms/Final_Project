@@ -12,7 +12,6 @@ public class CrudOperationsAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(CrudOperationsAspect.class);
 
-    // Логування операцій створення
     @AfterReturning("execution(* com.epam.rd.autocode.assessment.appliances.service.impl.*.save*(..))")
     public void logCreateOperation(JoinPoint joinPoint) {
         String className = joinPoint.getTarget().getClass().getSimpleName();
@@ -21,7 +20,6 @@ public class CrudOperationsAspect {
         logger.info("🆕 [CREATE] {}.{} - Новий запис створено", className, methodName);
     }
 
-    // Логування операцій видалення
     @AfterReturning("execution(* com.epam.rd.autocode.assessment.appliances.service.impl.*.delete*(..))")
     public void logDeleteOperation(JoinPoint joinPoint) {
         String className = joinPoint.getTarget().getClass().getSimpleName();
@@ -31,7 +29,6 @@ public class CrudOperationsAspect {
         logger.warn("🗑️ [DELETE] {}.{} - Запис видалено. ID: {}", className, methodName, args[0]);
     }
 
-    // Логування операцій оновлення
     @AfterReturning("execution(* com.epam.rd.autocode.assessment.appliances.service.impl.*.update*(..))")
     public void logUpdateOperation(JoinPoint joinPoint) {
         String className = joinPoint.getTarget().getClass().getSimpleName();
@@ -42,7 +39,6 @@ public class CrudOperationsAspect {
                 className, methodName, args.length > 0 ? args[0] : "N/A");
     }
 
-    // Логування операцій пошуку
     @AfterReturning(pointcut = "execution(* com.epam.rd.autocode.assessment.appliances.service.impl.*.find*(..))",
             returning = "result")
     public void logFindOperation(JoinPoint joinPoint, Object result) {
@@ -58,7 +54,6 @@ public class CrudOperationsAspect {
         }
     }
 
-    // Логування операцій з паролями (безпека)
     @Before("execution(* com.epam.rd.autocode.assessment.appliances.service.impl.*.*Password*(..))")
     public void logPasswordOperation(JoinPoint joinPoint) {
         String className = joinPoint.getTarget().getClass().getSimpleName();

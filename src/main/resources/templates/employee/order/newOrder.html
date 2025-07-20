@@ -13,11 +13,9 @@
 <div class="container">
     <h1 th:text="#{order.create.title}">Створення замовлення</h1>
 
-    <!-- Показ повідомлень -->
     <div th:if="${error}" class="error-message" th:text="${error}"></div>
     <div th:if="${success}" class="success-message" th:text="${success}"></div>
 
-    <!-- Форма пошуку клієнта -->
     <form th:action="@{/employee/orders/search-client}" method="post" th:object="${createOrderDTO}">
         <div class="search-section">
             <div class="search-title" th:text="#{order.search.title}">
@@ -37,7 +35,6 @@
         </div>
     </form>
 
-    <!-- Результат пошуку -->
     <div th:if="${clientFound}" class="client-info">
         <h3 th:text="#{order.client.found}">Знайдено клієнта:</h3>
         <p><strong th:text="#{order.client.name}">Ім'я:</strong> <span th:text="${foundClient.name}"></span></p>
@@ -45,20 +42,16 @@
         <p><strong th:text="#{order.client.card}">Бонусна карта №:</strong> <span th:text="${foundClient.card}"></span></p>
     </div>
 
-    <!-- Повідомлення про відсутність клієнта -->
     <div th:if="${clientFound == false}" class="info-message" th:text="#{order.client.notFound}">
         Поле в якому відобразиться помилка що такого клієнта не знайдено
     </div>
 
-    <!-- Кнопки дій -->
     <div class="button-group">
-        <!-- Кнопка "Створити" доступна тільки коли клієнт знайдений -->
         <form th:if="${clientFound}" th:action="@{/employee/orders/create}" method="post" th:object="${createOrderDTO}" style="display: inline;">
             <input type="hidden" th:field="*{clientEmail}">
             <button type="submit" class="btn btn-create" th:text="#{order.button.create}">Створити</button>
         </form>
 
-        <!-- Кнопка "Очистити поля" -->
         <a th:href="@{/employee/orders/add}" class="btn btn-clear" th:text="#{order.button.clear}">Очистити поля</a>
     </div>
 </div>

@@ -97,7 +97,6 @@ public class EmployeeServiceImpl implements EmployeeService {
                     dto.setId(employee.getId());
                     dto.setName(employee.getName());
                     dto.setEmail(employee.getEmail());
-                    // Пароль залишаємо порожнім для безпеки
                     dto.setPassword("");
                     return dto;
                 });

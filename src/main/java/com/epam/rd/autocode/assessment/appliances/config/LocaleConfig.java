@@ -16,14 +16,14 @@ public class LocaleConfig implements WebMvcConfigurer {
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver resolver = new SessionLocaleResolver();
-        resolver.setDefaultLocale(new Locale("en")); // дефолтна мова — англійська
+        resolver.setDefaultLocale(new Locale("en"));
         return resolver;
     }
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
-        interceptor.setParamName("lang"); // наприклад: ?language=uk
+        interceptor.setParamName("lang");
         return interceptor;
     }
 

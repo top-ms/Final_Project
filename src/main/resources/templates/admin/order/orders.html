@@ -2,17 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <!-- ✅ ТВІЙ ГОЛОВНИЙ CSS ФАЙЛ -->
     <link rel="stylesheet" th:href="@{/css/main.css}" />
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <title>Список замовлень</title>
 
@@ -27,20 +22,17 @@
         </div>
 
         <div class="action-buttons">
-            <!-- Кнопка "Нове замовлення" -->
             <a th:href="@{orders/add}" class="btn-custom btn-new" th:text="#{orders.btn.new}">
                 <i class="bi bi-plus-circle"></i>
                 Нове замовлення
             </a>
 
-            <!-- Кнопка "Переглянути всі замовлення" -->
             <a th:href="@{/admin/orders}" class="btn-custom btn-view" th:text="#{reset.btn}">
                 <i class="bi bi-list-ul"></i>
                 Переглянути всі замовлення
             </a>
         </div>
 
-        <!-- Повідомлення, якщо не знайдено -->
         <div th:if="${notFound}" class="alert-custom">
             <i class="bi bi-exclamation-triangle me-2"></i>
             <span th:text="#{order.notfound}">Замовлення з таким ID не знайдено</span>
@@ -56,7 +48,6 @@
                                 <i class="bi bi-hash me-2"></i>
                                 <span th:text="#{object.order.id}">ID</span>
                             </div>
-                            <!-- Форма пошуку по ID -->
                             <form th:action="@{/admin/orders/search}" method="get" class="filter-form">
                                 <div class="input-group input-group-sm input-group-custom">
                                     <input class="form-control form-control-custom"
@@ -82,7 +73,6 @@
                                 <i class="bi bi-briefcase me-2"></i>
                                 <span th:text="#{object.order.employee}">Працівник</span>
                             </div>
-                            <!-- Фільтр по працівнику -->
                             <form method="get" th:action="@{/admin/orders}" class="filter-form">
                                 <input type="hidden" name="page" th:value="${currentPage}"/>
                                 <input type="hidden" name="size" th:value="10"/>
@@ -104,7 +94,6 @@
                                 <i class="bi bi-currency-dollar me-2"></i>
                                 <span th:text="#{object.order.price}">Ціна</span>
                             </div>
-                            <!-- Сортування по ціні -->
                             <form method="get" th:action="@{/admin/orders}" class="filter-form">
                                 <input type="hidden" name="page" th:value="${currentPage}"/>
                                 <input type="hidden" name="size" th:value="10"/>
@@ -123,7 +112,6 @@
                                 <i class="bi bi-check-circle me-2"></i>
                                 <span th:text="#{object.order.approved}">Статус</span>
                             </div>
-                            <!-- Фільтр по approved -->
                             <form method="get" th:action="@{/admin/orders}" class="filter-form">
                                 <input type="hidden" name="page" th:value="${currentPage}"/>
                                 <input type="hidden" name="size" th:value="10"/>
@@ -168,14 +156,12 @@
                         </td>
                         <td>
                             <div class="operations-group">
-                                <!-- Кнопка редагування -->
                                 <a th:href="@{orders/{id}/edit(id=${order.id})}"
                                    class="operation-btn btn-edit"
                                    title="Редагувати">
                                     <i class="fa fa-edit"></i>
                                 </a>
 
-                                <!-- Кнопка затвердження/відхилення -->
                                 <a th:if="${!order.approved}"
                                    th:href="@{orders/{id}/approved(id=${order.id}, page=${currentPage})}"
                                    class="operation-btn btn-approve"
@@ -190,7 +176,6 @@
                                     <i class="fa fa-times"></i>
                                 </a>
 
-                                <!-- Кнопка видалення -->
                                 <a th:href="@{orders/{id}/delete(id=${order.id}, page=${currentPage})}"
                                    class="operation-btn btn-delete"
                                    title="Видалити">
@@ -212,12 +197,10 @@
         </div>
     </div>
 
-    <!-- ✅ Центрована Bootstrap-пагінація -->
     <div class="pagination-container" th:if="${!ordersPage.content.isEmpty()}">
         <nav aria-label="Pagination">
             <ul class="pagination pagination-custom justify-content-center">
 
-                <!-- Кнопка "Назад" -->
                 <li class="page-item" th:if="${currentPage > 0}">
                     <a class="page-link"
                        th:href="@{/admin/orders(page=${currentPage - 1}, size=10, priceSort=${priceSort}, employeeId=${selectedEmployeeId}, approved=${selectedApproved})}"
@@ -229,7 +212,6 @@
                        th:text="#{pagination.previous}">← Попередня</a>
                 </li>
 
-                <!-- Номери сторінок -->
                 <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                     th:classappend="${i == currentPage} ? 'active'">
                     <a class="page-link"
@@ -237,7 +219,6 @@
                        th:text="${i + 1}">1</a>
                 </li>
 
-                <!-- Кнопка "Вперед" -->
                 <li class="page-item" th:if="${currentPage + 1 < totalPages}">
                     <a class="page-link"
                        th:href="@{/admin/orders(page=${currentPage + 1}, size=10, priceSort=${priceSort}, employeeId=${selectedEmployeeId}, approved=${selectedApproved})}"

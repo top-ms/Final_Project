@@ -27,19 +27,12 @@ public interface EmployeeService{
 
     void register(EmployeeRegisterDTO employee);
 
-    // У EmployeeService interface:
     Employee findEmployeeEntityByEmail(String email);
 
-
-
-
-
-
-
-
-
     Optional<UserEditDTO> findByIdForEdit(Long id);
+
     void updateEmployee(UserEditDTO userEditDTO);
+
     Optional<Employee> findById(Long id);
 
 }

@@ -70,7 +70,6 @@ public class ManufacturerServiceImpl implements ManufacturerService {
             orderRowRepository.deleteAllByApplianceId(appliance.getId());
         }
 
-
         applianceRepository.deleteAll(appliances);
         manufacturerRepository.deleteById(manufacturerId);
     }

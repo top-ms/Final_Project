@@ -2,18 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-    <!-- FontAwesome (якщо потрібно) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <!-- ✅ ТВІЙ ГОЛОВНИЙ CSS ФАЙЛ -->
     <link rel="stylesheet" th:href="@{/css/main.css}" />
 
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <title>Створення замовлення</title>
 </head>
@@ -21,11 +16,9 @@
 <div class="container">
     <h1>Створення замовлення</h1>
 
-    <!-- Показ повідомлень -->
     <div th:if="${error}" class="error-message" th:text="${error}"></div>
     <div th:if="${success}" class="success-message" th:text="${success}"></div>
 
-    <!-- Форма пошуку клієнта -->
     <form th:action="@{/admin/orders/search-client}" method="post" th:object="${createOrderDTO}">
         <div class="search-section">
             <div class="search-title">Пошукове вікно по клієнтах за електронною поштою</div>
@@ -41,30 +34,23 @@
         </div>
     </form>
 
-    <!-- Результат пошуку -->
     <div th:if="${clientFound}" class="client-info">
         <h3>Знайдено клієнта:</h3>
         <p><strong>Ім'я:</strong> <span th:text="${foundClient.name}"></span></p>
         <p><strong>Email:</strong> <span th:text="${foundClient.email}"></span></p>
         <p><strong>Бонусна карта №:</strong> <span th:text="${foundClient.card}"></span></p>
-<!--        <p><strong>Телефон:</strong> <span th:text="${foundClient.phoneNumber}"></span></p>-->
-<!--        <p><strong>Адреса:</strong> <span th:text="${foundClient.address}"></span></p>-->
     </div>
 
-    <!-- Поле в якому відобразиться помилка що такого клієнта не знайдено -->
     <div th:if="${clientFound == false}" class="info-message">
         Поле в якому відобразиться помилка що такого клієнта не знайдено
     </div>
 
-    <!-- Кнопки дій -->
     <div class="button-group">
-        <!-- Кнопка "Створити" доступна тільки коли клієнт знайдений -->
         <form th:if="${clientFound}" th:action="@{/admin/orders/create}" method="post" th:object="${createOrderDTO}" style="display: inline;">
             <input type="hidden" th:field="*{clientEmail}">
             <button type="submit" class="btn btn-create">Створити</button>
         </form>
 
-        <!-- Кнопка "Очистити поля" -->
         <a th:href="@{/admin/orders/add}" class="btn btn-clear">Очистити поля</a>
     </div>
 </div>

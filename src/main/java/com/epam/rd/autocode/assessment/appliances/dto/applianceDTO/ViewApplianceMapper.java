@@ -13,16 +13,16 @@ public class ViewApplianceMapper {
         ViewApplianceDTO dto = new ViewApplianceDTO();
         dto.setId(appliance.getId());
         dto.setName(appliance.getName());
-        dto.setCategory(appliance.getCategory().name()); // enum → string
+        dto.setCategory(appliance.getCategory().name());
         dto.setModel(appliance.getModel());
 
         if (appliance.getManufacturer() != null) {
-            dto.setManufacturer(appliance.getManufacturer().getName()); // only name
+            dto.setManufacturer(appliance.getManufacturer().getName());
         } else {
             dto.setManufacturer("N/A");
         }
 
-        dto.setPowerType(appliance.getPowerType().name()); // enum → string
+        dto.setPowerType(appliance.getPowerType().name());
         dto.setCharacteristic(appliance.getCharacteristic());
         dto.setDescription(appliance.getDescription());
         dto.setPower(appliance.getPower());

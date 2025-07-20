@@ -2,17 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <!-- ✅ ТВІЙ ГОЛОВНИЙ CSS ФАЙЛ -->
     <link rel="stylesheet" th:href="@{/css/main.css}" />
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <title>Список виробників</title>
 </head>
@@ -25,9 +20,7 @@
             <h1 class="page-title" th:text="#{manufacturer.header.list}">Список виробників</h1>
         </div>
 
-        <!-- Панель дій та фільтрів -->
         <div class="controls-panel">
-            <!-- Кнопка додавання -->
             <div class="action-section">
                 <a th:href="@{/admin/manufacturers/add}" class="btn-custom btn-success-custom" th:text="#{manufacturer.btn.new}">
                     <i class="bi bi-plus-circle"></i>
@@ -35,9 +28,7 @@
                 </a>
             </div>
 
-            <!-- Панель фільтрів -->
             <div class="filters-section">
-                <!-- Пошук -->
                 <form th:action="@{/admin/manufacturers/search}" method="get" class="search-form">
                     <div class="search-group">
                         <div class="search-input-wrapper">
@@ -56,7 +47,6 @@
                     </div>
                 </form>
 
-                <!-- Сортування -->
                 <form method="get" th:action="@{/admin/manufacturers}" class="sort-form">
                     <input type="hidden" name="page" th:value="${currentPage}"/>
                     <input type="hidden" name="size" th:value="10"/>
@@ -74,7 +64,6 @@
                     </div>
                 </form>
 
-                <!-- Кнопка скидання -->
                 <a th:href="@{/admin/manufacturers}" class="btn-custom btn-secondary-custom reset-btn" th:text="#{button.reset}">
                     <i class="bi bi-arrow-clockwise"></i>
                     Скинути
@@ -82,13 +71,11 @@
             </div>
         </div>
 
-        <!-- Повідомлення про помилку -->
         <div th:if="${notFound}" class="alert-custom search-not-found">
             <i class="bi bi-exclamation-triangle me-2"></i>
             <span th:text="#{notfound}">Виробника з такою назвою не знайдено</span>
         </div>
 
-        <!-- Таблиця виробників -->
         <div class="table-container">
             <div class="table-responsive">
                 <table class="table table-custom">
@@ -131,7 +118,6 @@
             </div>
         </div>
 
-        <!-- Empty State -->
         <div th:if="${manufacturersPage.isEmpty()}" class="empty-state">
             <i class="bi bi-building-x"></i>
             <h3>Виробники відсутні</h3>
@@ -143,12 +129,10 @@
         </div>
     </div>
 
-    <!-- Пагінація -->
     <div class="pagination-container" th:if="${!manufacturersPage.isEmpty()}">
         <nav aria-label="Pagination">
             <ul class="pagination pagination-custom justify-content-center">
 
-                <!-- Кнопка "Назад" -->
                 <li class="page-item" th:if="${currentPage > 0}">
                     <a class="page-link"
                        th:href="@{/admin/manufacturers(page=${currentPage - 1}, size=10, sort=${sort})}"
@@ -160,7 +144,6 @@
                        th:text="#{pagination.previous}">← Попередня</a>
                 </li>
 
-                <!-- Номери сторінок -->
                 <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                     th:classappend="${i == currentPage} ? 'active'">
                     <a class="page-link"
@@ -168,7 +151,6 @@
                        th:text="${i + 1}">1</a>
                 </li>
 
-                <!-- Кнопка "Вперед" -->
                 <li class="page-item" th:if="${currentPage + 1 < totalPages}">
                     <a class="page-link"
                        th:href="@{/admin/manufacturers(page=${currentPage + 1}, size=10, sort=${sort})}"

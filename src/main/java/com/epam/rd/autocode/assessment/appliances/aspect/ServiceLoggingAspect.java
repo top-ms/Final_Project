@@ -19,7 +19,6 @@ public class ServiceLoggingAspect {
     @Pointcut("execution(* com.epam.rd.autocode.assessment.appliances.service.impl.*.*(..))")
     public void serviceMethodPointcut() {}
 
-    // Логування перед виконанням методу
     @Before("serviceMethodPointcut()")
     public void logBefore(JoinPoint joinPoint) {
         String className = joinPoint.getTarget().getClass().getSimpleName();
@@ -30,7 +29,6 @@ public class ServiceLoggingAspect {
                 className, methodName, Arrays.toString(args));
     }
 
-    // Логування після успішного виконання методу
     @AfterReturning(pointcut = "serviceMethodPointcut()", returning = "result")
     public void logAfterReturning(JoinPoint joinPoint, Object result) {
         String className = joinPoint.getTarget().getClass().getSimpleName();
@@ -40,7 +38,6 @@ public class ServiceLoggingAspect {
                 className, methodName, result);
     }
 
-    // Логування при виникненні винятку
     @AfterThrowing(pointcut = "serviceMethodPointcut()", throwing = "exception")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable exception) {
         String className = joinPoint.getTarget().getClass().getSimpleName();
@@ -50,7 +47,6 @@ public class ServiceLoggingAspect {
                 className, methodName, exception.getMessage());
     }
 
-    // Вимірювання часу виконання методу
     @Around("serviceMethodPointcut()")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         String className = joinPoint.getTarget().getClass().getSimpleName();

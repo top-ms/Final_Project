@@ -21,8 +21,6 @@ public class PasswordResetService {
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
 
-
-
     @Value("${app.password-reset.token-expiry-hours:1}")
     private int tokenExpiryHours;
 

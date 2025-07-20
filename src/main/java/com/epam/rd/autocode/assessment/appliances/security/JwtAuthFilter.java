@@ -40,7 +40,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         String path = request.getServletPath();
 
-        // Ігноруємо /login і /register, щоб не блокувати їх
         if ("/login".equals(path) || "/register".equals(path) || path.startsWith("/h2-console")) {
             filterChain.doFilter(request, response);
             return;
@@ -60,11 +59,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     userDetails, null, userDetails.getAuthorities()
                             );
 
-                    // 🔥 ВАЖЛИВО: Встановлюємо деталі запиту
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
 
-                    // 🔥 ВАЖЛИВО: Зберігаємо в сесії для Thymeleaf
                     request.getSession().setAttribute(
                             HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
                             SecurityContextHolder.getContext()

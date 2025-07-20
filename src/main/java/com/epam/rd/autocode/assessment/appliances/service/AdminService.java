@@ -22,15 +22,9 @@ public interface AdminService {
 
     boolean existsByEmail(String email);
 
-
-
-
-
-
-
-
-    // Методи для редагування
     Optional<UserEditDTO> findByIdForEdit(Long id);
+
     void updateAdmin(UserEditDTO userEditDTO);
+
     Optional<Admin> findById(Long id);
 }

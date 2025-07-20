@@ -6,6 +6,4 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @Configuration
 @EnableAspectJAutoProxy
 public class AopConfig {
-    // Ця конфігурація вмикає AOP у вашому додатку
-    // @EnableAspectJAutoProxy говорить Spring сканувати @Aspect класи
 }

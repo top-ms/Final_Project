@@ -3,20 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <title>Редагувати клієнта</title>
-  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
 
-  <!-- ✅ ТВІЙ ГОЛОВНИЙ CSS ФАЙЛ -->
   <link rel="stylesheet" th:href="@{/css/main.css}" />
 </head>
 <body>
 
-<!-- Навігація -->
 <div th:insert="~{admin/menunavy::navy}"></div>
 
-<!-- Центрована форма -->
 <div class="form-page-container">
   <div class="form-card">
     <div class="form-header">
@@ -28,10 +23,8 @@
     </div>
 
     <form action="#" th:action="@{'/admin/clients/' + ${client.id} + '/update'}" th:object="${client}" method="post" class="form-content">
-      <!-- Прихований ID -->
       <input type="hidden" th:field="*{id}"/>
 
-      <!-- Ім'я -->
       <div class="form-field">
         <label for="name" class="field-label">
           <i class="bi bi-person me-2"></i>
@@ -46,7 +39,6 @@
                  th:classappend="${#fields.hasErrors('name')} ? 'field-error' : ''"/>
           <i class="bi bi-person-check input-icon"></i>
         </div>
-        <!-- Помилки -->
         <div th:if="${#fields.hasErrors('name')}" class="field-errors">
           <div th:each="err : ${#fields.errors('name')}" class="error-message">
             <i class="bi bi-exclamation-circle me-2"></i>
@@ -55,7 +47,6 @@
         </div>
       </div>
 
-      <!-- Email -->
       <div class="form-field">
         <label for="email" class="field-label">
           <i class="bi bi-envelope me-2"></i>
@@ -70,7 +61,6 @@
                  th:classappend="${#fields.hasErrors('email')} ? 'field-error' : ''"/>
           <i class="bi bi-envelope-check input-icon"></i>
         </div>
-        <!-- Помилки -->
         <div th:if="${#fields.hasErrors('email')}" class="field-errors">
           <div th:each="err : ${#fields.errors('email')}" class="error-message">
             <i class="bi bi-exclamation-circle me-2"></i>
@@ -79,7 +69,6 @@
         </div>
       </div>
 
-      <!-- Пароль -->
       <div class="form-field">
         <label for="password" class="field-label">
           <i class="bi bi-key me-2"></i>
@@ -94,7 +83,6 @@
                  th:classappend="${#fields.hasErrors('password')} ? 'field-error' : ''"/>
           <i class="bi bi-shield-check input-icon"></i>
         </div>
-        <!-- Помилки -->
         <div th:if="${#fields.hasErrors('password')}" class="field-errors">
           <div th:each="err : ${#fields.errors('password')}" class="error-message">
             <i class="bi bi-exclamation-circle me-2"></i>
@@ -103,7 +91,6 @@
         </div>
       </div>
 
-      <!-- Кнопки -->
       <div class="form-actions">
         <button type="submit" class="btn-custom btn-success-custom action-btn primary-action">
           <i class="bi bi-check-circle me-2"></i>
@@ -118,10 +105,8 @@
   </div>
 </div>
 
-<!-- Footer -->
 <div th:insert="~{footer::footer}"></div>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

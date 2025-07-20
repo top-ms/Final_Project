@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // 🔐 403 Forbidden (Access Denied)
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public String handleAccessDenied(Exception ex, Model model) {
@@ -19,7 +18,6 @@ public class GlobalExceptionHandler {
         return "error/error_403";
     }
 
-    // ❌ 404 Not Found
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleNotFound(Exception ex, Model model) {
@@ -27,7 +25,6 @@ public class GlobalExceptionHandler {
         return "error/error_404";
     }
 
-    // 💣 500 Internal Server Error
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleAllOtherErrors(Exception ex, Model model) {
