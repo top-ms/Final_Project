@@ -1,4 +1,4 @@
-package com.epam.rd.autocode.assessment.appliances.exeprion;
+package com.epam.rd.autocode.assessment.appliances.exception;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
