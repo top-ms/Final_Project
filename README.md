@@ -1,5 +1,8 @@
 # Appliance Store — Spring Boot Web App
 
+Use case diagram:
+
+
 ## Project Overview
 
 **Appliance Store** is a full-featured web application that simulates an online shop for household appliances. The project was developed as part of a test assignment and showcases practical use of Spring Boot, security, localization, and layered architecture.
@@ -79,29 +82,29 @@ Entities:
 
 ## Running the Project
 
-1. Clone the repository:
-```bash
-git clone https://github.com/top-ms/Final_Project.git
-cd Final_Project
-```
+## For testing it, you are better to launch the project via IDE and a browser.
 
-2. Run with Maven:
-```bash
-./mvnw spring-boot:run
-```
-
-3. Or run the packaged JAR:
-```bash
-./mvnw clean package
-java -jar target/*.jar
-```
-
-4. Access the application at:
+1. Access the application at:
 ```
 http://localhost:8080
 ```
 
-5. Access the H2 Console:
+2. Access the application as an admin (only if you are authorized as an admin; if you aren't, you will get a 403 status code) at:
+```
+http://localhost:8080/admin
+```
+
+2. Access the application as an employee (only if you are authorized as an employee; if you aren't, you will get a 403 status code) at:
+```
+http://localhost:8080/user
+```
+
+2. Access the application as a client (only if you are authorized as a client; if you aren't, you will get a 403 status code) at:
+```
+http://localhost:8080/client
+```
+
+2. Access the H2 Console:
 ```
 http://localhost:8080/h2-console
 ```
@@ -109,9 +112,9 @@ http://localhost:8080/h2-console
 ## Example Users
 
 To create in-memory users or pre-load users via SQL. Example roles:
-- `admin@example.com / password`
-- `employee@example.com / password`
-- `client@example.com / password`
+- `a@gmail.com / 1111`
+- `k@gmail.com / 1111`
+- `i@gmail.com / 1111`
 
 
 ## GitHub
