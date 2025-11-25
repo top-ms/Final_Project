@@ -3,6 +3,7 @@ package com.epam.rd.autocode.assessment.appliances.service;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import java.util.function.Function;
 public class JwtService {
 
     private static final String SECRET_KEY = "DyZ9O7ykcN6p+TzhCEF6p9Ucjb6e5zdYxLJeLzHWgS8=";
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(JwtService.class);
+    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(JwtService.class);
 
     public String generateToken(UserDetails userDetails) {
         try {

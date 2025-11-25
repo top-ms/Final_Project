@@ -48,9 +48,9 @@ public class CrudOperationsAspect {
         boolean found = result != null && !result.toString().contains("Optional.empty");
 
         if (found) {
-            logger.info("🔍 [FIND] {}.{} - Дані знайдено", className, methodName);
+            logger.info("[FIND] {}.{} - Дані знайдено", className, methodName);
         } else {
-            logger.warn("🔍❌ [FIND] {}.{} - Дані НЕ знайдено", className, methodName);
+            logger.warn("[FIND] {}.{} - Дані НЕ знайдено", className, methodName);
         }
     }
 

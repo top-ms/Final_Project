@@ -1,6 +1,5 @@
 package com.epam.rd.autocode.assessment.appliances.controler.clientRole;
 
-import com.epam.rd.autocode.assessment.appliances.dto.clientDTO.ViewClientsByAdminDTO;
 import com.epam.rd.autocode.assessment.appliances.dto.orderDTO.ViewOrdersDTO;
 import com.epam.rd.autocode.assessment.appliances.model.*;
 import com.epam.rd.autocode.assessment.appliances.service.ApplianceService;

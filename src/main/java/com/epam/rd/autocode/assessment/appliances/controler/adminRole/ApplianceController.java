@@ -97,25 +97,4 @@ public class ApplianceController {
         applianceService.updateAppliance(id, dto);
         return "redirect:/admin/appliances";
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
