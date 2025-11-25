@@ -53,7 +53,6 @@ public class JwtAuthController {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password)
             );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String jwtToken = jwtService.generateToken(userDetails);
             System.out.println("JWT Token: " + jwtToken);

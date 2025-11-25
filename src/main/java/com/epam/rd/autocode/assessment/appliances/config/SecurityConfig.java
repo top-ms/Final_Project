@@ -30,23 +30,27 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // ✅ Додав endpoint'и для reset password
                         .requestMatchers("/login", "/register", "/logout", "/test", "/h2-console/**",
                                 "/css/**", "/js/**", "/images/**",
-                                "/forgot-password", "/reset-password", "/reset-password-error").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout=success")
-                        .deleteCookies("jwt", "JSESSIONID")
-                        .invalidateHttpSession(true)
-                        .clearAuthentication(true)
+                                "/forgot-password", "/reset-password", "/reset-password-error")
                         .permitAll()
+
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/employee/**").hasAnyRole("EMPLOYEE", "ADMIN")
+                        .requestMatchers("/client/**").hasAnyRole("CLIENT", "ADMIN")
+
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout=success")
+                        .deleteCookies("jwt")  // Видаляємо тільки jwt cookie
+                        .permitAll()
                 )
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
